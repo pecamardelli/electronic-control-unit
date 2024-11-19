@@ -1,0 +1,9 @@
+{
+  "editor.defaultFormatter": "ms-vscode.cpptools",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "cmake.configureOnOpen": true,
+  "C_Cpp.clang_format_fallbackStyle": "Google",
+  "C_Cpp.formatting": "clangFormat",
+  "C_Cpp.default.intelliSenseMode": "linux-gcc-x64"
+}

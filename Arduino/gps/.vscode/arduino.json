@@ -1,0 +1,7 @@
+{
+    "sketch": "gps.ino",
+    "configuration": "cpu=atmega2560",
+    "board": "arduino:avr:mega",
+    "output": "build",
+    "port": "/dev/ttyACM0"
+}
