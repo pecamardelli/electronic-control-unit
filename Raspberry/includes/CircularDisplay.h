@@ -1,7 +1,7 @@
 #ifndef _CIRCULAR_DISPLAY_H_
 #define _CIRCULAR_DISPLAY_H_
 
-#include <display.h>
+#include <LCD_display.h>
 
 class CircularDisplay
 {
