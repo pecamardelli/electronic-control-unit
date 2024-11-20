@@ -3,9 +3,10 @@
 int main(int argc, char *argv[])
 {
 	CircularDisplay display;
-	display.drawImage("./assets/torino_logo.bmp");
+	display.drawBmpFile("./assets/torino_logo.bmp");
 	sleep(4);
 	display.clear();
+	display.drawTest();
 
 	while (1)
 	{

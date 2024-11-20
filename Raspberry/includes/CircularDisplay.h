@@ -2,6 +2,7 @@
 #define _CIRCULAR_DISPLAY_H_
 
 #include <LCD_display.h>
+#include <numbers.h>
 
 class CircularDisplay
 {
@@ -15,7 +16,8 @@ public:
   void setup();
   void loop();
 
-  void drawImage(char *);
+  void drawBmpFile(char *);
+  void drawTest();
   void clear();
 };
 
