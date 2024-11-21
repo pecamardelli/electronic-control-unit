@@ -804,8 +804,8 @@ parameter:
     image            ：Image start address
     xStart           : X starting coordinates
     yStart           : Y starting coordinates
-    xEnd             ：Image width
-    yEnd             : Image height
+    W_Image          ：Image width
+    H_Image          : Image height
 ******************************************************************************/
 void Paint_DrawImage(const unsigned char *image, UWORD xStart, UWORD yStart, UWORD W_Image, UWORD H_Image)
 {

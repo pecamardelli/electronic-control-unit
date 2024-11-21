@@ -3,12 +3,15 @@
 
 #include <LCD_display.h>
 #include <numbers.h>
+#include <characters.h>
 
 class CircularDisplay
 {
 private:
   UWORD *BlackImage;
   UDOUBLE Imagesize = LCD_1IN28_HEIGHT * LCD_1IN28_WIDTH * 2;
+  uint8_t lowerCaseOffset = 97;
+  uint8_t upperCaseOffset = 65;
 
 public:
   CircularDisplay(/* args */);
@@ -17,7 +20,7 @@ public:
   void loop();
 
   void drawBmpFile(char *);
-  void drawTest();
+  void drawTest(char *, int, int);
   void clear();
 };
 

@@ -53,12 +53,32 @@ void CircularDisplay::clear()
     LCD_1IN28_Display(BlackImage);
 }
 
-void CircularDisplay::drawTest()
+void CircularDisplay::drawTest(char *string, int x, int y)
 {
-    Paint_DrawImage(number0_big, 40, 60, 30, 42);
-    Paint_DrawImage(number1_big, 70, 60, 30, 42);
-    Paint_DrawImage(number2_big, 100, 60, 30, 42);
-    Paint_DrawImage(number3_big, 130, 60, 30, 42);
-    Paint_DrawImage(number4_big, 160, 60, 30, 42);
+    const size_t string_length = strlen(string);
+    uint8_t offset;
+
+    for (int i = 0; i < string_length; ++i)
+    {
+        if ((int)string[i] >= 33 && (int)string[i] <= 57) // Punctuation or Number
+        {
+            offset = 33;
+        }
+        else if ((int)string[i] >= 65 && (int)string[i] <= 90) // Uppercase
+        {
+            offset = 65 - 10; // Minus numbers
+        }
+        else if ((int)string[i] >= 97 && (int)string[i] <= 122) // lowercase
+        {
+            offset = 97 - 10 - 26; // Minus numbers and uppercase letters
+        }
+        else // Character not allowed
+        {
+            continue;
+        }
+
+        Paint_DrawImage(characters.characters[(int)string[i] - offset], x + characters.width * i, y, characters.width, characters.height);
+    }
+
     LCD_1IN28_Display(BlackImage);
 }
