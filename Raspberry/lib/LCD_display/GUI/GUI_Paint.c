@@ -545,6 +545,7 @@ void Paint_DrawString_EN(UWORD Xstart, UWORD Ystart, const char *pString,
 {
     UWORD Xpoint = Xstart;
     UWORD Ypoint = Ystart;
+    UWORD nextXpoint = 0;
 
     if (Xstart > Paint.Width || Ystart > Paint.Height)
     {
@@ -567,13 +568,22 @@ void Paint_DrawString_EN(UWORD Xstart, UWORD Ystart, const char *pString,
             Xpoint = Xstart;
             Ypoint = Ystart;
         }
+
         Paint_DrawChar(Xpoint, Ypoint, *pString, Font, Color_Background, Color_Foreground);
+        if (*pString == '.')
+        {
+            nextXpoint = Font->Width * 0.4;
+        }
+        else
+        {
+            nextXpoint = 0;
+        }
 
         // The next character of the address
         pString++;
 
         // The next word of the abscissa increases the font of the broadband
-        Xpoint += Font->Width;
+        Xpoint += Font->Width - nextXpoint;
     }
 }
 

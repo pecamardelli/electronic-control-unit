@@ -89,6 +89,8 @@ extern "C"
   extern sFONT LiberationSansNarrow_Bold48;
   extern sFONT LiberationSansNarrow_Bold54;
   extern sFONT LiberationSansNarrow_Bold60;
+  extern sFONT LiberationSansNarrow_Bold72;
+  extern sFONT LiberationSansNarrow_Bold80;
 
 #ifdef __cplusplus
 }

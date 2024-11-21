@@ -70,7 +70,7 @@ font_name = font_name.replace("-","_")
 # font_name = f"{os.getcwd()}/assets/fonts/BebasNeue-Regular.ttf"
 # font_size = calculate_max_font_size(string.ascii_uppercase,width=width,height=height,font_name=font_name)
 # font_size = 60
-font_sizes = [24,36,48,54,60]
+font_sizes = [24,36,48,54,60,72,80]
 path = f"{os.getcwd()}/Raspberry/lib/LCD_display/Fonts"
 background_color = (0, 0, 0)  # black background
 text_color = (255, 255, 255)  # white color for the number
@@ -84,7 +84,7 @@ formatted_date = current_date.strftime("%d-%B-%Y")
 for font_size in font_sizes:
     font = ImageFont.truetype(font_file, font_size)
     width, height = calculate_max_character_size(string.printable,font_name=font_file,font_size=font_size)
-    width = round(width*0.75)
+    width = round(width*0.7)
     c_file_name = f"{font_name}{font_size}.c"
     c_file_content = f"""/**
 ******************************************************************************
