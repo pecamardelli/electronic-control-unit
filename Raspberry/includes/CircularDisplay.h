@@ -3,7 +3,6 @@
 
 #include <LCD_display.h>
 #include <numbers.h>
-#include <characters.h>
 
 class CircularDisplay
 {

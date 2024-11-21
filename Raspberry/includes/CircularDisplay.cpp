@@ -77,7 +77,12 @@ void CircularDisplay::drawTest(char *string, int x, int y)
             continue;
         }
 
-        Paint_DrawImage(characters.characters[(int)string[i] - offset], x + characters.width * i, y, characters.width, characters.height);
+        // Paint_DrawImage(characters.characters[(int)string[i] - offset], x + characters.width * i, y, characters.width, characters.height);
+
+        Paint_DrawString_EN(63, 13, "78.5", &LiberationSansNarrow_Bold24, BLACK, GREEN);
+        Paint_DrawString_EN(43, 63, "78.5", &LiberationSansNarrow_Bold36, BLACK, GREEN);
+        Paint_DrawString_EN(43, 103, "78.5", &LiberationSansNarrow_Bold48, BLACK, GREEN);
+        Paint_DrawString_EN(43, 143, "78.5", &LiberationSansNarrow_Bold54, BLACK, GREEN);
     }
 
     LCD_1IN28_Display(BlackImage);
