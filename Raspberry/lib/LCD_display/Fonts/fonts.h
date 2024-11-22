@@ -84,6 +84,7 @@ extern "C"
   extern sFONT Font16;
   extern sFONT Font12;
   extern sFONT Font8;
+  extern sFONT LiberationSansNarrow_Bold16;
   extern sFONT LiberationSansNarrow_Bold24;
   extern sFONT LiberationSansNarrow_Bold36;
   extern sFONT LiberationSansNarrow_Bold48;

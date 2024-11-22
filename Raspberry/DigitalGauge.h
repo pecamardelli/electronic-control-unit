@@ -2,9 +2,11 @@
 #define _CIRCULAR_DISPLAY_H_
 
 #include <LCD_display.h>
-#include <numbers.h>
+#include <iostream>
+#include <string>
+#include <cmath>
 
-class CircularDisplay
+class DigitalGauge
 {
 private:
   UWORD *BlackImage;
@@ -13,13 +15,12 @@ private:
   uint8_t upperCaseOffset = 65;
 
 public:
-  CircularDisplay(/* args */);
-  ~CircularDisplay();
+  DigitalGauge(/* args */);
+  ~DigitalGauge();
   void setup();
   void loop();
 
   void drawBmpFile(char *);
-  void drawTest(char *, int, int);
   void clear();
 };
 

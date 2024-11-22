@@ -570,7 +570,7 @@ void Paint_DrawString_EN(UWORD Xstart, UWORD Ystart, const char *pString,
         }
 
         Paint_DrawChar(Xpoint, Ypoint, *pString, Font, Color_Background, Color_Foreground);
-        if (*pString == '.')
+        if (*pString == '.' || *pString == 'I')
         {
             nextXpoint = Font->Width * 0.4;
         }
