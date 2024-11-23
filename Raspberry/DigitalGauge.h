@@ -2,6 +2,7 @@
 #define _CIRCULAR_DISPLAY_H_
 
 #include <LCD_display.h>
+#include <images.h>
 #include <iostream>
 #include <string>
 #include <cmath>

@@ -892,3 +892,80 @@ void GUI_Partial_Refresh(UWORD Xstart, UWORD Ystart, UWORD Xend, UWORD Yend)
     LCD_1in54_DisplayWindows(X0, Y0, X1, Y1, Paint.Image);
 }
 */
+void Paint_DrawPartialCircleWithCaps(UWORD X_Center, UWORD Y_Center, UWORD Radius,
+                                     UWORD Color, DOT_PIXEL Line_width,
+                                     float Start_Angle, float End_Angle)
+{
+    if (X_Center > Paint.Width || Y_Center >= Paint.Height)
+    {
+        DEBUG("Paint_DrawPartialCircleWithCaps Input exceeds the normal display range\r\n");
+        return;
+    }
+
+    // Convert angles to radians
+    float start_rad = Start_Angle * M_PI / 180.0;
+    float end_rad = End_Angle * M_PI / 180.0;
+
+    // Normalize angles to range [0, 2π]
+    if (start_rad < 0)
+        start_rad += 2 * M_PI;
+    if (end_rad < 0)
+        end_rad += 2 * M_PI;
+    if (end_rad < start_rad)
+        end_rad += 2 * M_PI; // Ensure end > start
+
+    // Midpoint Circle Algorithm for the Arc
+    int16_t XCurrent = 0, YCurrent = Radius;
+    int16_t Esp = 3 - (Radius << 1);
+
+    // Variables to store arc endpoints
+    int arc_start_x = 0, arc_start_y = 0;
+    int arc_end_x = 0, arc_end_y = 0;
+
+    while (XCurrent <= YCurrent)
+    {
+        // 8-way symmetry points
+        int points[8][2] = {
+            {XCurrent, YCurrent}, {-XCurrent, YCurrent}, {-XCurrent, -YCurrent}, {XCurrent, -YCurrent}, {YCurrent, XCurrent}, {-YCurrent, XCurrent}, {-YCurrent, -XCurrent}, {YCurrent, -XCurrent}};
+
+        for (int i = 0; i < 8; i++)
+        {
+            // Calculate angle of current point
+            float angle = atan2(points[i][1], points[i][0]);
+            if (angle < 0)
+                angle += 2 * M_PI; // Normalize angle to [0, 2π]
+
+            // Draw only points within the angle range
+            if (angle >= start_rad && angle <= end_rad)
+            {
+                int px = X_Center + points[i][0];
+                int py = Y_Center + points[i][1];
+                Paint_DrawPoint(px, py, Color, Line_width, DOT_STYLE_DFT);
+
+                // Record the start and end points of the arc
+                if (arc_start_x == 0 && arc_start_y == 0)
+                {
+                    arc_start_x = px;
+                    arc_start_y = py;
+                }
+                arc_end_x = px;
+                arc_end_y = py;
+            }
+        }
+
+        if (Esp < 0)
+        {
+            Esp += 4 * XCurrent + 6;
+        }
+        else
+        {
+            Esp += 10 + 4 * (XCurrent - YCurrent);
+            YCurrent--;
+        }
+        XCurrent++;
+    }
+
+    // Add rounded caps at the arc endpoints
+    // Paint_DrawCircle(arc_start_x, arc_start_y, Line_width, Color, DOT_PIXEL_DFT, DRAW_FILL_FULL);
+    // Paint_DrawCircle(arc_end_x, arc_end_y, Line_width, Color, DOT_PIXEL_DFT, DRAW_FILL_FULL);
+}
