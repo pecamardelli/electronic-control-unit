@@ -23,10 +23,10 @@ DigitalGauge::DigitalGauge(/* args */)
         BlackImage = NULL;
     }
 
-    drawBmpFile("./assets/images/torino_logo.bmp");
+    drawBmpFile(TORINO_LOGO_PATH.c_str());
     sleep(2);
     clear();
-    drawBmpFile("./assets/images/digital_gauge.bmp");
+    drawBmpFile(BACKGROUND.c_str());
     Paint_DrawString_EN(TEMP_LABEL_X, TEMP_LABEL_Y, "TEMP", &LiberationSansNarrow_Bold16, BLACK, WHITE);
     Paint_DrawString_EN(KML_LABEL_X, KML_LABEL_Y, "KM/L", &LiberationSansNarrow_Bold16, BLACK, WHITE);
     Paint_DrawString_EN(VOLTS_LABEL_X, VOLTS_LABEL_Y, "VOLTS", &LiberationSansNarrow_Bold16, BLACK, WHITE);
@@ -45,7 +45,7 @@ void DigitalGauge::setup()
 {
 }
 
-void DigitalGauge::drawBmpFile(char *pathToImageFile)
+void DigitalGauge::drawBmpFile(const char *pathToImageFile)
 {
     clear();
     GUI_ReadBmp(pathToImageFile);

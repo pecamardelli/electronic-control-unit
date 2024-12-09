@@ -7,6 +7,8 @@
 #include <string>
 #include <cmath>
 
+extern std::string IMAGES_PATH;
+
 class DigitalGauge
 {
 private:
@@ -14,6 +16,9 @@ private:
   UDOUBLE Imagesize = LCD_1IN28_HEIGHT * LCD_1IN28_WIDTH * 2;
   uint8_t lowerCaseOffset = 97;
   uint8_t upperCaseOffset = 65;
+
+  std::string TORINO_LOGO_PATH = IMAGES_PATH + "/torino_logo.bmp";
+  std::string BACKGROUND = IMAGES_PATH + "/digital_gauge.bmp";
 
   sFONT KML_FONT = LiberationSansNarrow_Bold48;
   const uint8_t KML_X = 75;
@@ -34,9 +39,9 @@ private:
   uint8_t lastTempValue = 0;
 
   sFONT VOLTS_FONT = LiberationSansNarrow_Bold36;
-  const uint8_t VOLTS_X = 140;
+  const uint8_t VOLTS_X = 143;
   const uint8_t VOLTS_Y = 100;
-  const uint8_t VOLTS_LABEL_X = 152;
+  const uint8_t VOLTS_LABEL_X = 155;
   const uint8_t VOLTS_LABEL_Y = 145;
   const float VOLTS_WARN_THRESHOLD = 12;
   const float VOLTS_DANGER_THRESHOLD = 15;
@@ -52,7 +57,7 @@ public:
   void setup();
   void draw(int, float, float);
 
-  void drawBmpFile(char *);
+  void drawBmpFile(const char *);
   void clear();
 };
 
