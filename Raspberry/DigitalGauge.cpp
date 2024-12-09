@@ -27,9 +27,9 @@ DigitalGauge::DigitalGauge(/* args */)
     sleep(2);
     clear();
     drawBmpFile("./assets/images/digital_gauge.bmp");
-    Paint_DrawString_EN(103, 76, "TEMP", &LiberationSansNarrow_Bold16, BLACK, WHITE);
-    Paint_DrawString_EN(39, 145, "LITROS", &LiberationSansNarrow_Bold16, BLACK, WHITE);
-    Paint_DrawString_EN(152, 145, "VOLTS", &LiberationSansNarrow_Bold16, BLACK, WHITE);
+    Paint_DrawString_EN(TEMP_LABEL_X, TEMP_LABEL_Y, "TEMP", &LiberationSansNarrow_Bold16, BLACK, WHITE);
+    Paint_DrawString_EN(KML_LABEL_X, KML_LABEL_Y, "KM/L", &LiberationSansNarrow_Bold16, BLACK, WHITE);
+    Paint_DrawString_EN(VOLTS_LABEL_X, VOLTS_LABEL_Y, "VOLTS", &LiberationSansNarrow_Bold16, BLACK, WHITE);
 
     LCD_1IN28_Display(BlackImage);
 }
@@ -45,123 +45,6 @@ void DigitalGauge::setup()
 {
 }
 
-void DigitalGauge::loop()
-{
-    int temp = 0;
-    float volts = 10;
-    float liters = 0;
-
-    while (1)
-    {
-        char buffer[16];
-        uint16_t fontColor = WHITE;
-
-        // Format the float to 1 decimal place
-        if (liters < 10)
-        {
-            Paint_DrawString_EN(30, 100, "    ", &LiberationSansNarrow_Bold36, BLACK, fontColor);
-            snprintf(buffer, sizeof(buffer), "%.1f", liters);
-            Paint_DrawString_EN(38, 100, buffer, &LiberationSansNarrow_Bold36, BLACK, fontColor);
-        }
-        else
-        {
-            snprintf(buffer, sizeof(buffer), "%.1f", liters);
-            Paint_DrawString_EN(30, 100, buffer, &LiberationSansNarrow_Bold36, BLACK, fontColor);
-        }
-
-        if (volts < 12)
-        {
-            fontColor = YELLOW;
-        }
-        else if (volts < 14.3)
-        {
-            fontColor = WHITE;
-        }
-        else
-        {
-            fontColor = RED;
-        }
-
-        snprintf(buffer, sizeof(buffer), "%.1f", volts);
-        Paint_DrawString_EN(140, 100, buffer, &LiberationSansNarrow_Bold36, BLACK, fontColor);
-
-        uint8_t Xtemp = 83;
-        uint8_t Ytemp = 24;
-
-        fontColor = WHITE;
-        if (temp < 10)
-        {
-            Paint_DrawString_EN(Xtemp, Ytemp, "   ", &LiberationSansNarrow_Bold48, BLACK, fontColor);
-            snprintf(buffer, sizeof(buffer), "%d", temp);
-            Paint_DrawString_EN(Xtemp + LiberationSansNarrow_Bold48.Width, Ytemp, buffer, &LiberationSansNarrow_Bold48, BLACK, fontColor);
-        }
-        else if (temp < 100)
-        {
-            if (temp >= 90)
-            {
-                fontColor = YELLOW;
-            }
-            Paint_DrawString_EN(Xtemp, Ytemp, "   ", &LiberationSansNarrow_Bold48, BLACK, fontColor);
-            snprintf(buffer, sizeof(buffer), "%d", temp);
-            Paint_DrawString_EN(Xtemp + LiberationSansNarrow_Bold48.Width / 2, Ytemp, buffer, &LiberationSansNarrow_Bold48, BLACK, fontColor);
-        }
-        else
-        {
-            fontColor = RED;
-            snprintf(buffer, sizeof(buffer), "%d", temp);
-            Paint_DrawString_EN(Xtemp, Ytemp, buffer, &LiberationSansNarrow_Bold48, BLACK, fontColor);
-        }
-
-        // float minAngle = 151;
-        // float maxAngle = 205;
-        // float minTemp = 40;
-        // float maxTemp = 120;
-        // float tempRange = maxTemp - minTemp;
-        // float angleRange = maxAngle - minAngle;
-        // float tempToAngle = angleRange / tempRange;
-        // float endAngle = minAngle + (temp - minTemp) * tempToAngle;
-        // if (endAngle < minAngle)
-        // {
-        //     endAngle = minAngle;
-        // }
-        // // Draw a partial circle from 200° to 270°
-        // printf("min: %.2f - max: %.2f\n", minAngle, endAngle);
-        // Paint_DrawPartialCircleWithCaps(120, 120, 109, fontColor, DOT_PIXEL_3X3, minAngle, endAngle);
-        // Paint_DrawPartialCircleWithCaps(120, 120, 104, fontColor, DOT_PIXEL_2X2, minAngle, endAngle);
-        // Paint_DrawPartialCircleWithCaps(120, 120, 115, fontColor, DOT_PIXEL_2X2, 150, 210);
-
-        LCD_1IN28_Display(BlackImage);
-
-        if (temp < 125)
-        {
-            temp++;
-        }
-        else
-        {
-            temp = 0;
-        }
-
-        if (liters < 60)
-        {
-            liters += 0.1;
-        }
-        else
-        {
-            liters = 0;
-        }
-
-        if (volts < 14.5)
-        {
-            volts += 0.1;
-        }
-        else
-        {
-            volts = 10;
-        }
-        usleep(50000);
-    }
-}
-
 void DigitalGauge::drawBmpFile(char *pathToImageFile)
 {
     clear();
@@ -174,4 +57,113 @@ void DigitalGauge::clear()
     Paint_NewImage(BlackImage, LCD_1IN28_WIDTH, LCD_1IN28_HEIGHT, 0, BLACK, 16);
     Paint_Clear(BLACK);
     LCD_1IN28_Display(BlackImage);
+}
+
+void DigitalGauge::draw(int temp, float kml, float volts)
+{
+    drawKml(kml);
+    drawTemp(temp);
+    drawVolts(volts);
+    LCD_1IN28_Display(BlackImage);
+}
+
+void DigitalGauge::drawTemp(uint8_t temp)
+{
+    if (temp == lastTempValue)
+        return;
+
+    uint16_t fontColor = WHITE;
+    char buffer[16];
+
+    snprintf(buffer, sizeof(buffer), "%d", temp);
+
+    if (temp < 10)
+    {
+        Paint_DrawString_EN(TEMP_X, TEMP_Y, "   ", &TEMP_FONT, BLACK, fontColor);
+        Paint_DrawString_EN(TEMP_X + TEMP_FONT.Width - 2, TEMP_Y, buffer, &TEMP_FONT, BLACK, fontColor);
+    }
+    else if (temp < TEMP_DANGER_THRESHOLD)
+    {
+        if (temp >= TEMP_WARN_THRESHOLD)
+        {
+            fontColor = YELLOW;
+        }
+        Paint_DrawString_EN(TEMP_X, TEMP_Y, "   ", &TEMP_FONT, BLACK, fontColor);
+        Paint_DrawString_EN(TEMP_X + TEMP_FONT.Width / 2 - 3, TEMP_Y, buffer, &TEMP_FONT, BLACK, fontColor);
+    }
+    else
+    {
+        fontColor = RED;
+        Paint_DrawString_EN(TEMP_X, TEMP_Y, buffer, &TEMP_FONT, BLACK, fontColor);
+    }
+
+    lastTempValue = temp;
+}
+
+void DigitalGauge::drawKml(float kml)
+{
+    if (kml == lastKmlValue)
+        return;
+
+    uint16_t fontColor = WHITE;
+    char buffer[16];
+
+    if (kml < KML_DANGER_THRESHOLD)
+    {
+        fontColor = RED;
+    }
+    else if (kml < KML_WARN_THRESHOLD)
+    {
+        fontColor = YELLOW;
+    }
+
+    snprintf(buffer, sizeof(buffer), "%.1f", kml);
+
+    if (kml < 10)
+    {
+        Paint_DrawString_EN(KML_X, KML_Y, "    ", &KML_FONT, BLACK, fontColor);
+        Paint_DrawString_EN(KML_X + KML_FONT.Width / 2, KML_Y, buffer, &KML_FONT, BLACK, fontColor);
+    }
+    else
+    {
+        Paint_DrawString_EN(KML_X, KML_Y, buffer, &KML_FONT, BLACK, fontColor);
+    }
+
+    lastKmlValue = kml;
+}
+
+void DigitalGauge::drawVolts(float volts)
+{
+    if (volts == lastVoltsValue)
+        return;
+
+    uint16_t fontColor = WHITE;
+    char buffer[16];
+
+    if (volts < VOLTS_WARN_THRESHOLD)
+    {
+        fontColor = YELLOW;
+    }
+    else if (volts >= VOLTS_DANGER_THRESHOLD)
+    {
+        fontColor = RED;
+    }
+    else
+    {
+        fontColor = WHITE;
+    }
+
+    snprintf(buffer, sizeof(buffer), "%.1f", volts);
+
+    if (volts < 10)
+    {
+        Paint_DrawString_EN(VOLTS_X, VOLTS_Y, "    ", &VOLTS_FONT, BLACK, fontColor);
+        Paint_DrawString_EN(VOLTS_X + VOLTS_FONT.Width / 2, VOLTS_Y, buffer, &VOLTS_FONT, BLACK, fontColor);
+    }
+    else
+    {
+        Paint_DrawString_EN(VOLTS_X, VOLTS_Y, buffer, &VOLTS_FONT, BLACK, fontColor);
+    }
+
+    lastVoltsValue = volts;
 }

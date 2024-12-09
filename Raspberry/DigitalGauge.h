@@ -15,11 +15,42 @@ private:
   uint8_t lowerCaseOffset = 97;
   uint8_t upperCaseOffset = 65;
 
+  sFONT KML_FONT = LiberationSansNarrow_Bold48;
+  const uint8_t KML_X = 75;
+  const uint8_t KML_Y = 24;
+  const uint8_t KML_LABEL_X = 103;
+  const uint8_t KML_LABEL_Y = 76;
+  const float KML_DANGER_THRESHOLD = 6;
+  const float KML_WARN_THRESHOLD = 8;
+  float lastKmlValue = 0;
+
+  sFONT TEMP_FONT = LiberationSansNarrow_Bold36;
+  const uint8_t TEMP_X = 30;
+  const uint8_t TEMP_Y = 100;
+  const uint8_t TEMP_LABEL_X = 39;
+  const uint8_t TEMP_LABEL_Y = 145;
+  const uint8_t TEMP_WARN_THRESHOLD = 90;
+  const uint8_t TEMP_DANGER_THRESHOLD = 100;
+  uint8_t lastTempValue = 0;
+
+  sFONT VOLTS_FONT = LiberationSansNarrow_Bold36;
+  const uint8_t VOLTS_X = 140;
+  const uint8_t VOLTS_Y = 100;
+  const uint8_t VOLTS_LABEL_X = 152;
+  const uint8_t VOLTS_LABEL_Y = 145;
+  const float VOLTS_WARN_THRESHOLD = 12;
+  const float VOLTS_DANGER_THRESHOLD = 15;
+  float lastVoltsValue = 0;
+
+  void drawTemp(uint8_t);
+  void drawKml(float);
+  void drawVolts(float);
+
 public:
   DigitalGauge(/* args */);
   ~DigitalGauge();
   void setup();
-  void loop();
+  void draw(int, float, float);
 
   void drawBmpFile(char *);
   void clear();
