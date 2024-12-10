@@ -74,5 +74,5 @@ float Ads1115::getVolts()
     printf("Channel %d Raw Value: %d\n", VOLT_SENSOR_CHANNEL, rawValue);
     printf("Voltage: %.1f V\n", volts);
 
-    return volts;
+    return volts >= 0 ? volts : 0;
 }

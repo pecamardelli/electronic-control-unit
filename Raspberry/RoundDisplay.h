@@ -6,10 +6,12 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include "./includes/Common.h"
 
 extern std::string IMAGES_PATH;
+extern EngineValues engineValues;
 
-class DigitalGauge
+class RoundDisplay
 {
 private:
   UWORD *BlackImage;
@@ -53,10 +55,10 @@ private:
   void drawVolts(float);
 
 public:
-  DigitalGauge(/* args */);
-  ~DigitalGauge();
+  RoundDisplay(/* args */);
+  ~RoundDisplay();
   void setup();
-  void draw(int, float, float);
+  void draw();
 
   void drawBmpFile(const char *);
   void clear();

@@ -3,35 +3,35 @@
 int main(int argc, char *argv[])
 {
 	System sys;
-	DigitalGauge digitalGauge;
+	RoundDisplay roundDisplay;
 	Ads1115 ads;
 
 	while (1)
 	{
-		volts = ads.getVolts();
+		engineValues.volts = ads.getVolts();
 
 		// if (volts < 5)
 		// 	sys.shutdown();
 
-		if (temp < 125)
+		if (engineValues.temp < 125)
 		{
-			temp++;
+			engineValues.temp++;
 		}
 		else
 		{
-			temp = 0;
+			engineValues.temp = 0;
 		}
 
-		if (kml < 16)
+		if (engineValues.kml < 16)
 		{
-			kml += 0.1;
+			engineValues.kml += 0.1;
 		}
 		else
 		{
-			kml = 0;
+			engineValues.kml = 0;
 		}
 
-		digitalGauge.draw(temp, kml, volts);
+		roundDisplay.draw();
 
 		usleep(50000);
 	}

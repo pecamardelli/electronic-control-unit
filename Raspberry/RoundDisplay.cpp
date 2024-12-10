@@ -1,6 +1,6 @@
-#include "DigitalGauge.h"
+#include "RoundDisplay.h"
 
-DigitalGauge::DigitalGauge(/* args */)
+RoundDisplay::RoundDisplay(/* args */)
 {
     /* Module Init */
     if (DEV_ModuleInit() != 0)
@@ -31,40 +31,40 @@ DigitalGauge::DigitalGauge(/* args */)
     LCD_1IN28_Display(BlackImage);
 }
 
-DigitalGauge::~DigitalGauge()
+RoundDisplay::~RoundDisplay()
 {
     free(BlackImage);
     BlackImage = NULL;
     DEV_ModuleExit();
 }
 
-void DigitalGauge::setup()
+void RoundDisplay::setup()
 {
 }
 
-void DigitalGauge::drawBmpFile(const char *pathToImageFile)
+void RoundDisplay::drawBmpFile(const char *pathToImageFile)
 {
     clear();
     GUI_ReadBmp(pathToImageFile);
     LCD_1IN28_Display(BlackImage);
 }
 
-void DigitalGauge::clear()
+void RoundDisplay::clear()
 {
     Paint_NewImage(BlackImage, LCD_1IN28_WIDTH, LCD_1IN28_HEIGHT, 0, BLACK, 16);
     Paint_Clear(BLACK);
     LCD_1IN28_Display(BlackImage);
 }
 
-void DigitalGauge::draw(int temp, float kml, float volts)
+void RoundDisplay::draw()
 {
-    drawKml(kml);
-    drawTemp(temp);
-    drawVolts(volts);
+    drawKml(engineValues.kml);
+    drawTemp(engineValues.temp);
+    drawVolts(engineValues.volts);
     LCD_1IN28_Display(BlackImage);
 }
 
-void DigitalGauge::drawTemp(uint8_t temp)
+void RoundDisplay::drawTemp(uint8_t temp)
 {
     if (temp == lastTempValue)
         return;
@@ -98,7 +98,7 @@ void DigitalGauge::drawTemp(uint8_t temp)
     lastTempValue = temp;
 }
 
-void DigitalGauge::drawKml(float kml)
+void RoundDisplay::drawKml(float kml)
 {
     if (kml == lastKmlValue)
         return;
@@ -128,7 +128,7 @@ void DigitalGauge::drawKml(float kml)
     lastKmlValue = kml;
 }
 
-void DigitalGauge::drawVolts(float volts)
+void RoundDisplay::drawVolts(float volts)
 {
     if (volts == lastVoltsValue)
         return;
