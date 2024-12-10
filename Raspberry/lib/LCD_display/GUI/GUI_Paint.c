@@ -906,6 +906,10 @@ void Paint_DrawPartialCircleWithCaps(UWORD X_Center, UWORD Y_Center, UWORD Radiu
     float start_rad = Start_Angle * M_PI / 180.0;
     float end_rad = End_Angle * M_PI / 180.0;
 
+    // Variables to store arc endpoints
+    int arc_start_x = 0, arc_start_y = 0;
+    int arc_end_x = 0, arc_end_y = 0;
+
     // Normalize angles to range [0, 2π]
     if (start_rad < 0)
         start_rad += 2 * M_PI;
@@ -917,10 +921,6 @@ void Paint_DrawPartialCircleWithCaps(UWORD X_Center, UWORD Y_Center, UWORD Radiu
     // Midpoint Circle Algorithm for the Arc
     int16_t XCurrent = 0, YCurrent = Radius;
     int16_t Esp = 3 - (Radius << 1);
-
-    // Variables to store arc endpoints
-    int arc_start_x = 0, arc_start_y = 0;
-    int arc_end_x = 0, arc_end_y = 0;
 
     while (XCurrent <= YCurrent)
     {

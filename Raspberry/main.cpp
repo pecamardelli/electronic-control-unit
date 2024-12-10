@@ -2,12 +2,16 @@
 
 int main(int argc, char *argv[])
 {
+	System sys;
 	DigitalGauge digitalGauge;
 	Ads1115 ads;
 
 	while (1)
 	{
 		volts = ads.getVolts();
+
+		// if (volts < 5)
+		// 	sys.shutdown();
 
 		if (temp < 125)
 		{
@@ -27,14 +31,6 @@ int main(int argc, char *argv[])
 			kml = 0;
 		}
 
-		if (volts < 16)
-		{
-			volts += 0.1;
-		}
-		else
-		{
-			volts = 8;
-		}
 		digitalGauge.draw(temp, kml, volts);
 
 		usleep(50000);

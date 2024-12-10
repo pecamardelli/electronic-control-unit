@@ -2,9 +2,6 @@
 
 DigitalGauge::DigitalGauge(/* args */)
 {
-    // Exception handling:ctrl + c
-    signal(SIGINT, Handler_1IN28_LCD);
-
     /* Module Init */
     if (DEV_ModuleInit() != 0)
     {

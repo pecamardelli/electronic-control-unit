@@ -48,9 +48,11 @@
     "typeinfo": "cpp",
     "ctime": "cpp",
     "iomanip": "cpp",
-    "sstream": "cpp"
+    "sstream": "cpp",
+    "ads1115.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "C_Cpp.errorSquiggles": "enabledIfIncludesResolve"
 }

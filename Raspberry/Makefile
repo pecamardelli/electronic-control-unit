@@ -1,5 +1,6 @@
 DIR_LIB			= ./lib
 DIR_INCLUDES	= ./includes
+DIR_HELPERS		= ./helpers
 DIR_ASSETS		= ./assets
 DIR_IMAGES		= ${DIR_ASSETS}/images
 
@@ -13,7 +14,7 @@ DIR_BIN		= ./bin
 DIR_MAIN	= ./
 
 SRC_C = $(wildcard ${DIR_DISPLAY}/*.c ${DIR_DISPLAY_EPD}/*.c ${DIR_DISPLAY_FONTS}/*.c ${DIR_DISPLAY_GUI}/*.c ${DIR_DISPLAY_CONFIG}/*.c)
-SRC_CPP = $(wildcard ${DIR_MAIN}/*.cpp ${DIR_INCLUDES}/*.cpp ${DIR_IMAGES}/*.cpp)
+SRC_CPP = $(wildcard ${DIR_MAIN}/*.cpp ${DIR_INCLUDES}/*.cpp ${DIR_HELPERS}/*.cpp ${DIR_IMAGES}/*.cpp)
 OBJ_O = $(patsubst %.c,${DIR_BIN}/%.o,$(notdir ${SRC_C})) $(patsubst %.cpp,${DIR_BIN}/%.o,$(notdir ${SRC_CPP}))
 
 TARGET = torino-ecu
@@ -59,6 +60,9 @@ ${DIR_BIN}/%.o:$(DIR_DISPLAY_CONFIG)/%.c
 
 ${DIR_BIN}/%.o:$(DIR_INCLUDES)/%.cpp
 	$(CC) $(CFLAGS) -c  $< -o $@ $(DISPLAY)
+
+${DIR_BIN}/%.o:$(DIR_HELPERS)/%.cpp
+	$(CC) $(CFLAGS) -c  $< -o $@
 
 ${DIR_BIN}/%.o:$(DIR_IMAGES)/%.cpp
 	$(CC) $(CFLAGS) -c  $< -o $@
