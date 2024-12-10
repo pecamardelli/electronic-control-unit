@@ -5,6 +5,7 @@ int main(int argc, char *argv[])
 	System sys;
 	RoundDisplay roundDisplay;
 	AnalogConverter analogConverter;
+	CoolantTempSensor coolantTempSensor;
 
 	roundDisplay.showLogo();
 	sleep(2);
@@ -12,19 +13,8 @@ int main(int argc, char *argv[])
 
 	while (1)
 	{
+		engineValues.temp = coolantTempSensor.readTemp();
 		engineValues.volts = analogConverter.getVolts();
-
-		// if (volts < 5)
-		// 	sys.shutdown();
-
-		if (engineValues.temp < 125)
-		{
-			engineValues.temp++;
-		}
-		else
-		{
-			engineValues.temp = 0;
-		}
 
 		if (engineValues.kml < 16)
 		{
