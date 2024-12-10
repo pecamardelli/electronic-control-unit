@@ -1,5 +1,5 @@
-#ifndef ADS1115_H_
-#define ADS1115_H_
+#ifndef ANALOG_CONVERTER_H_
+#define ANALOG_CONVERTER_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,7 +12,7 @@
 #define CONVERSION_REG 0x00
 #define CONFIG_REG 0x01
 
-class Ads1115
+class AnalogConverter
 {
 private:
     /* data */
@@ -23,8 +23,8 @@ private:
     int getRawValue(const u_int8_t);
 
 public:
-    Ads1115(/* args */);
-    ~Ads1115();
+    AnalogConverter(/* args */);
+    ~AnalogConverter();
     float getVolts();
 };
 

@@ -4,11 +4,11 @@ int main(int argc, char *argv[])
 {
 	System sys;
 	RoundDisplay roundDisplay;
-	Ads1115 ads;
+	AnalogConverter analogConverter;
 
 	while (1)
 	{
-		engineValues.volts = ads.getVolts();
+		engineValues.volts = analogConverter.getVolts();
 
 		// if (volts < 5)
 		// 	sys.shutdown();

@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include "./includes/Common.h"
+#include "includes/Common.h"
 
 extern std::string IMAGES_PATH;
 extern EngineValues engineValues;

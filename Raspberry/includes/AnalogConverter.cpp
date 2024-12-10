@@ -1,6 +1,6 @@
-#include "Ads1115.h"
+#include "AnalogConverter.h"
 
-Ads1115::Ads1115(/* args */)
+AnalogConverter::AnalogConverter(/* args */)
 {
     // Open I2C bus
     if ((file = open(FILENAME, O_RDWR)) < 0)
@@ -15,13 +15,13 @@ Ads1115::Ads1115(/* args */)
     }
 }
 
-Ads1115::~Ads1115()
+AnalogConverter::~AnalogConverter()
 {
     // Close I2C file
     close(file);
 }
 
-int Ads1115::getRawValue(const u_int8_t channel)
+int AnalogConverter::getRawValue(const u_int8_t channel)
 {
     // Configure ADS1115 for single-ended reading on A0
     unsigned char config[3];
@@ -64,7 +64,7 @@ int Ads1115::getRawValue(const u_int8_t channel)
     return rawValue;
 }
 
-float Ads1115::getVolts()
+float AnalogConverter::getVolts()
 {
     int rawValue = getRawValue(VOLT_SENSOR_CHANNEL);
     // Calculate voltage (assuming gain ±4.096V, resolution = 16-bit)
