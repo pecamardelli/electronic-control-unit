@@ -73,6 +73,7 @@ void DigitalGauge::drawTemp(uint8_t temp)
         return;
 
     uint16_t fontColor = WHITE;
+    uint8_t _tempX = TEMP_X;
     char buffer[16];
 
     snprintf(buffer, sizeof(buffer), "%d", temp);
@@ -80,7 +81,7 @@ void DigitalGauge::drawTemp(uint8_t temp)
     if (temp < 10)
     {
         Paint_DrawString_EN(TEMP_X, TEMP_Y, "   ", &TEMP_FONT, BLACK, fontColor);
-        Paint_DrawString_EN(TEMP_X + TEMP_FONT.Width - 2, TEMP_Y, buffer, &TEMP_FONT, BLACK, fontColor);
+        _tempX = TEMP_X + TEMP_FONT.Width - 2;
     }
     else if (temp < TEMP_DANGER_THRESHOLD)
     {
@@ -89,14 +90,14 @@ void DigitalGauge::drawTemp(uint8_t temp)
             fontColor = YELLOW;
         }
         Paint_DrawString_EN(TEMP_X, TEMP_Y, "   ", &TEMP_FONT, BLACK, fontColor);
-        Paint_DrawString_EN(TEMP_X + TEMP_FONT.Width / 2 - 3, TEMP_Y, buffer, &TEMP_FONT, BLACK, fontColor);
+        _tempX = TEMP_X + TEMP_FONT.Width / 2 - 3;
     }
     else
     {
         fontColor = RED;
-        Paint_DrawString_EN(TEMP_X, TEMP_Y, buffer, &TEMP_FONT, BLACK, fontColor);
     }
 
+    Paint_DrawString_EN(_tempX, TEMP_Y, buffer, &TEMP_FONT, BLACK, fontColor);
     lastTempValue = temp;
 }
 
@@ -106,6 +107,7 @@ void DigitalGauge::drawKml(float kml)
         return;
 
     uint16_t fontColor = WHITE;
+    uint8_t _kmlX = KML_X;
     char buffer[16];
 
     if (kml < KML_DANGER_THRESHOLD)
@@ -122,13 +124,10 @@ void DigitalGauge::drawKml(float kml)
     if (kml < 10)
     {
         Paint_DrawString_EN(KML_X, KML_Y, "    ", &KML_FONT, BLACK, fontColor);
-        Paint_DrawString_EN(KML_X + KML_FONT.Width / 2, KML_Y, buffer, &KML_FONT, BLACK, fontColor);
-    }
-    else
-    {
-        Paint_DrawString_EN(KML_X, KML_Y, buffer, &KML_FONT, BLACK, fontColor);
+        _kmlX = KML_X + KML_FONT.Width / 2;
     }
 
+    Paint_DrawString_EN(_kmlX, KML_Y, buffer, &KML_FONT, BLACK, fontColor);
     lastKmlValue = kml;
 }
 
@@ -138,13 +137,18 @@ void DigitalGauge::drawVolts(float volts)
         return;
 
     uint16_t fontColor = WHITE;
+    uint8_t _voltsX = VOLTS_X;
     char buffer[16];
 
-    if (volts < VOLTS_WARN_THRESHOLD)
+    if (volts < VOLTS_DANGER_THRESHOLD_LOW)
+    {
+        fontColor = RED;
+    }
+    else if (volts < VOLTS_WARN_THRESHOLD)
     {
         fontColor = YELLOW;
     }
-    else if (volts >= VOLTS_DANGER_THRESHOLD)
+    else if (volts >= VOLTS_DANGER_THRESHOLD_HIGH)
     {
         fontColor = RED;
     }
@@ -158,12 +162,9 @@ void DigitalGauge::drawVolts(float volts)
     if (volts < 10)
     {
         Paint_DrawString_EN(VOLTS_X, VOLTS_Y, "    ", &VOLTS_FONT, BLACK, fontColor);
-        Paint_DrawString_EN(VOLTS_X + VOLTS_FONT.Width / 2, VOLTS_Y, buffer, &VOLTS_FONT, BLACK, fontColor);
-    }
-    else
-    {
-        Paint_DrawString_EN(VOLTS_X, VOLTS_Y, buffer, &VOLTS_FONT, BLACK, fontColor);
+        _voltsX = VOLTS_X + VOLTS_FONT.Width / 2;
     }
 
+    Paint_DrawString_EN(_voltsX, VOLTS_Y, buffer, &VOLTS_FONT, BLACK, fontColor);
     lastVoltsValue = volts;
 }

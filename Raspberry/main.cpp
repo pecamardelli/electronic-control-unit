@@ -3,9 +3,11 @@
 int main(int argc, char *argv[])
 {
 	DigitalGauge digitalGauge;
+	Ads1115 ads;
 
 	while (1)
 	{
+		volts = ads.getVolts();
 
 		if (temp < 125)
 		{

@@ -2,6 +2,7 @@
 #define _MAIN_H_
 
 #include "DigitalGauge.h"
+#include "includes/Ads1115.h"
 #include <string>
 
 const char *ASSETS_PATH = "./assets";

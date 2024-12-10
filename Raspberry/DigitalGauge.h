@@ -23,7 +23,7 @@ private:
   sFONT KML_FONT = LiberationSansNarrow_Bold48;
   const uint8_t KML_X = 75;
   const uint8_t KML_Y = 24;
-  const uint8_t KML_LABEL_X = 103;
+  const uint8_t KML_LABEL_X = 105;
   const uint8_t KML_LABEL_Y = 76;
   const float KML_DANGER_THRESHOLD = 6;
   const float KML_WARN_THRESHOLD = 8;
@@ -43,8 +43,9 @@ private:
   const uint8_t VOLTS_Y = 100;
   const uint8_t VOLTS_LABEL_X = 155;
   const uint8_t VOLTS_LABEL_Y = 145;
-  const float VOLTS_WARN_THRESHOLD = 12;
-  const float VOLTS_DANGER_THRESHOLD = 15;
+  const float VOLTS_WARN_THRESHOLD = 12.5;
+  const float VOLTS_DANGER_THRESHOLD_LOW = 12;
+  const float VOLTS_DANGER_THRESHOLD_HIGH = 15;
   float lastVoltsValue = 0;
 
   void drawTemp(uint8_t);
