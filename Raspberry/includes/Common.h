@@ -11,4 +11,10 @@ typedef struct _engineValues
     bool ignition = false;
 } EngineValues;
 
+enum Screen
+{
+    TORINO_LOGO,
+    DIGITAL_GAUGE
+};
+
 #endif

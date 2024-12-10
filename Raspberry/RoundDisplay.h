@@ -19,6 +19,8 @@ private:
   uint8_t lowerCaseOffset = 97;
   uint8_t upperCaseOffset = 65;
 
+  Screen currentScreen = TORINO_LOGO;
+
   std::string TORINO_LOGO_PATH = IMAGES_PATH + "/torino_logo.bmp";
   std::string BACKGROUND = IMAGES_PATH + "/digital_gauge.bmp";
 
@@ -59,6 +61,8 @@ public:
   ~RoundDisplay();
   void setup();
   void draw();
+  void setScreen(Screen);
+  void showLogo();
 
   void drawBmpFile(const char *);
   void clear();

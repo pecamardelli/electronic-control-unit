@@ -6,6 +6,10 @@ int main(int argc, char *argv[])
 	RoundDisplay roundDisplay;
 	AnalogConverter analogConverter;
 
+	roundDisplay.showLogo();
+	sleep(2);
+	roundDisplay.setScreen(DIGITAL_GAUGE);
+
 	while (1)
 	{
 		engineValues.volts = analogConverter.getVolts();

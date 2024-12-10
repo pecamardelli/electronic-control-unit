@@ -19,16 +19,6 @@ RoundDisplay::RoundDisplay(/* args */)
         printf("Failed to apply for black memory...\r\n");
         BlackImage = NULL;
     }
-
-    drawBmpFile(TORINO_LOGO_PATH.c_str());
-    sleep(2);
-    clear();
-    drawBmpFile(BACKGROUND.c_str());
-    Paint_DrawString_EN(TEMP_LABEL_X, TEMP_LABEL_Y, "TEMP", &LiberationSansNarrow_Bold16, BLACK, WHITE);
-    Paint_DrawString_EN(KML_LABEL_X, KML_LABEL_Y, "KM/L", &LiberationSansNarrow_Bold16, BLACK, WHITE);
-    Paint_DrawString_EN(VOLTS_LABEL_X, VOLTS_LABEL_Y, "VOLTS", &LiberationSansNarrow_Bold16, BLACK, WHITE);
-
-    LCD_1IN28_Display(BlackImage);
 }
 
 RoundDisplay::~RoundDisplay()
@@ -49,6 +39,32 @@ void RoundDisplay::drawBmpFile(const char *pathToImageFile)
     LCD_1IN28_Display(BlackImage);
 }
 
+void RoundDisplay::setScreen(Screen screen)
+{
+    switch (screen)
+    {
+    case DIGITAL_GAUGE:
+        clear();
+        drawBmpFile(BACKGROUND.c_str());
+        Paint_DrawString_EN(TEMP_LABEL_X, TEMP_LABEL_Y, "TEMP", &LiberationSansNarrow_Bold16, BLACK, WHITE);
+        Paint_DrawString_EN(KML_LABEL_X, KML_LABEL_Y, "KM/L", &LiberationSansNarrow_Bold16, BLACK, WHITE);
+        Paint_DrawString_EN(VOLTS_LABEL_X, VOLTS_LABEL_Y, "VOLTS", &LiberationSansNarrow_Bold16, BLACK, WHITE);
+        LCD_1IN28_Display(BlackImage);
+        break;
+    default:
+        break;
+    }
+
+    currentScreen = screen;
+}
+
+void RoundDisplay::showLogo()
+{
+    clear();
+    drawBmpFile(TORINO_LOGO_PATH.c_str());
+    LCD_1IN28_Display(BlackImage);
+}
+
 void RoundDisplay::clear()
 {
     Paint_NewImage(BlackImage, LCD_1IN28_WIDTH, LCD_1IN28_HEIGHT, 0, BLACK, 16);
@@ -58,9 +74,17 @@ void RoundDisplay::clear()
 
 void RoundDisplay::draw()
 {
-    drawKml(engineValues.kml);
-    drawTemp(engineValues.temp);
-    drawVolts(engineValues.volts);
+    switch (currentScreen)
+    {
+    case DIGITAL_GAUGE:
+        drawKml(engineValues.kml);
+        drawTemp(engineValues.temp);
+        drawVolts(engineValues.volts);
+        break;
+    default:
+        break;
+    }
+
     LCD_1IN28_Display(BlackImage);
 }
 
