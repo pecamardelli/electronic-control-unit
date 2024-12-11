@@ -15,24 +15,28 @@ FlowSensor::FlowSensor(/* args */)
     printf("Monitoring flow sensor...\n");
 
     // Variables for detecting rising edges
-    last_state = bcm2835_gpio_lev(FLOW_SENSOR_PIN);
+    lastState = bcm2835_gpio_lev(FLOW_SENSOR_PIN);
 }
 
 FlowSensor::~FlowSensor()
 {
 }
 
-void FlowSensor::checkPulses()
+FlowSensorData FlowSensor::loop()
 {
     // Read the current state of the pin
-    current_state = bcm2835_gpio_lev(FLOW_SENSOR_PIN);
+    currentState = bcm2835_gpio_lev(FLOW_SENSOR_PIN);
 
     // Detect a rising edge
-    if (last_state == LOW && current_state == HIGH)
+    if (lastState == LOW && currentState == HIGH)
     {
-        pulse_count++;
+        data.partialPulseCount++;
+        data.totalPulseCount++;
+        data.totalConsumption = (float)data.totalPulseCount / PULSES_PER_LITER;
     }
 
     // Update the last state
-    last_state = current_state;
+    lastState = currentState;
+
+    return data;
 }

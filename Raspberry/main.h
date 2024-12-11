@@ -11,10 +11,11 @@
 #include "RoundDisplay.h"
 
 #include <string>
+#include <sys/mman.h>
 
 const char *ASSETS_PATH = "./assets";
 std::string IMAGES_PATH = std::string(ASSETS_PATH) + "/images";
 
-EngineValues engineValues;
+EngineValues engineValues = {0};
 
 #endif

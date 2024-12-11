@@ -49,6 +49,7 @@ void RoundDisplay::setScreen(Screen screen)
         Paint_DrawString_EN(TEMP_LABEL_X, TEMP_LABEL_Y, "TEMP", &LiberationSansNarrow_Bold16, BLACK, WHITE);
         Paint_DrawString_EN(KML_LABEL_X, KML_LABEL_Y, "KM/L", &LiberationSansNarrow_Bold16, BLACK, WHITE);
         Paint_DrawString_EN(VOLTS_LABEL_X, VOLTS_LABEL_Y, "VOLTS", &LiberationSansNarrow_Bold16, BLACK, WHITE);
+        Paint_DrawString_EN(FUEL_CONS_LABEL_X, FUEL_CONS_LABEL_Y, "LT", &LiberationSansNarrow_Bold16, BLACK, WHITE);
         LCD_1IN28_Display(BlackImage);
         break;
     default:
@@ -80,6 +81,7 @@ void RoundDisplay::draw()
         drawKml(engineValues.kml);
         drawTemp(engineValues.temp);
         drawVolts(engineValues.volts);
+        drawFuelConsumption(engineValues.fuelConsumption);
         break;
     default:
         break;
@@ -188,4 +190,25 @@ void RoundDisplay::drawVolts(float volts)
 
     Paint_DrawString_EN(_voltsX, VOLTS_Y, buffer, &VOLTS_FONT, BLACK, fontColor);
     lastVoltsValue = volts;
+}
+
+void RoundDisplay::drawFuelConsumption(float fuelConsumption)
+{
+    if (fuelConsumption == lastFuelConsValue)
+        return;
+
+    uint16_t fontColor = WHITE;
+    uint8_t fuelConsX = FUEL_CONS_X;
+    char buffer[16];
+
+    snprintf(buffer, sizeof(buffer), "%.1f", fuelConsumption);
+
+    if (fuelConsumption < 10)
+    {
+        Paint_DrawString_EN(FUEL_CONS_X, FUEL_CONS_Y, "    ", &FUEL_CONS_FONT, BLACK, fontColor);
+        fuelConsX = FUEL_CONS_X + FUEL_CONS_FONT.Width / 2;
+    }
+
+    Paint_DrawString_EN(fuelConsX, FUEL_CONS_Y, buffer, &FUEL_CONS_FONT, BLACK, fontColor);
+    lastFuelConsValue = fuelConsumption;
 }

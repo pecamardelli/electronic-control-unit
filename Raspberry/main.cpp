@@ -12,52 +12,47 @@ int main(int argc, char *argv[])
 	sleep(2);
 	roundDisplay.setScreen(DIGITAL_GAUGE);
 
-	// Pipes to comunicate with the flow sensor process
-	int flowSensorPipe[2]; // Array to hold pipe ends: pipe_fd[0] for read, pipe_fd[1] for write
+	// Create shared memory for the Flow Sensor
+	FlowSensorData *flowSensorData = (FlowSensorData *)mmap(
+		NULL,
+		sizeof(FlowSensorData),
+		PROT_READ | PROT_WRITE,
+		MAP_SHARED | MAP_ANONYMOUS,
+		-1,
+		0);
 
-	if (pipe(flowSensorPipe) == -1)
+	if (flowSensorData == MAP_FAILED)
 	{
-		perror("Pipe creation for the Flow Sensor failed");
+		perror("mmap failed");
 	}
 
-	// Create a child process for the flow sensor
+	// Create a child process for the Flow Sensor
 	pid_t flowSensorPid = fork();
 
 	if (flowSensorPid < 0)
 	{
 		perror("Fork failed");
+		munmap(flowSensorData, sizeof(FlowSensorData));
 	}
 	else if (flowSensorPid == 0)
 	{
-		// Child process for the Flow Sensor
-		close(flowSensorPipe[0]); // Close unused read end
-
 		while (1)
 		{
-			flowSensor.checkPulses();
-
-			if (write(flowSensorPipe[1], &flowSensor.pulse_count, sizeof(flowSensor.pulse_count)) == -1)
-			{
-				perror("Write failed");
-			}
-			printf("Child pulses: %lu\n", flowSensor.pulse_count);
+			*flowSensorData = flowSensor.loop();
 			usleep(5000);
 		}
 	}
 
-	// close(flowSensorPipe[1]); // Close unused write end
-
+	// ### MAIN LOOP ###
 	while (1)
 	{
 		engineValues.temp = coolantTempSensor.readTemp();
 		engineValues.volts = analogConverter.getVolts();
-		unsigned long pulses = 1;
 
-		read(flowSensorPipe[0], &pulses, sizeof(pulses));
+		printf("Fuel: %.1f\n", flowSensorData->totalConsumption);
 
-		printf("Pulses: %ld\n", pulses);
-
-		engineValues.kml = (float)pulses;
+		// engineValues.kml = flowSensorData->totalConsumption;
+		engineValues.fuelConsumption = flowSensorData->totalConsumption;
 
 		roundDisplay.draw();
 		usleep(50000);

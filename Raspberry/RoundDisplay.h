@@ -37,7 +37,7 @@ private:
   const uint8_t TEMP_X = 30;
   const uint8_t TEMP_Y = 100;
   const uint8_t TEMP_LABEL_X = 39;
-  const uint8_t TEMP_LABEL_Y = 145;
+  const uint8_t TEMP_LABEL_Y = 142;
   const uint8_t TEMP_WARN_THRESHOLD = 90;
   const uint8_t TEMP_DANGER_THRESHOLD = 100;
   uint8_t lastTempValue = 0;
@@ -46,15 +46,23 @@ private:
   const uint8_t VOLTS_X = 143;
   const uint8_t VOLTS_Y = 100;
   const uint8_t VOLTS_LABEL_X = 155;
-  const uint8_t VOLTS_LABEL_Y = 145;
+  const uint8_t VOLTS_LABEL_Y = 142;
   const float VOLTS_WARN_THRESHOLD = 12.5;
   const float VOLTS_DANGER_THRESHOLD_LOW = 12;
   const float VOLTS_DANGER_THRESHOLD_HIGH = 15;
   float lastVoltsValue = 0;
 
+  sFONT FUEL_CONS_FONT = LiberationSansNarrow_Bold36;
+  const uint8_t FUEL_CONS_X = 92;
+  const uint8_t FUEL_CONS_Y = 170;
+  const uint8_t FUEL_CONS_LABEL_X = 65;
+  const uint8_t FUEL_CONS_LABEL_Y = 184;
+  float lastFuelConsValue = 0;
+
   void drawTemp(uint8_t);
   void drawKml(float);
   void drawVolts(float);
+  void drawFuelConsumption(float);
 
 public:
   RoundDisplay(/* args */);

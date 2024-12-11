@@ -50,7 +50,8 @@
     "iomanip": "cpp",
     "sstream": "cpp",
     "ads1115.h": "c",
-    "relay.h": "c"
+    "relay.h": "c",
+    "coolanttempsensor.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

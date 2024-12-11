@@ -7,21 +7,28 @@
 #include <unistd.h>
 
 #define FLOW_SENSOR_PIN RPI_GPIO_P1_12 // GPIO18 (Pin 12)
-#define PULSES_PER_LITER 287           // Example value, check your datasheet
+
+typedef struct _flowSensorData
+{
+    unsigned long partialPulseCount;
+    unsigned long totalPulseCount;
+    float totalConsumption;
+} FlowSensorData;
 
 class FlowSensor
 {
 private:
     /* data */
-    uint8_t last_state;
-    uint8_t current_state;
+    uint8_t lastState;
+    uint8_t currentState;
+    const u_int16_t PULSES_PER_LITER = 287;
 
 public:
     FlowSensor(/* args */);
     ~FlowSensor();
-    unsigned long pulse_count = 0;
+    FlowSensorData data = {0};
 
-    void checkPulses();
+    FlowSensorData loop();
 };
 
 #endif
