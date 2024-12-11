@@ -1,3 +1,8 @@
+/*
+    Credits to Nils Henrich
+    https://github.com/nilshenrich/DS18B20_cpp
+*/
+
 #ifndef COOLANT_TEMP_SENSOR_H_
 #define COOLANT_TEMP_SENSOR_H_
 

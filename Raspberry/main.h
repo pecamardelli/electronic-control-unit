@@ -6,6 +6,7 @@
 #include "includes/AnalogConverter.h"
 #include "includes/Relay.h"
 #include "includes/CoolantTempSensor.h"
+#include "includes/FlowSensor.h"
 #include "helpers/helpers.h"
 #include "RoundDisplay.h"
 

@@ -1,0 +1,53 @@
+# General
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# C++ build files
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.a
+*.lib
+
+# Compiler generated files
+*.d
+*.gcno
+*.gcda
+*.gcov
+*.pdb
+*.idb
+
+# Editor and IDE specific files
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-workspace
+*.sublime-project
+*.project
+*.cproject
+*.classpath
+
+# Build directories
+build/
+bin/
+out/
+Debug/
+Release/
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Other
+*.DS_Store
+*.directory

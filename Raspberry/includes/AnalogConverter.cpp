@@ -70,9 +70,5 @@ float AnalogConverter::getVolts()
     // Calculate voltage (assuming gain ±4.096V, resolution = 16-bit)
     // Scaling factor for MH 25V sensor is 5
     float volts = rawValue * 4.096 / 32768.0 * 5;
-
-    // printf("Channel %d Raw Value: %d\n", VOLT_SENSOR_CHANNEL, rawValue);
-    // printf("Voltage: %.1f V\n", volts);
-
     return volts >= 0 ? volts : 0;
 }
