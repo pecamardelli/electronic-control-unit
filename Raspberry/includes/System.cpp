@@ -17,6 +17,6 @@ System::~System()
 void System::shutdown()
 {
     printf("Shutting down...\n");
-    system("init 0");
+    // system("init 0");
     exit(0);
 }

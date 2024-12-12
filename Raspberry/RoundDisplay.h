@@ -26,38 +26,44 @@ private:
 
   sFONT KML_FONT = LiberationSansNarrow_Bold48;
   const uint8_t KML_X = 75;
-  const uint8_t KML_Y = 24;
-  const uint8_t KML_LABEL_X = 105;
-  const uint8_t KML_LABEL_Y = 76;
+  const uint8_t KML_Y = 15;
+  const char *KML_LABEL = "KML";
+  const uint8_t KML_LABEL_X = (LCD_1IN28_WIDTH - LABELS_FONT.Width * strlen(KML_LABEL)) / 2;
+  const uint8_t KML_LABEL_Y = KML_Y + KML_FONT.Height + 2;
   const float KML_DANGER_THRESHOLD = 6;
   const float KML_WARN_THRESHOLD = 8;
-  float lastKmlValue = 0;
+  float lastKmlValue;
+
+  sFONT LABELS_FONT = LiberationSansNarrow_Bold16;
 
   sFONT TEMP_FONT = LiberationSansNarrow_Bold36;
   const uint8_t TEMP_X = 30;
   const uint8_t TEMP_Y = 100;
+  const char *TEMP_LABEL = "TEMP";
   const uint8_t TEMP_LABEL_X = 39;
   const uint8_t TEMP_LABEL_Y = 142;
   const uint8_t TEMP_WARN_THRESHOLD = 90;
   const uint8_t TEMP_DANGER_THRESHOLD = 100;
-  uint8_t lastTempValue = 0;
+  uint8_t lastTempValue;
 
   sFONT VOLTS_FONT = LiberationSansNarrow_Bold36;
   const uint8_t VOLTS_X = 143;
   const uint8_t VOLTS_Y = 100;
+  const char *VOLTS_LABEL = "VOLTS";
   const uint8_t VOLTS_LABEL_X = 155;
   const uint8_t VOLTS_LABEL_Y = 142;
   const float VOLTS_WARN_THRESHOLD = 12.5;
   const float VOLTS_DANGER_THRESHOLD_LOW = 12;
   const float VOLTS_DANGER_THRESHOLD_HIGH = 15;
-  float lastVoltsValue = 0;
+  float lastVoltsValue;
 
   sFONT FUEL_CONS_FONT = LiberationSansNarrow_Bold36;
-  const uint8_t FUEL_CONS_X = 92;
+  const uint8_t FUEL_CONS_X = 0;
   const uint8_t FUEL_CONS_Y = 170;
-  const uint8_t FUEL_CONS_LABEL_X = 65;
-  const uint8_t FUEL_CONS_LABEL_Y = 184;
-  float lastFuelConsValue = 0;
+  const char *FUEL_CONS_LABEL = "LTS";
+  const uint8_t FUEL_CONS_LABEL_X = (LCD_1IN28_WIDTH - LABELS_FONT.Width * strlen(FUEL_CONS_LABEL)) / 2;
+  const uint8_t FUEL_CONS_LABEL_Y = FUEL_CONS_Y - LABELS_FONT.Height;
+  float lastFuelConsValue;
 
   void drawTemp(uint8_t);
   void drawKml(float);

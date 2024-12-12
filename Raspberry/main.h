@@ -18,7 +18,7 @@
 const char *ASSETS_PATH = "./assets";
 std::string IMAGES_PATH = std::string(ASSETS_PATH) + "/images";
 
-EngineValues engineValues = {0};
+EngineValues engineValues;
 
 bool terminateProgram = false;
 

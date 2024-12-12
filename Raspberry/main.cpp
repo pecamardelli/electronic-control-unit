@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
 		engineValues.temp = coolantTempSensor.readTemp();
 		engineValues.volts = analogConverter.getVolts();
 		engineValues.fuelConsumption = flowSensorData->totalConsumption;
+		engineValues.kml = flowSensorData->totalConsumption;
 		roundDisplay.draw();
 
 		// SIGINT handler will set this flag to true.
