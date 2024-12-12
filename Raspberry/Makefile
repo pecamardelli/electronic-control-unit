@@ -41,31 +41,31 @@ ${TARGET}:${OBJ_O}
 	$(CC) $(CFLAGS) $(OBJ_O) -o $@ $(LIB)
     
 ${DIR_BIN}/%.o:$(DIR_MAIN)/%.cpp
-	$(CC) $(CFLAGS) -c  $< -o $@ $(DISPLAY)
+	$(CC) $(CFLAGS) -c $< -o $@ $(DISPLAY)
     
 ${DIR_BIN}/%.o:$(DIR_DISPLAY)/%.c
-	$(CC) $(CFLAGS) -c  $< -o $@ -I $(DIR_DISPLAY_CONFIG) -I $(DIR_DISPLAY_GUI) -I $(DIR_DISPLAY_EPD)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_DISPLAY_CONFIG) -I $(DIR_DISPLAY_GUI) -I $(DIR_DISPLAY_EPD)
 
 ${DIR_BIN}/%.o:$(DIR_DISPLAY_EPD)/%.c
-	$(CC) $(CFLAGS) -c  $< -o $@ -I $(DIR_DISPLAY_CONFIG)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_DISPLAY_CONFIG)
     
 ${DIR_BIN}/%.o:$(DIR_DISPLAY_FONTS)/%.c
-	$(CC) $(CFLAGS) -c  $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
     
 ${DIR_BIN}/%.o:$(DIR_DISPLAY_GUI)/%.c
-	$(CC) $(CFLAGS) -c  $< -o $@ -I $(DIR_DISPLAY_CONFIG)  -I $(DIR_DISPLAY_EPD) -I $(DIR_DISPLAY)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_DISPLAY_CONFIG) -I $(DIR_DISPLAY_EPD) -I $(DIR_DISPLAY)
 
 ${DIR_BIN}/%.o:$(DIR_DISPLAY_CONFIG)/%.c
-	$(CC) $(CFLAGS) -c  $< -o $@ $(LIB)
+	$(CC) $(CFLAGS) -c $< -o $@ $(LIB)
 
 ${DIR_BIN}/%.o:$(DIR_INCLUDES)/%.cpp
-	$(CC) $(CFLAGS) -c  $< -o $@ $(DISPLAY)
+	$(CC) $(CFLAGS) -c $< -o $@ $(DISPLAY)
 
 ${DIR_BIN}/%.o:$(DIR_HELPERS)/%.cpp
-	$(CC) $(CFLAGS) -c  $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 ${DIR_BIN}/%.o:$(DIR_IMAGES)/%.cpp
-	$(CC) $(CFLAGS) -c  $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 	
 clean :
 	rm $(DIR_BIN)/*.* 

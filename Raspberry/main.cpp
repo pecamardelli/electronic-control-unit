@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 		while (1)
 		{
 			*flowSensorData = flowSensor.loop();
-			usleep(5000);
+			usleep(sys.flowSensorLoopRate);
 		}
 	}
 
@@ -48,13 +48,34 @@ int main(int argc, char *argv[])
 	{
 		engineValues.temp = coolantTempSensor.readTemp();
 		engineValues.volts = analogConverter.getVolts();
-
-		printf("Fuel: %.1f\n", flowSensorData->totalConsumption);
-
-		// engineValues.kml = flowSensorData->totalConsumption;
 		engineValues.fuelConsumption = flowSensorData->totalConsumption;
-
 		roundDisplay.draw();
-		usleep(50000);
+
+		// SIGINT handler will set this flag to true.
+		if (terminateProgram)
+			break;
+
+		usleep(sys.mainProgramLoopRate);
 	}
+
+	roundDisplay.setScreen(TORINO_LOGO);
+	roundDisplay.showLogo();
+
+	printf("Terminating Flow Sensor process...\n");
+
+	int status;
+
+	kill(flowSensorPid, SIGKILL);
+	waitpid(flowSensorPid, &status, 0);
+
+	if (WIFEXITED(status))
+	{
+		printf("Flow Sensor process exited normally with status %d\n", WEXITSTATUS(status));
+	}
+	else if (WIFSIGNALED(status))
+	{
+		printf("Flow Sensor process killed by signal %d\n", WTERMSIG(status));
+	}
+
+	sys.shutdown();
 }

@@ -7,6 +7,8 @@
 #include "../helpers/helpers.h"
 #include "Relay.h"
 
+void signal_handler(int);
+
 class System
 {
 private:
@@ -16,6 +18,8 @@ private:
 public:
     System(/* args */);
     ~System();
+    useconds_t flowSensorLoopRate;
+    useconds_t mainProgramLoopRate;
 
     void shutdown();
 };
