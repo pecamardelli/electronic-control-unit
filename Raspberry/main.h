@@ -2,6 +2,7 @@
 #define _MAIN_H_
 
 #include "includes/Common.h"
+#include "includes/Logger.h"
 #include "includes/System.h"
 #include "includes/AnalogConverter.h"
 #include "includes/Relay.h"

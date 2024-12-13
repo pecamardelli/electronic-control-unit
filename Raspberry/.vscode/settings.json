@@ -51,7 +51,16 @@
     "sstream": "cpp",
     "ads1115.h": "c",
     "relay.h": "c",
-    "coolanttempsensor.h": "c"
+    "coolanttempsensor.h": "c",
+    "bitset": "cpp",
+    "codecvt": "cpp",
+    "csignal": "cpp",
+    "ratio": "cpp",
+    "regex": "cpp",
+    "fstream": "cpp",
+    "semaphore": "cpp",
+    "stop_token": "cpp",
+    "thread": "cpp"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,
