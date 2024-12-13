@@ -19,7 +19,7 @@
 #include "GUI_Paint.h"
 #include "GUI_BMP.h"
 #include "image.h"
-#include <stdio.h>  //printf()
+#include <stdio.h>
 #include <stdlib.h> //exit()
 #include <signal.h> //signal()
 

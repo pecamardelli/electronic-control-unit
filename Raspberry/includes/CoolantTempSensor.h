@@ -13,8 +13,9 @@
 #include <filesystem>
 #include <iostream>
 #include <cmath>
+#include "Logger.h"
 
-class CoolantTempSensor
+class CoolantTempSensor : Logger
 {
 public:
     /**

@@ -2,14 +2,14 @@
 
 CoolantTempSensor::CoolantTempSensor(std::string address) : address(oneWireRootFolder + address + oneWireFile)
 {
-    std::cout << "Set address to " << address << std::endl;
-
-    return;
+    className = "CoolantTempSensor";
+    info("Set address to " + address);
 }
 
 CoolantTempSensor::CoolantTempSensor()
 {
-    std::cout << "Find CoolantTempSensor sensor ..." << std::endl;
+    className = "CoolantTempSensor";
+    info("Find CoolantTempSensor sensor ...");
 
     // Find first folder whose name starts with "28-"
     for (const std::filesystem::directory_entry &val : std::filesystem::directory_iterator(oneWireRootFolder))
@@ -24,14 +24,12 @@ CoolantTempSensor::CoolantTempSensor()
             continue;
 
         address = oneWireRootFolder + folderName + oneWireFile;
-
-        std::cout << "Found sensor with address " << folderName << std::endl;
-
+        info("Found sensor with address " + folderName);
         return;
     }
 
     // If code gets here, no connected sensor was found
-    throw std::runtime_error("No connected CoolantTempSensor sensor found!");
+    error("No connected CoolantTempSensor sensor found!");
 }
 
 CoolantTempSensor::~CoolantTempSensor() {}
@@ -48,8 +46,7 @@ float CoolantTempSensor::readTemp()
     // Check if read was good
     if (!reader.good())
     {
-        std::cerr << "Read from CoolantTempSensor failed!" << std::endl;
-
+        // error("Read from CoolantTempSensor failed!");
         return std::numeric_limits<float>::quiet_NaN();
     }
 
@@ -67,8 +64,7 @@ float CoolantTempSensor::readTemp()
     // Check if temperature was read properly
     if ("YES" != status)
     {
-        std::cerr << "Temperature was not measured properly!" << std::endl;
-
+        // error("Temperature was not measured properly!");
         return std::numeric_limits<float>::quiet_NaN();
     }
 

@@ -59,7 +59,7 @@ ${DIR_BIN}/%.o:$(DIR_DISPLAY_CONFIG)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ $(LIB)
 
 ${DIR_BIN}/%.o:$(DIR_INCLUDES)/%.cpp
-	$(CC) $(CFLAGS) -c $< -o $@ $(DISPLAY)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 ${DIR_BIN}/%.o:$(DIR_HELPERS)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@

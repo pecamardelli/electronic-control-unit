@@ -5,6 +5,12 @@ Logger::Logger()
     openLogFile();
 }
 
+Logger::Logger(std::string _className)
+{
+    className = _className;
+    openLogFile();
+}
+
 Logger::~Logger()
 {
     if (logFile.is_open())

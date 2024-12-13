@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "Logger.h"
 
 #define FLOW_SENSOR_PIN RPI_GPIO_P1_12 // GPIO18 (Pin 12)
 
@@ -15,7 +16,7 @@ typedef struct _flowSensorData
     float totalConsumption;
 } FlowSensorData;
 
-class FlowSensor
+class FlowSensor : Logger
 {
 private:
     /* data */

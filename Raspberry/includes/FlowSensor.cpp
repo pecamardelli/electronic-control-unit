@@ -2,17 +2,18 @@
 
 FlowSensor::FlowSensor(/* args */)
 {
+    className = "FlowSensor";
     // Initialize bcm2835
     if (!bcm2835_init())
     {
-        printf("bcm2835_init failed. Are you running as root?\n");
+        error("bcm2835_init failed. Are you running as root?");
     }
 
     // Configure GPIO pin
     bcm2835_gpio_fsel(FLOW_SENSOR_PIN, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_set_pud(FLOW_SENSOR_PIN, BCM2835_GPIO_PUD_UP);
 
-    printf("Monitoring flow sensor...\n");
+    info("Flow sensor inited...");
 
     // Variables for detecting rising edges
     lastState = bcm2835_gpio_lev(FLOW_SENSOR_PIN);

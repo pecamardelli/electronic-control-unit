@@ -60,7 +60,10 @@
     "fstream": "cpp",
     "semaphore": "cpp",
     "stop_token": "cpp",
-    "thread": "cpp"
+    "thread": "cpp",
+    "dev_config.h": "c",
+    "analogconverter.h": "c",
+    "stdlib.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

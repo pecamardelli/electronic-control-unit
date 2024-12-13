@@ -19,6 +19,7 @@ private:
     void openLogFile();
 
 public:
+    Logger(std::string);
     Logger();
     ~Logger();
 
