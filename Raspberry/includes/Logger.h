@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <ctime>
+#include <cxxabi.h>
 
 class Logger
 {
@@ -14,8 +15,8 @@ private:
     std::string currentDate;
     std::string getCurrentDate();
     std::string getCurrentTime();
+    bool debugModeEnabled = false;
     void openLogFile();
-    void log(const std::string &, const std::string &);
 
 public:
     Logger();
@@ -25,6 +26,10 @@ public:
     void warning(const std::string &);
     void error(const std::string &);
     void debug(const std::string &);
+
+protected:
+    void log(const std::string &, const std::string &);
+    std::string className = "Main";
 };
 
 #endif

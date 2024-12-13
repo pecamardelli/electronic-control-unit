@@ -57,10 +57,11 @@ void Logger::log(const std::string &level, const std::string &message)
     openLogFile(); // Ensure the log file is up-to-date
 
     std::string timestamp = getCurrentTime();
-    std::string logMessage = "[" + timestamp + "] [" + level + "] " + message;
+    std::string logMessage = "[" + timestamp + "] [" + level + "] " + "[" + className + "] " + message;
 
     // Log to console
-    std::cout << logMessage << std::endl;
+    std::cout
+        << logMessage << std::endl;
 
     // Log to file
     if (logFile.is_open())
@@ -86,5 +87,6 @@ void Logger::error(const std::string &message)
 
 void Logger::debug(const std::string &message)
 {
-    // log("DEBUG", message);
+    if (debugModeEnabled)
+        log("DEBUG", message);
 }

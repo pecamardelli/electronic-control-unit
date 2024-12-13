@@ -7,12 +7,13 @@
 #include <fcntl.h>
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
+#include "Logger.h"
 
 #define ADS1115_ADDR 0x48 // Default I2C address
 #define CONVERSION_REG 0x00
 #define CONFIG_REG 0x01
 
-class AnalogConverter
+class AnalogConverter : Logger
 {
 private:
     /* data */
@@ -26,6 +27,8 @@ public:
     AnalogConverter(/* args */);
     ~AnalogConverter();
     float getVolts();
+
+protected:
 };
 
 #endif
