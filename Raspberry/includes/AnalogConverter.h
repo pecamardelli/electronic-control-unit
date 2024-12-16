@@ -13,7 +13,7 @@
 #define CONVERSION_REG 0x00
 #define CONFIG_REG 0x01
 
-class AnalogConverter : Logger
+class AnalogConverter
 {
 private:
     /* data */
@@ -22,6 +22,7 @@ private:
     const char *FILENAME = "/dev/i2c-1";
     const u_int8_t VOLT_SENSOR_CHANNEL = 0;
     int getRawValue(const u_int8_t);
+    Logger logger = Logger("AnalogConverter");
 
 public:
     AnalogConverter(/* args */);

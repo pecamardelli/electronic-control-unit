@@ -95,6 +95,7 @@ int TempGauge::tempToAngle(float temp) {
 EXEC_STATUSES TempGauge::exec(String args[]) {
   if (args[0].equals("temp")) {
     currentTemperature = args[1].toFloat();
+    Serial.println("Temp set to: " + String(currentTemperature));
     return COMMAND_SUCCESSFUL;
   }
 

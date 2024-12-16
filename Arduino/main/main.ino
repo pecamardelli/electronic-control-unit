@@ -11,7 +11,7 @@ VoltSensor voltSensor;
 SDCard sdCard;
 CoolantTempSensor coolantTempSensor;
 TempGauge tempGauge;
-CircularDisplay circularDisplay;
+//CircularDisplay circularDisplay;
 
 void setup() {
   Serial.begin(9600);
@@ -26,7 +26,7 @@ void setup() {
   clock.begin();
   tempSensor.begin();
   // sdCard.begin();
-  circularDisplay.setup();
+ // circularDisplay.setup();
 }
 
 void loop() {
@@ -46,21 +46,9 @@ void loop() {
   ignition = volts > 10;
   amperes = currentSensor.getMeasure();
   coolantTemp = coolantTempSensor.getMeasure();
-  tempGauge.setTemperature(coolantTemp);
-  tempGauge.loop();
+  //tempGauge.setTemperature(coolantTemp);
+  //tempGauge.loop();
   _pulses = flowmeter.checkPulse();
-  circularDisplay.loop();
+  //circularDisplay.loop();
 
-  if (debugMode == READINGS) {
-    Serial.print("VOLTS: ");
-    Serial.print(volts);
-    Serial.print(" - AMPS: ");
-    Serial.print(amperes);
-    Serial.print(" - TEMP: ");
-    Serial.print(coolantTemp);
-    Serial.print(" - PULSES: ");
-    Serial.print(_pulses);
-    Serial.print(" - IGN: ");
-    Serial.println(ignition);
-  }
 }

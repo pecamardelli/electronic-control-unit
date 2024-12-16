@@ -2,14 +2,12 @@
 
 CoolantTempSensor::CoolantTempSensor(std::string address) : address(oneWireRootFolder + address + oneWireFile)
 {
-    className = "CoolantTempSensor";
-    info("Set address to " + address);
+    logger.info("Set address to " + address);
 }
 
 CoolantTempSensor::CoolantTempSensor()
 {
-    className = "CoolantTempSensor";
-    info("Find CoolantTempSensor sensor ...");
+    logger.info("Find CoolantTempSensor sensor ...");
 
     // Find first folder whose name starts with "28-"
     for (const std::filesystem::directory_entry &val : std::filesystem::directory_iterator(oneWireRootFolder))
@@ -24,12 +22,12 @@ CoolantTempSensor::CoolantTempSensor()
             continue;
 
         address = oneWireRootFolder + folderName + oneWireFile;
-        info("Found sensor with address " + folderName);
+        logger.info("Found sensor with address " + folderName);
         return;
     }
 
     // If code gets here, no connected sensor was found
-    error("No connected CoolantTempSensor sensor found!");
+    logger.error("No connected CoolantTempSensor sensor found!");
 }
 
 CoolantTempSensor::~CoolantTempSensor() {}

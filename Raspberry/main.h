@@ -8,6 +8,7 @@
 #include "includes/Relay.h"
 #include "includes/CoolantTempSensor.h"
 #include "includes/FlowSensor.h"
+#include "includes/TempGauge.h"
 #include "helpers/helpers.h"
 #include "RoundDisplay.h"
 

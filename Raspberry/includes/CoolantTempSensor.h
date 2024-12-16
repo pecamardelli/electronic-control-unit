@@ -15,7 +15,7 @@
 #include <cmath>
 #include "Logger.h"
 
-class CoolantTempSensor : Logger
+class CoolantTempSensor
 {
 public:
     /**
@@ -45,6 +45,8 @@ public:
      * Is temperature value valid?
      */
     bool isValid(float temperature);
+
+    Logger logger = Logger("CoolantTempSensor");
 
 private:
     // Root folder of all one-Wire devices

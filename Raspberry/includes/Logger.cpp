@@ -1,10 +1,5 @@
 #include "Logger.h"
 
-Logger::Logger()
-{
-    openLogFile();
-}
-
 Logger::Logger(std::string _className)
 {
     className = _className;

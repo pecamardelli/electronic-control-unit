@@ -63,7 +63,8 @@
     "thread": "cpp",
     "dev_config.h": "c",
     "analogconverter.h": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "tempgauge.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

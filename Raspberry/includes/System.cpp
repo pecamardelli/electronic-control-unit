@@ -16,7 +16,14 @@ System::~System()
 
 void System::shutdown()
 {
-    printf("Shutting down...\n");
+    logger.info("Shutting down...");
     // system("init 0");
     exit(0);
+}
+
+uint64_t System::uptime()
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return static_cast<uint64_t>(ts.tv_sec) * 1000000 + ts.tv_nsec / 1000;
 }

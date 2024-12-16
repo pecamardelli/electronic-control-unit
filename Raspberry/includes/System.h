@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <csignal>
+#include <iostream>
+#include <ctime>
+
+#include "Logger.h"
 #include "../helpers/helpers.h"
 #include "Relay.h"
 
@@ -14,6 +18,7 @@ class System
 private:
     /* data */
     Relay mainRelay;
+    Logger logger = Logger("System");
 
 public:
     System(/* args */);
@@ -22,6 +27,7 @@ public:
     useconds_t mainProgramLoopRate;
 
     void shutdown();
+    static uint64_t uptime();
 };
 
 #endif

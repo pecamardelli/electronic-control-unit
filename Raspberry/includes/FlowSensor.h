@@ -16,13 +16,14 @@ typedef struct _flowSensorData
     float totalConsumption;
 } FlowSensorData;
 
-class FlowSensor : Logger
+class FlowSensor
 {
 private:
     /* data */
     uint8_t lastState;
     uint8_t currentState;
     const u_int16_t PULSES_PER_LITER = 1;
+    Logger logger = Logger("FlowSensor");
 
 public:
     FlowSensor(/* args */);

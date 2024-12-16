@@ -1,7 +1,7 @@
 #ifndef _HEADER_H_
 #define _HEADER_H_
 
-#include "CircularDisplay.h"
+//#include "CircularDisplay.h"
 #include "Clock.h"
 #include "Commander.h"
 #include "CoolantTempSensor.h"

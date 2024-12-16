@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[])
 {
-	Logger logger;
+	Logger logger("Main");
 	logger.info("Program started.");
 
 	System sys;
@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 	AnalogConverter analogConverter;
 	CoolantTempSensor coolantTempSensor;
 	FlowSensor flowSensor;
+	TempGauge tempGauge;
 
 	logger.info("Initializing Round Display.");
 	roundDisplay.showLogo();
@@ -41,7 +42,6 @@ int main(int argc, char *argv[])
 	if (flowSensorPid < 0)
 	{
 		logger.error("Fork failed for Flow Sensor process.");
-		perror("Fork failed");
 		munmap(flowSensorData, sizeof(FlowSensorData));
 	}
 	else if (flowSensorPid == 0)
@@ -51,6 +51,21 @@ int main(int argc, char *argv[])
 		{
 			*flowSensorData = flowSensor.loop();
 			usleep(sys.flowSensorLoopRate);
+		}
+	}
+
+	pid_t tempGaugePid = fork();
+
+	if (tempGaugePid < 0)
+	{
+		logger.error("Fork failed for Temp Gauge process.");
+	}
+	else if (tempGaugePid == 0)
+	{
+		logger.info("Temp Gauge child process started.");
+		while (1)
+		{
+			tempGauge.loop();
 		}
 	}
 
@@ -67,7 +82,6 @@ int main(int argc, char *argv[])
 
 		if (engineValues.volts < 6)
 		{
-			logger.warning("Voltage dropped below 6V. Ignition turned off.");
 			engineValues.ignition = false;
 		}
 		else
@@ -87,9 +101,9 @@ int main(int argc, char *argv[])
 	roundDisplay.setScreen(TORINO_LOGO);
 	roundDisplay.showLogo();
 
-	logger.info("Terminating Flow Sensor process.");
-
 	int status;
+
+	logger.info("Terminating Flow Sensor process.");
 	kill(flowSensorPid, SIGKILL);
 	waitpid(flowSensorPid, &status, 0);
 
@@ -100,6 +114,19 @@ int main(int argc, char *argv[])
 	else if (WIFSIGNALED(status))
 	{
 		logger.warning("Flow Sensor process killed by signal.");
+	}
+
+	logger.info("Terminating Temp Gauge process.");
+	kill(tempGaugePid, SIGKILL);
+	waitpid(tempGaugePid, &status, 0);
+
+	if (WIFEXITED(status))
+	{
+		logger.info("Temp Gauge process exited normally.");
+	}
+	else if (WIFSIGNALED(status))
+	{
+		logger.warning("Temp Gauge process killed by signal.");
 	}
 
 	logger.info("Shutting down system.");
