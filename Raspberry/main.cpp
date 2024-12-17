@@ -5,6 +5,9 @@ int main(int argc, char *argv[])
 	Logger logger("Main");
 	logger.info("Program started.");
 
+	// Exception handling: ctrl + c
+	signal(SIGINT, signal_handler);
+
 	System sys;
 	RoundDisplay roundDisplay;
 	AnalogConverter analogConverter;
@@ -16,6 +19,20 @@ int main(int argc, char *argv[])
 	roundDisplay.showLogo();
 	sleep(2);
 	roundDisplay.setScreen(DIGITAL_GAUGE);
+
+	logger.info("Setting up shared memory for the engine readings.");
+	EngineValues *engineValues = (EngineValues *)mmap(
+		NULL,
+		sizeof(EngineValues),
+		PROT_READ | PROT_WRITE,
+		MAP_SHARED | MAP_ANONYMOUS,
+		-1,
+		0);
+
+	if (engineValues == MAP_FAILED || engineValues == NULL)
+	{
+		logger.error("mmap failed for engine readings or returned NULL pointer.");
+	}
 
 	logger.info("Setting up shared memory for the Flow Sensor.");
 	// Create shared memory for the Flow Sensor
@@ -30,7 +47,6 @@ int main(int argc, char *argv[])
 	if (flowSensorData == MAP_FAILED || flowSensorData == NULL)
 	{
 		logger.error("mmap failed for Flow Sensor data or returned NULL pointer.");
-		perror("mmap failed");
 	}
 
 	logger.info("Creating child process for Flow Sensor.");
@@ -52,13 +68,12 @@ int main(int argc, char *argv[])
 			*flowSensorData = flowSensor.loop();
 			usleep(sys.flowSensorLoopRate);
 		}
+
+		exit(0);
 	}
-	else
-	{
-		// Track the child PID and description
-		ChildProcess flowSensorProcess = {flowSensorPid, "Flow Sensor"};
-		childProcesses.push_back(flowSensorProcess);
-	}
+	// Track the child PID and description
+	ChildProcess flowSensorProcess = {flowSensorPid, "Flow Sensor"};
+	childProcesses.push_back(flowSensorProcess);
 
 	pid_t tempGaugePid = fork();
 
@@ -69,36 +84,63 @@ int main(int argc, char *argv[])
 	else if (tempGaugePid == 0)
 	{
 		logger.info("Temp Gauge child process started.");
+		tempGauge.setup();
+
 		while (1)
 		{
-			tempGauge.loop();
+			std::string input;
+			std::cout << "Type something and press Enter: ";
+			std::cin >> input; // Reads until the first whitespace
+			float value;
+
+			try
+			{
+				value = std::stof(input); // Convert string to float
+				std::cout << "Parsed float: " << value << std::endl;
+			}
+			catch (const std::invalid_argument &e)
+			{
+				std::cerr << "Invalid input: Not a valid float!" << std::endl;
+				continue;
+			}
+			catch (const std::out_of_range &e)
+			{
+				std::cerr << "Invalid input: Float value out of range!" << std::endl;
+				continue;
+			}
+
+			tempGauge.loop(value);
+
+			if (terminateChildProcess)
+				break;
 		}
+
+		logger.info("Received SIGTERM signal. Cleaning up resources...");
+		tempGauge.~TempGauge();
+		exit(0);
 	}
-	else
-	{
-		// Track the child PID and description
-		ChildProcess tempGauteProcess = {flowSensorPid, "Temp Gauge"};
-		childProcesses.push_back(tempGauteProcess);
-	}
+	// Track the child PID and description
+	ChildProcess tempGauteProcess = {tempGaugePid, "Temp Gauge"};
+	childProcesses.push_back(tempGauteProcess);
 
 	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###
 	while (1)
 	{
-		engineValues.temp = coolantTempSensor.readTemp();
-		engineValues.volts = analogConverter.getVolts();
-		engineValues.fuelConsumption = flowSensorData->totalConsumption;
-		engineValues.kml = flowSensorData->totalPulseCount;
+		engineValues->temp = coolantTempSensor.readTemp();
+		engineValues->volts = analogConverter.getVolts();
+		engineValues->fuelConsumption = flowSensorData->totalConsumption;
+		engineValues->kml = flowSensorData->totalPulseCount;
 
-		roundDisplay.draw();
+		roundDisplay.draw(engineValues);
 
-		if (engineValues.volts < 6)
+		if (engineValues->volts < 6)
 		{
-			engineValues.ignition = false;
+			engineValues->ignition = false;
 		}
 		else
 		{
-			engineValues.ignition = true;
+			engineValues->ignition = true;
 		}
 
 		// SIGINT handler will set this flag to true.
@@ -115,7 +157,7 @@ int main(int argc, char *argv[])
 
 	terminateChildProcesses(childProcesses);
 
-	logger.info("Shutting down system.");
+	logger.info("Exiting...");
 	sys.shutdown();
 
 	logger.info("Program terminated.");

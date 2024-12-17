@@ -2,24 +2,67 @@
 
 TempGauge::TempGauge(/* args */)
 {
-    motor.setSpeed(1);
+    motor.setSpeed(2);
 }
 
 TempGauge::~TempGauge()
 {
+    goToStartPosition();
 }
 
-void TempGauge::loop()
+void TempGauge::loop(float temp)
 {
+    // motor.step(100);
+    // goToStartPosition();
+
+    if (temp == 0)
+    {
+        while (currentStep > 0)
+        {
+            motor.step(-1);
+            currentStep--;
+            usleep(loopInterval);
+        }
+    }
+    else
+    {
+        while (currentStep < temp)
+        {
+            motor.step(1);
+            currentStep++;
+            usleep(loopInterval);
+        }
+    }
+}
+
+void TempGauge::setup()
+{
+    logger.info("Setting up...");
     button.check();
 
-    if (button.pressed)
+    // Step forward until button is released.
+    while (button.pressed)
     {
-        direction = 1;
+        motor.step(1);
+        usleep(loopInterval);
+        button.check();
     }
 
-    motor.step(1);
-    steps += 1;
+    // Get back to the initial position.
+    goToStartPosition();
 
-    usleep(10000);
+    motor.stop();
+    logger.info("Temp Gauge ready!");
+}
+
+void TempGauge::goToStartPosition()
+{
+    while (!button.pressed)
+    {
+        motor.step(-1);
+        usleep(loopInterval);
+        button.check();
+    }
+
+    currentStep = 0;
 }

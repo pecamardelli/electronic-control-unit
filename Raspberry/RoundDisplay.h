@@ -9,7 +9,6 @@
 #include "includes/Common.h"
 
 extern std::string IMAGES_PATH;
-extern EngineValues engineValues;
 
 class RoundDisplay
 {
@@ -74,7 +73,7 @@ public:
   RoundDisplay(/* args */);
   ~RoundDisplay();
   void setup();
-  void draw();
+  void draw(EngineValues *);
   void setScreen(Screen);
   void showLogo();
 
