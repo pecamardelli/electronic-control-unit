@@ -4,11 +4,13 @@ extern bool terminateProgram;
 
 void signal_handler(int signal)
 {
+    Logger logger("SignalHandler");
+
     switch (signal)
     {
     case SIGINT:
         // System Exit
-        printf("\r\nSigint received: breaking main loop...\r\n");
+        logger.info("Sigint received: breaking main loop...");
         terminateProgram = true;
         break;
     default:

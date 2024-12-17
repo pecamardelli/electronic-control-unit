@@ -53,6 +53,12 @@ int main(int argc, char *argv[])
 			usleep(sys.flowSensorLoopRate);
 		}
 	}
+	else
+	{
+		// Track the child PID and description
+		ChildProcess flowSensorProcess = {flowSensorPid, "Flow Sensor"};
+		childProcesses.push_back(flowSensorProcess);
+	}
 
 	pid_t tempGaugePid = fork();
 
@@ -67,6 +73,12 @@ int main(int argc, char *argv[])
 		{
 			tempGauge.loop();
 		}
+	}
+	else
+	{
+		// Track the child PID and description
+		ChildProcess tempGauteProcess = {flowSensorPid, "Temp Gauge"};
+		childProcesses.push_back(tempGauteProcess);
 	}
 
 	logger.info("Entering main loop.");
@@ -101,33 +113,7 @@ int main(int argc, char *argv[])
 	roundDisplay.setScreen(TORINO_LOGO);
 	roundDisplay.showLogo();
 
-	int status;
-
-	logger.info("Terminating Flow Sensor process.");
-	kill(flowSensorPid, SIGKILL);
-	waitpid(flowSensorPid, &status, 0);
-
-	if (WIFEXITED(status))
-	{
-		logger.info("Flow Sensor process exited normally.");
-	}
-	else if (WIFSIGNALED(status))
-	{
-		logger.warning("Flow Sensor process killed by signal.");
-	}
-
-	logger.info("Terminating Temp Gauge process.");
-	kill(tempGaugePid, SIGKILL);
-	waitpid(tempGaugePid, &status, 0);
-
-	if (WIFEXITED(status))
-	{
-		logger.info("Temp Gauge process exited normally.");
-	}
-	else if (WIFSIGNALED(status))
-	{
-		logger.warning("Temp Gauge process killed by signal.");
-	}
+	terminateChildProcesses(childProcesses);
 
 	logger.info("Shutting down system.");
 	sys.shutdown();

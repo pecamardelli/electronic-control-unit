@@ -64,7 +64,10 @@
     "dev_config.h": "c",
     "analogconverter.h": "c",
     "stdlib.h": "c",
-    "tempgauge.h": "c"
+    "tempgauge.h": "c",
+    "flowsensor.h": "c",
+    "system.h": "c",
+    "rounddisplay.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

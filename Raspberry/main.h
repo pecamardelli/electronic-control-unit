@@ -19,6 +19,7 @@
 
 const char *ASSETS_PATH = "./assets";
 std::string IMAGES_PATH = std::string(ASSETS_PATH) + "/images";
+std::vector<ChildProcess> childProcesses; // Vector to store child processes
 
 EngineValues engineValues;
 

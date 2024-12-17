@@ -16,11 +16,10 @@ void TempGauge::loop()
     if (button.pressed)
     {
         direction = 1;
-        printf("Button pressed on step %d\n", steps);
     }
 
     motor.step(1);
     steps += 1;
 
-    usleep(1000);
+    usleep(10000);
 }
