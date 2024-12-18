@@ -5,6 +5,18 @@ System::System(/* args */)
     mainRelay.state(HIGH);
     flowSensorLoopRate = 1000;
     mainProgramLoopRate = 100000;
+    config = loadConfig(configFile);
+
+    // Display parsed configuration
+    // for (const auto &[section, values] : config)
+    // {
+    //     std::cout << "[" << section << "]" << std::endl;
+    //     for (const auto &[key, value] : values)
+    //     {
+    //         std::cout << key << " = " << value << std::endl;
+    //     }
+    //     std::cout << std::endl;
+    // }
 }
 
 System::~System()
@@ -23,4 +35,82 @@ uint64_t System::uptime()
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return static_cast<uint64_t>(ts.tv_sec) * 1000000 + ts.tv_nsec / 1000;
+}
+
+ConfigMap System::loadConfig(const std::string &filename)
+{
+    ConfigMap parsedConfig;
+    ConfigMap result = defaultConfigValues;
+    std::ifstream file(filename);
+
+    if (!file)
+    {
+        logger.warning("[Config] Could not open INI file: " + filename + ". Using defaults!");
+        return result;
+    }
+
+    std::string line, currentSection = "global"; // Default section
+    parsedConfig[currentSection] = {};           // Initialize global section
+    size_t lineNumber = 0;
+
+    while (std::getline(file, line))
+    {
+        ++lineNumber;
+        line = trim(line);
+
+        // Skip empty lines and comments (starting with '#' or ';')
+        if (line.empty() || line[0] == '#' || line[0] == ';')
+        {
+            continue;
+        }
+
+        // Check for section headers (e.g., [section_name])
+        if (line[0] == '[')
+        {
+            if (line.back() != ']')
+            {
+                logger.error("[Config] Malformed section header at line " + std::to_string(lineNumber) + ": " + line);
+                continue;
+            }
+            currentSection = trim(line.substr(1, line.size() - 2)); // Extract section name
+            if (currentSection.empty())
+            {
+                logger.error("[Config] Empty section name at line " + std::to_string(lineNumber));
+                continue;
+            }
+            parsedConfig[currentSection] = {}; // Initialize section in the map
+        }
+        else
+        {
+            // Parse key-value pairs
+            size_t pos = line.find('=');
+            if (pos == std::string::npos)
+            {
+                logger.error("[Config] Missing '=' in key-value pair at line " + std::to_string(lineNumber) + ": " + line);
+                continue;
+            }
+
+            std::string key = trim(line.substr(0, pos));
+            std::string value = trim(line.substr(pos + 1));
+
+            if (key.empty())
+            {
+                logger.error("[Config] Empty key in key-value pair at line " + std::to_string(lineNumber));
+                continue;
+            }
+
+            parsedConfig[currentSection][key] = value;
+        }
+    }
+
+    // Merge with default values.
+    for (const auto &[section, values] : parsedConfig)
+    {
+        for (const auto &[key, value] : values)
+        {
+            result[section][key] = value; // Override defaults with parsed values
+        }
+    }
+
+    return result;
 }

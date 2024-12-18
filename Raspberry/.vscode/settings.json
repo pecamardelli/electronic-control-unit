@@ -67,7 +67,11 @@
     "tempgauge.h": "c",
     "flowsensor.h": "c",
     "system.h": "c",
-    "rounddisplay.h": "c"
+    "rounddisplay.h": "c",
+    "map": "cpp",
+    "helpers.h": "c",
+    "logger.h": "c",
+    "variant": "cpp"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,
