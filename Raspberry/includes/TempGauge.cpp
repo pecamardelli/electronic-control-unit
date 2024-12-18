@@ -7,7 +7,9 @@ TempGauge::TempGauge(/* args */)
 
 TempGauge::~TempGauge()
 {
+    logger.info("Going to start position...");
     goToStartPosition();
+    logger.info("Done!");
 }
 
 void TempGauge::loop(float temp)
