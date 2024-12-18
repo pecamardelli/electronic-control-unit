@@ -8,15 +8,18 @@ System::System(/* args */)
     config = loadConfig(configFile);
 
     // Display parsed configuration
-    // for (const auto &[section, values] : config)
-    // {
-    //     std::cout << "[" << section << "]" << std::endl;
-    //     for (const auto &[key, value] : values)
-    //     {
-    //         std::cout << key << " = " << value << std::endl;
-    //     }
-    //     std::cout << std::endl;
-    // }
+    for (const auto &[section, values] : config)
+    {
+        std::cout << "[" << section << "]" << std::endl;
+        for (const auto &[key, value] : values)
+        {
+            std::cout << key << " = ";
+            std::visit([](const auto &v)
+                       { std::cout << v; }, value); // Print the value based on type
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+    }
 }
 
 System::~System()
@@ -99,7 +102,7 @@ ConfigMap System::loadConfig(const std::string &filename)
                 continue;
             }
 
-            parsedConfig[currentSection][key] = value;
+            parsedConfig[currentSection][key] = determineType(value);
         }
     }
 

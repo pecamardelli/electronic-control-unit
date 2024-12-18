@@ -12,11 +12,6 @@
 #include "helpers/helpers.h"
 #include "RoundDisplay.h"
 
-#include <string>
-#include <sys/mman.h>
-#include <signal.h>
-#include <sys/wait.h>
-
 const char *ASSETS_PATH = "./assets";
 std::string IMAGES_PATH = std::string(ASSETS_PATH) + "/images";
 std::vector<ChildProcess> childProcesses; // Vector to store child processes

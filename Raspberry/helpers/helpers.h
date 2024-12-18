@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <string>
 #include <fstream>
-#include <map>
+#include <regex>
 
 #include "../includes/Common.h"
 #include "../includes/Logger.h"
@@ -18,5 +18,6 @@
 void signalHandler(int);
 void terminateChildProcesses(std::vector<ChildProcess>);
 std::string trim(const std::string &);
+ConfigValue determineType(const std::string &);
 
 #endif

@@ -1,20 +1,11 @@
 #ifndef SYSTEM_H_
 #define SYSTEM_H_
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <csignal>
-#include <iostream>
-#include <ctime>
-#include <string>
-#include <fstream>
-#include <map>
+#include "Common.h"
 
 #include "Logger.h"
 #include "Relay.h"
 #include "../helpers/helpers.h"
-
-using ConfigMap = std::map<std::string, std::map<std::string, std::string>>;
 
 class System
 {
@@ -23,11 +14,12 @@ private:
     Relay mainRelay;
     Logger logger = Logger("System");
     const std::string configFile = "config.ini";
-    ConfigMap loadConfig(const std::string &);
     ConfigMap defaultConfigValues = {
-        {"global", {{"hostname", "torino-ecu"}, {"main_loop_rate", "5000"}}},
-        {"FlowSensor", {{"flow_sensor_loop_rate", "50000"}}},
+        {"global", {{"hostname", "torino-ecu"}, {"main_loop_rate", "100000"}}},
+        {"FlowSensor", {{"flow_sensor_loop_rate", "1000"}}},
         {"logging", {{"log_level", "INFO"}}}};
+
+    ConfigMap loadConfig(const std::string &);
 
 public:
     System(/* args */);
