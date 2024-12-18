@@ -5,15 +5,15 @@ int main(int argc, char *argv[])
 	Logger logger("Main");
 	logger.info("Program started.");
 
-	// Exception handling: ctrl + c
-	signal(SIGINT, signal_handler);
-
 	System sys;
 	RoundDisplay roundDisplay;
 	AnalogConverter analogConverter;
 	CoolantTempSensor coolantTempSensor;
 	FlowSensor flowSensor;
 	TempGauge tempGauge;
+
+	// Exception handling: ctrl + c
+	signal(SIGINT, signalHandler);
 
 	logger.info("Initializing Round Display.");
 	roundDisplay.showLogo();
@@ -62,14 +62,20 @@ int main(int argc, char *argv[])
 	}
 	else if (flowSensorPid == 0)
 	{
+		logger.setDescription("FlowSensorProcess");
 		logger.info("Flow Sensor child process started.");
-		while (1)
+
+		signal(SIGTERM, signalHandler);
+
+		while (!terminateChildProcess)
 		{
 			*flowSensorData = flowSensor.loop();
 			usleep(sys.flowSensorLoopRate);
 		}
 
-		exit(0);
+		logger.info("Received SIGTERM signal. Cleaning up resources...");
+
+		return 0;
 	}
 	// Track the child PID and description
 	ChildProcess flowSensorProcess = {flowSensorPid, "Flow Sensor"};
@@ -83,41 +89,21 @@ int main(int argc, char *argv[])
 	}
 	else if (tempGaugePid == 0)
 	{
+		logger.setDescription("TempGaugeProcess");
 		logger.info("Temp Gauge child process started.");
+
+		signal(SIGTERM, signalHandler);
+
 		tempGauge.setup();
 
-		while (1)
+		while (!terminateChildProcess)
 		{
-			// std::string input;
-			// std::cout << "Type something and press Enter: ";
-			// std::cin >> input; // Reads until the first whitespace
-			// float value;
-
-			// try
-			// {
-			// 	value = std::stof(input); // Convert string to float
-			// 	std::cout << "Parsed float: " << value << std::endl;
-			// }
-			// catch (const std::invalid_argument &e)
-			// {
-			// 	std::cerr << "Invalid input: Not a valid float!" << std::endl;
-			// 	continue;
-			// }
-			// catch (const std::out_of_range &e)
-			// {
-			// 	std::cerr << "Invalid input: Float value out of range!" << std::endl;
-			// 	continue;
-			// }
-
 			tempGauge.loop(engineValues->temp);
-
-			if (terminateChildProcess)
-				break;
 		}
 
 		logger.info("Received SIGTERM signal. Cleaning up resources...");
-		tempGauge.~TempGauge();
-		exit(0);
+
+		return 0;
 	}
 	// Track the child PID and description
 	ChildProcess tempGauteProcess = {tempGaugePid, "Temp Gauge"};

@@ -12,7 +12,7 @@ class Logger
 private:
     std::ofstream logFile;
     std::string logFilePath = "/var/log/";
-    std::string className = "Main";
+    std::string description = "Main";
     std::string currentDate;
     std::string getCurrentDate();
     std::string getCurrentTime();
@@ -28,6 +28,7 @@ public:
     void warning(const std::string &);
     void error(const std::string &);
     void debug(const std::string &);
+    void setDescription(const std::string &);
 };
 
 #endif

@@ -10,7 +10,7 @@
 #include "Logger.h"
 #include "Relay.h"
 
-void signal_handler(int);
+void signalHandler(int);
 
 class System
 {

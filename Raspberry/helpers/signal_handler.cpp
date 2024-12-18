@@ -1,9 +1,9 @@
 #include "helpers.h"
 
 extern bool terminateProgram;
-extern bool terminateChildProcess;
+extern volatile bool terminateChildProcess;
 
-void signal_handler(int signal)
+void signalHandler(int signal)
 {
     Logger logger("SignalHandler");
 

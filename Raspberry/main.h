@@ -22,6 +22,6 @@ std::string IMAGES_PATH = std::string(ASSETS_PATH) + "/images";
 std::vector<ChildProcess> childProcesses; // Vector to store child processes
 
 bool terminateProgram = false;
-bool terminateChildProcess = false;
+volatile bool terminateChildProcess = false;
 
 #endif

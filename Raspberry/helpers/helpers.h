@@ -12,7 +12,7 @@
 #include "../includes/Common.h"
 #include "../includes/Logger.h"
 
-void signal_handler(int);
+void signalHandler(int);
 void terminateChildProcesses(std::vector<ChildProcess>);
 
 #endif

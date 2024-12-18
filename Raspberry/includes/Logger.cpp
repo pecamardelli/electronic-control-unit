@@ -2,7 +2,7 @@
 
 Logger::Logger(std::string _className)
 {
-    className = _className;
+    description = _className;
     openLogFile();
 }
 
@@ -12,6 +12,11 @@ Logger::~Logger()
     {
         logFile.close();
     }
+}
+
+void Logger::setDescription(const std::string &_description)
+{
+    description = _description;
 }
 
 std::string Logger::getCurrentTime()
@@ -58,7 +63,7 @@ void Logger::log(const std::string &level, const std::string &message)
     openLogFile(); // Ensure the log file is up-to-date
 
     std::string timestamp = getCurrentTime();
-    std::string logMessage = "[" + timestamp + "] [" + level + "] " + "[" + className + "] " + message;
+    std::string logMessage = "[" + timestamp + "] [" + level + "] " + "[" + description + "] " + message;
 
     // Log to console
     std::cout
