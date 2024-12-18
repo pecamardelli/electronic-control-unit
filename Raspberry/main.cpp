@@ -88,28 +88,28 @@ int main(int argc, char *argv[])
 
 		while (1)
 		{
-			std::string input;
-			std::cout << "Type something and press Enter: ";
-			std::cin >> input; // Reads until the first whitespace
-			float value;
+			// std::string input;
+			// std::cout << "Type something and press Enter: ";
+			// std::cin >> input; // Reads until the first whitespace
+			// float value;
 
-			try
-			{
-				value = std::stof(input); // Convert string to float
-				std::cout << "Parsed float: " << value << std::endl;
-			}
-			catch (const std::invalid_argument &e)
-			{
-				std::cerr << "Invalid input: Not a valid float!" << std::endl;
-				continue;
-			}
-			catch (const std::out_of_range &e)
-			{
-				std::cerr << "Invalid input: Float value out of range!" << std::endl;
-				continue;
-			}
+			// try
+			// {
+			// 	value = std::stof(input); // Convert string to float
+			// 	std::cout << "Parsed float: " << value << std::endl;
+			// }
+			// catch (const std::invalid_argument &e)
+			// {
+			// 	std::cerr << "Invalid input: Not a valid float!" << std::endl;
+			// 	continue;
+			// }
+			// catch (const std::out_of_range &e)
+			// {
+			// 	std::cerr << "Invalid input: Float value out of range!" << std::endl;
+			// 	continue;
+			// }
 
-			tempGauge.loop(value);
+			tempGauge.loop(engineValues->temp);
 
 			if (terminateChildProcess)
 				break;

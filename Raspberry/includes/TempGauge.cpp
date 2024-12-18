@@ -12,24 +12,28 @@ TempGauge::~TempGauge()
 
 void TempGauge::loop(float temp)
 {
-    // motor.step(100);
-    // goToStartPosition();
+    uint16_t stepToGo = tempToStep(temp);
 
-    if (temp == 0)
+    if (stepToGo == currentStep)
+        return;
+
+    // std::cout << "Step to go: " << stepToGo << std::endl;
+
+    if (currentStep < stepToGo)
     {
-        while (currentStep > 0)
+        while (currentStep < stepToGo)
         {
-            motor.step(-1);
-            currentStep--;
+            motor.step(1);
+            currentStep++;
             usleep(loopInterval);
         }
     }
     else
     {
-        while (currentStep < temp)
+        while (currentStep > stepToGo)
         {
-            motor.step(1);
-            currentStep++;
+            motor.step(-1);
+            currentStep--;
             usleep(loopInterval);
         }
     }
@@ -65,4 +69,27 @@ void TempGauge::goToStartPosition()
     }
 
     currentStep = 0;
+}
+
+uint16_t TempGauge::tempToStep(float temp)
+{
+    // Find the proper map object.
+    auto conversion = std::find_if(conversions.begin(), conversions.end(), [temp](const Conversion &c)
+                                   { return temp <= c.temp; });
+
+    // Calculate the index using std::distance
+    size_t index = std::distance(conversions.begin(), conversion);
+
+    if (index == 0)
+    {
+        return 0;
+    }
+
+    auto lowerConversion = conversions.at(index - 1);
+
+    float tempDiff = conversion->temp - lowerConversion.temp;
+    uint16_t stepsDiff = conversion->step - lowerConversion.step;
+    uint16_t stepToGo = lowerConversion.step + (temp - lowerConversion.temp) / tempDiff * stepsDiff;
+
+    return stepToGo;
 }
