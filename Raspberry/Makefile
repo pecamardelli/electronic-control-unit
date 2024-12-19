@@ -1,7 +1,8 @@
-DIR_LIB			= ./lib
-DIR_INCLUDES	= ./includes
-DIR_HELPERS		= ./helpers
-DIR_ASSETS		= ./assets
+DIR_MAIN		= ./src
+DIR_LIB			= ${DIR_MAIN}/lib
+DIR_INCLUDES	= ${DIR_MAIN}/includes
+DIR_HELPERS		= ${DIR_MAIN}/helpers
+DIR_ASSETS		= ${DIR_MAIN}/assets
 DIR_IMAGES		= ${DIR_ASSETS}/images
 
 DIR_DISPLAY				= ${DIR_LIB}/LCD_display
@@ -13,7 +14,6 @@ DIR_DISPLAY_GUI			= ${DIR_DISPLAY}/GUI
 DIR_STEPPER		= $(DIR_LIB)/Stepper
 
 DIR_BIN		= ./bin
-DIR_MAIN	= ./
 
 SRC_C = $(wildcard ${DIR_DISPLAY}/*.c ${DIR_DISPLAY_EPD}/*.c ${DIR_DISPLAY_FONTS}/*.c ${DIR_DISPLAY_GUI}/*.c ${DIR_DISPLAY_CONFIG}/*.c)
 SRC_CPP = $(wildcard ${DIR_MAIN}/*.cpp ${DIR_INCLUDES}/*.cpp ${DIR_HELPERS}/*.cpp ${DIR_IMAGES}/*.cpp ${DIR_STEPPER}/*.cpp)
