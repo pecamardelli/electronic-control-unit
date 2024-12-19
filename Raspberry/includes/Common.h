@@ -37,8 +37,6 @@ enum Screen
     DIGITAL_GAUGE
 };
 
-// Config values: using 'variant' to hold different types.
-using ConfigValue = std::variant<int, float, bool, std::string>;
-using ConfigMap = std::map<std::string, std::map<std::string, ConfigValue>>;
+using ConfigMap = std::map<std::string, std::map<std::string, std::string>>;
 
 #endif

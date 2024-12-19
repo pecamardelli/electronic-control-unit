@@ -18,6 +18,5 @@
 void signalHandler(int);
 void terminateChildProcesses(std::vector<ChildProcess>);
 std::string trim(const std::string &);
-ConfigValue determineType(const std::string &);
 
 #endif
