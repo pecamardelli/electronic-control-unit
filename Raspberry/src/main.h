@@ -9,6 +9,7 @@
 #include "includes/CoolantTempSensor.h"
 #include "includes/FlowSensor.h"
 #include "includes/TempGauge.h"
+#include "includes/GPS.h"
 #include "helpers/helpers.h"
 #include "RoundDisplay.h"
 

@@ -35,8 +35,7 @@ private:
     const uint8_t IN2 = RPI_V2_GPIO_P1_38; // GPIO 20
     const uint8_t IN3 = RPI_V2_GPIO_P1_40; // GPIO 21
     const uint8_t IN4 = RPI_V2_GPIO_P1_37; // GPIO 26
-    const useconds_t loopInterval = sys.getConfigValue<useconds_t>(description, LOOP_INTERVAL);
-    // const useconds_t loopInterval = std::atoi(sys.config[description][LOOP_INTERVAL]);
+    const useconds_t loopInterval = sys.getConfigValue<useconds_t>(description, "loop_interval");
 
     std::vector<Conversion> conversions = {
         {30, 0}, {40, 45}, {60, 100}, {80, 185}, {100, 275}, {130, 351}};

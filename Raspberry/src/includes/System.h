@@ -2,7 +2,6 @@
 #define SYSTEM_H_
 
 #include "Common.h"
-
 #include "Logger.h"
 #include "Relay.h"
 #include "../helpers/helpers.h"

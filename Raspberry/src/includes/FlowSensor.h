@@ -24,7 +24,7 @@ class FlowSensor
 private:
     /* data */
     const std::string description = "FlowSensor";
-    const useconds_t loopInterval = sys.getConfigValue<useconds_t>(description, LOOP_INTERVAL);
+    const useconds_t loopInterval = sys.getConfigValue<useconds_t>(description, "loop_interval");
     const u_int16_t PULSES_PER_LITER = sys.getConfigValue<u_int16_t>(description, "pulses_per_liter");
     uint8_t lastState;
     uint8_t currentState;

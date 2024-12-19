@@ -6,12 +6,13 @@ int main(int argc, char *argv[])
 	logger.info("Program started.");
 
 	useconds_t mainLoopInterval = sys.getConfigValue<useconds_t>("global", "main_loop_interval");
-	std::cout << "Main loop interval: " << mainLoopInterval << std::endl;
+
 	RoundDisplay roundDisplay;
 	AnalogConverter analogConverter;
 	CoolantTempSensor coolantTempSensor;
 	FlowSensor flowSensor;
 	TempGauge tempGauge;
+	GPS gps;
 
 	// Exception handling: ctrl + c
 	signal(SIGINT, signalHandler);
@@ -108,6 +109,8 @@ int main(int argc, char *argv[])
 	// Track the child PID and description
 	ChildProcess tempGauteProcess = {tempGaugePid, "Temp Gauge"};
 	childProcesses.push_back(tempGauteProcess);
+
+	gps.readData();
 
 	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###

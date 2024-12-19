@@ -6,15 +6,15 @@ System::System(/* args */)
     config = loadConfig(configFile);
 
     // Display parsed configuration
-    for (const auto &[section, values] : config)
-    {
-        std::cout << "[" << section << "]" << std::endl;
-        for (const auto &[key, value] : values)
-        {
-            std::cout << key << " = " << value << std::endl;
-        }
-        std::cout << std::endl;
-    }
+    // for (const auto &[section, values] : config)
+    // {
+    //     std::cout << "[" << section << "]" << std::endl;
+    //     for (const auto &[key, value] : values)
+    //     {
+    //         std::cout << key << " = " << value << std::endl;
+    //     }
+    //     std::cout << std::endl;
+    // }
 }
 
 System::~System()
