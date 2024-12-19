@@ -5,6 +5,11 @@
 #include "Relay.h"
 #include "../helpers/helpers.h"
 
+#ifndef SSTREAM_H_
+#define SSTREAM_H_
+#include <sstream>
+#endif
+
 class System
 {
 private:

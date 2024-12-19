@@ -1,17 +1,14 @@
 #pragma once
 
-#include <cstdint>
-#include <string>
+#ifndef MAP_H_
+#define MAP_H_
 #include <map>
-#include <stdlib.h>
-#include <stdio.h>
-#include <csignal>
-#include <iostream>
-#include <ctime>
-#include <fstream>
-#include <vector>
-#include <unistd.h>
-#include <sstream>
+#endif
+
+#ifndef STRING_H_
+#define STRING_H_
+#include <string>
+#endif
 
 // Struct to store child PID and description
 typedef struct _childProcess

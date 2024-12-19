@@ -71,7 +71,8 @@
     "map": "cpp",
     "helpers.h": "c",
     "logger.h": "c",
-    "variant": "cpp"
+    "variant": "cpp",
+    "wait.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

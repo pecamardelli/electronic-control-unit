@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 	ChildProcess tempGauteProcess = {tempGaugePid, "Temp Gauge"};
 	childProcesses.push_back(tempGauteProcess);
 
-	gps.readData();
+	// gps.readData();
 
 	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###

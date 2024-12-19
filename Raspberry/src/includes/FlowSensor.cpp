@@ -2,6 +2,8 @@
 
 FlowSensor::FlowSensor(/* args */)
 {
+    loopInterval = sys.getConfigValue<useconds_t>(description, "loop_interval");
+    PULSES_PER_LITER = sys.getConfigValue<u_int16_t>(description, "pulses_per_liter");
     // Initialize bcm2835
     if (!bcm2835_init())
     {

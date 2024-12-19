@@ -2,6 +2,7 @@
 
 TempGauge::TempGauge(/* args */)
 {
+    loopInterval = sys.getConfigValue<useconds_t>(description, "loop_interval");
     motor.setSpeed(2);
 }
 
