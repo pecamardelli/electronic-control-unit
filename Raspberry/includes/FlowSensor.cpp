@@ -38,5 +38,7 @@ FlowSensorData FlowSensor::loop()
     // Update the last state
     lastState = currentState;
 
+    usleep(loopInterval);
+
     return data;
 }

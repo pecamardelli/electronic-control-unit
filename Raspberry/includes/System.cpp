@@ -3,8 +3,6 @@
 System::System(/* args */)
 {
     mainRelay.state(HIGH);
-    flowSensorLoopRate = 1000;
-    mainProgramLoopRate = 100000;
     config = loadConfig(configFile);
 
     // Display parsed configuration

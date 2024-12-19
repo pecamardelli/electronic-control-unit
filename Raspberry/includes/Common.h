@@ -15,6 +15,8 @@
 #include <ctime>
 #include <fstream>
 
+#define LOOP_INTERVAL "loop_interval"
+
 // Struct to store child PID and description
 typedef struct _childProcess
 {

@@ -5,7 +5,8 @@ int main(int argc, char *argv[])
 	Logger logger("Main");
 	logger.info("Program started.");
 
-	System sys;
+	useconds_t mainLoopInterval = sys.getConfigValue<useconds_t>("global", "main_loop_interval");
+	std::cout << "Main loop interval: " << mainLoopInterval << std::endl;
 	RoundDisplay roundDisplay;
 	AnalogConverter analogConverter;
 	CoolantTempSensor coolantTempSensor;
@@ -70,7 +71,6 @@ int main(int argc, char *argv[])
 		while (!terminateChildProcess)
 		{
 			*flowSensorData = flowSensor.loop();
-			usleep(sys.flowSensorLoopRate);
 		}
 
 		logger.info("Received SIGTERM signal. Cleaning up resources...");
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 		if (terminateProgram)
 			break;
 
-		usleep(sys.mainProgramLoopRate);
+		usleep(mainLoopInterval);
 	}
 
 	logger.info("Exiting main loop. Cleaning up resources.");
