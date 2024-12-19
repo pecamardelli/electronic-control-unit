@@ -1,5 +1,4 @@
-#ifndef BUTTON_H_
-#define BUTTON_H_
+#pragma once
 
 #include <bcm2835.h>
 #include <iostream>
@@ -20,5 +19,3 @@ public:
     void check();
     volatile bool pressed;
 };
-
-#endif

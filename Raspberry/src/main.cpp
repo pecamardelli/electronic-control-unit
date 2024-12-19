@@ -1,5 +1,7 @@
 #include "main.h"
 
+#include <signal.h>
+
 int main(int argc, char *argv[])
 {
 	Logger logger("Main");

@@ -1,20 +1,14 @@
-#ifndef COMMON_H_
-#define COMMON_H_
+#pragma once
 
 #include <cstdint>
-#include <sys/wait.h>
 #include <string>
 #include <map>
-#include <variant>
-#include <sys/mman.h>
-#include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <csignal>
 #include <iostream>
 #include <ctime>
 #include <fstream>
-#include <bcm2835.h>
 #include <vector>
 #include <unistd.h>
 #include <sstream>
@@ -42,5 +36,3 @@ enum Screen
 };
 
 using ConfigMap = std::map<std::string, std::map<std::string, std::string>>;
-
-#endif

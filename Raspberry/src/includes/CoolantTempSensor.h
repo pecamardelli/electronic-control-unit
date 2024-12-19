@@ -3,8 +3,7 @@
     https://github.com/nilshenrich/DS18B20_cpp
 */
 
-#ifndef COOLANT_TEMP_SENSOR_H_
-#define COOLANT_TEMP_SENSOR_H_
+#pragma once
 
 #include <string>
 #include <regex>
@@ -62,5 +61,3 @@ private:
     CoolantTempSensor(const CoolantTempSensor &) = delete;
     CoolantTempSensor &operator=(const CoolantTempSensor &) = delete;
 };
-
-#endif // DS18B20_H

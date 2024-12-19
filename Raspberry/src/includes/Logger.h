@@ -1,11 +1,24 @@
-#ifndef LOGGER_H_
-#define LOGGER_H_
+#pragma once
 
+#ifndef IOSTREAM_H_
+#define IOSTREAM_H_
 #include <iostream>
+#endif
+
+#ifndef FSTREAM_H_
+#define FSTREAM_H_
 #include <fstream>
+#endif
+
+#ifndef STRING_H_
+#define STRING_H_
 #include <string>
+#endif
+
+#ifndef CTIME_H_
+#define CTIME_H_
 #include <ctime>
-#include <cxxabi.h>
+#endif
 
 class Logger
 {
@@ -30,5 +43,3 @@ public:
     void debug(const std::string &);
     void setDescription(const std::string &);
 };
-
-#endif

@@ -7,8 +7,7 @@
     130° -> 354 steps
 */
 
-#ifndef TEMP_GAUGE_H_
-#define TEMP_GAUGE_H_
+#pragma once
 
 #include "Logger.h"
 #include "System.h"
@@ -55,5 +54,3 @@ public:
     void setup();
     void loop(float);
 };
-
-#endif

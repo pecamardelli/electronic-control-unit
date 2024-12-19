@@ -1,5 +1,4 @@
-#ifndef FLOW_SENSOR_H_
-#define FLOW_SENSOR_H_
+#pragma once
 
 #include <bcm2835.h>
 #include <stdio.h>
@@ -37,5 +36,3 @@ public:
 
     FlowSensorData loop();
 };
-
-#endif

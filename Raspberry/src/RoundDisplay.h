@@ -1,5 +1,4 @@
-#ifndef _CIRCULAR_DISPLAY_H_
-#define _CIRCULAR_DISPLAY_H_
+#pragma once
 
 #include <LCD_display.h>
 #include <images.h>
@@ -80,5 +79,3 @@ public:
   void drawBmpFile(const char *);
   void clear();
 };
-
-#endif

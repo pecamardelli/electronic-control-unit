@@ -1,5 +1,4 @@
-#ifndef ANALOG_CONVERTER_H_
-#define ANALOG_CONVERTER_H_
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,8 +27,4 @@ public:
     AnalogConverter(/* args */);
     ~AnalogConverter();
     float getVolts();
-
-protected:
 };
-
-#endif

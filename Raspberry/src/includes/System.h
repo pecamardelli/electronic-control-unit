@@ -1,5 +1,4 @@
-#ifndef SYSTEM_H_
-#define SYSTEM_H_
+#pragma once
 
 #include "Common.h"
 #include "Logger.h"
@@ -60,5 +59,3 @@ public:
         return convertedValue;
     }
 };
-
-#endif

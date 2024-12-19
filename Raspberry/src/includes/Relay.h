@@ -1,5 +1,4 @@
-#ifndef RELAY_H_
-#define RELAY_H_
+#pragma once
 
 #include <bcm2835.h>
 #include <stdio.h>
@@ -16,5 +15,3 @@ public:
     ~Relay();
     void state(int);
 };
-
-#endif

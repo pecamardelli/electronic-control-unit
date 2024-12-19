@@ -1,5 +1,8 @@
-#ifndef _MAIN_H_
-#define _MAIN_H_
+#pragma once
+
+#include <sys/wait.h>
+#include <sys/mman.h>
+#include <signal.h>
 
 #include "includes/Common.h"
 #include "includes/Logger.h"
@@ -21,5 +24,3 @@ System sys;
 
 bool terminateProgram = false;
 volatile bool terminateChildProcess = false;
-
-#endif

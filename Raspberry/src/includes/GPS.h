@@ -1,8 +1,11 @@
-#ifndef GPS_H_
-#define GPS_H_
+#pragma once
 
-#include "Common.h"
 #include "Logger.h"
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <bcm2835.h>
 
 #define GPS_UART "/dev/serial0" // Raspberry Pi UART port
 
@@ -18,5 +21,3 @@ public:
     ~GPS();
     void readData();
 };
-
-#endif
