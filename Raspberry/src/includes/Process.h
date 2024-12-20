@@ -15,4 +15,7 @@ public:
     // Pure virtual function
     virtual void loop() = 0;
     virtual void setup() {};
+
+protected:
+    useconds_t loopInterval;
 };

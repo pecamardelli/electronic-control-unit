@@ -23,7 +23,6 @@ class FlowSensor : public Process
 {
 private:
     /* data */
-    useconds_t loopInterval;
     u_int16_t PULSES_PER_LITER;
     uint8_t lastState;
     uint8_t currentState;

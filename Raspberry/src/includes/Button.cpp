@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(/* args */)
+Button::Button(RPiGPIOPin pin)
 {
     if (!bcm2835_init())
     {
@@ -8,8 +8,8 @@ Button::Button(/* args */)
     }
 
     // Set BUTTON_PIN as input with a pull-up resistor
-    bcm2835_gpio_fsel(BUTTON_PIN, BCM2835_GPIO_FSEL_INPT);
-    bcm2835_gpio_set_pud(BUTTON_PIN, BCM2835_GPIO_PUD_UP);
+    bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
+    bcm2835_gpio_set_pud(pin, BCM2835_GPIO_PUD_UP);
 }
 
 Button::~Button()
@@ -18,7 +18,7 @@ Button::~Button()
 
 void Button::check()
 {
-    uint8_t buttonState = bcm2835_gpio_lev(BUTTON_PIN);
+    uint8_t buttonState = bcm2835_gpio_lev(pin);
 
     if (buttonState == LOW)
     {

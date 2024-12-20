@@ -6,23 +6,18 @@ int main(int argc, char *argv[])
 	logger.info("Program started.");
 
 	useconds_t mainLoopInterval = sys.getConfigValue<useconds_t>("global", "main_loop_interval");
+	unsigned int logoTime = sys.getConfigValue<unsigned int>("global", "logo_screen_time");
 
-	// Vector of smart pointers to the base class
-	std::vector<std::shared_ptr<Process>> processes;
 	// Adding derived class objects to the vector
 	processes.push_back(std::make_shared<TempGauge>());
 	processes.push_back(std::make_shared<FlowSensor>());
+	processes.push_back(std::make_shared<GPS>());
 
 	DigitalGauge digitalGauge;
 	AnalogConverter analogConverter;
 	CoolantTempSensor coolantTempSensor;
-	GPS gps;
 
-	// Exception handling: ctrl + c
-	signal(SIGINT, signalHandler);
-
-	digitalGauge.showLogo();
-	sleep(2);
+	digitalGauge.showLogo(logoTime);
 	digitalGauge.setScreen(DIGITAL_GAUGE);
 
 	logger.info("Setting up shared memory for the engine readings.");
@@ -54,7 +49,7 @@ int main(int argc, char *argv[])
 		logger.error("mmap failed for Flow Sensor data or returned NULL pointer.");
 	}
 
-	// Iterating and calling the loop method on each process
+	// Iterating and calling the setup and loop methods on each process
 	for (const auto &process : processes)
 	{
 		pid_t pid = fork();
@@ -68,7 +63,7 @@ int main(int argc, char *argv[])
 			logger.setDescription(process->description + "Process");
 			logger.info(process->description + " child process started.");
 
-			signal(SIGTERM, signalHandler);
+			// signal(SIGTERM, signalHandler);
 
 			process->setup();
 
@@ -89,11 +84,12 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	// gps.readData();
+	// Exception handling: ctrl + c
+	signal(SIGINT, signalHandler);
 
 	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###
-	while (true)
+	while (!terminateProgram)
 	{
 		engineValues->temp = coolantTempSensor.readTemp();
 		engineValues->volts = analogConverter.getVolts();
@@ -111,17 +107,13 @@ int main(int argc, char *argv[])
 			engineValues->ignition = true;
 		}
 
-		// SIGINT handler will set this flag to true.
-		if (terminateProgram)
-			break;
-
 		usleep(mainLoopInterval);
 	}
 
 	logger.info("Exiting main loop. Cleaning up resources.");
 
 	digitalGauge.setScreen(TORINO_LOGO);
-	digitalGauge.showLogo();
+	digitalGauge.showLogo(logoTime);
 
 	terminateChildProcesses(childProcesses);
 

@@ -2,35 +2,36 @@
 
 GPS::GPS(/* args */)
 {
+    description = "GPS";
+    loopInterval = sys.getConfigValue<useconds_t>(description, "loop_interval");
+    baudRate = sys.getConfigValue<std::string>(description, "baud_rate");
     // Configure the Raspberry Pi UART interface (if needed)
-    system("stty -F " GPS_UART " 9600 raw -echo"); // Set baud rate to 9600
+    std::string command = "stty - F /dev/serial0 " + baudRate + " raw - echo";
+    system(command.c_str());
 }
 
 GPS::~GPS()
 {
 }
 
-void GPS::readData()
+void GPS::loop()
 {
     std::ifstream gpsStream(GPS_UART, std::ios::in);
+    std::string line;
+
     if (!gpsStream.is_open())
     {
         logger.error("Error: Could not open GPS UART port.");
-        return;
     }
 
-    std::string line;
-    while (true)
+    if (std::getline(gpsStream, line))
     {
-        if (std::getline(gpsStream, line))
+        // Filter NMEA sentences if needed, e.g., $GPGGA or $GPRMC
+        if (line.find("$GPGGA") != std::string::npos || line.find("$GPRMC") != std::string::npos)
         {
-            // Filter NMEA sentences if needed, e.g., $GPGGA or $GPRMC
-            if (line.find("$GPGGA") != std::string::npos || line.find("$GPRMC") != std::string::npos)
-            {
-                std::cout << "GPS Data: " << line << std::endl;
-            }
         }
+        std::cout << "GPS Data: " << line << std::endl;
     }
 
-    gpsStream.close();
+    usleep(loopInterval);
 }

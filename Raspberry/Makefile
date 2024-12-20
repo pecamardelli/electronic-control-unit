@@ -12,11 +12,12 @@ DIR_DISPLAY_FONTS		= ${DIR_DISPLAY}/Fonts
 DIR_DISPLAY_GUI			= ${DIR_DISPLAY}/GUI
 
 DIR_STEPPER		= $(DIR_LIB)/Stepper
+DIR_GPS			= $(DIR_LIB)/GPS
 
 DIR_BIN		= ./bin
 
 SRC_C = $(wildcard ${DIR_DISPLAY}/*.c ${DIR_DISPLAY_EPD}/*.c ${DIR_DISPLAY_FONTS}/*.c ${DIR_DISPLAY_GUI}/*.c ${DIR_DISPLAY_CONFIG}/*.c)
-SRC_CPP = $(wildcard ${DIR_MAIN}/*.cpp ${DIR_INCLUDES}/*.cpp ${DIR_HELPERS}/*.cpp ${DIR_IMAGES}/*.cpp ${DIR_STEPPER}/*.cpp)
+SRC_CPP = $(wildcard ${DIR_MAIN}/*.cpp ${DIR_INCLUDES}/*.cpp ${DIR_HELPERS}/*.cpp ${DIR_IMAGES}/*.cpp ${DIR_STEPPER}/*.cpp ${DIR_GPS}/*.cpp)
 OBJ_O = $(patsubst %.c,${DIR_BIN}/%.o,$(notdir ${SRC_C})) $(patsubst %.cpp,${DIR_BIN}/%.o,$(notdir ${SRC_CPP}))
 
 TARGET = torino-ecu
@@ -43,7 +44,7 @@ ${TARGET}:${OBJ_O}
 	$(CC) $(CFLAGS) $(OBJ_O) -o $@ $(LIB)
     
 ${DIR_BIN}/%.o:$(DIR_MAIN)/%.cpp
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_MAIN) $(DISPLAY) -I $(DIR_STEPPER) -I $(DIR_HELPERS) -I $(DIR_INCLUDES)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_MAIN) $(DISPLAY) -I $(DIR_STEPPER) -I $(DIR_GPS) -I $(DIR_HELPERS) -I $(DIR_INCLUDES)
     
 ${DIR_BIN}/%.o:$(DIR_DISPLAY)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_DISPLAY_CONFIG) -I $(DIR_DISPLAY_GUI) -I $(DIR_DISPLAY_EPD)
@@ -71,6 +72,9 @@ ${DIR_BIN}/%.o:$(DIR_IMAGES)/%.cpp
 
 ${DIR_BIN}/%.o:$(DIR_STEPPER)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
+
+${DIR_BIN}/%.o:$(DIR_GPS)/%.cpp
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_INCLUDES)
 	
 clean :
 	rm $(DIR_BIN)/*.* 

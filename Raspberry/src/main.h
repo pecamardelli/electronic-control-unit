@@ -22,6 +22,9 @@ const char *ASSETS_PATH = "./src/assets";
 std::string IMAGES_PATH = std::string(ASSETS_PATH) + "/images";
 std::vector<ChildProcess> childProcesses; // Vector to store child processes
 
+// Vector of smart pointers to the base class
+std::vector<std::shared_ptr<Process>> processes;
+
 System sys;
 
 bool terminateProgram = false;

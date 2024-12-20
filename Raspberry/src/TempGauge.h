@@ -31,18 +31,21 @@ class TempGauge : public Process
 {
 private:
     // Define GPIO pins for the ULN2003AN
-    const uint8_t IN1 = RPI_V2_GPIO_P1_36; // GPIO 16
-    const uint8_t IN2 = RPI_V2_GPIO_P1_38; // GPIO 20
-    const uint8_t IN3 = RPI_V2_GPIO_P1_40; // GPIO 21
-    const uint8_t IN4 = RPI_V2_GPIO_P1_37; // GPIO 26
-    useconds_t loopInterval;
+    const RPiGPIOPin IN1 = RPI_V2_GPIO_P1_36; // GPIO 16
+    const RPiGPIOPin IN2 = RPI_V2_GPIO_P1_38; // GPIO 20
+    const RPiGPIOPin IN3 = RPI_V2_GPIO_P1_40; // GPIO 21
+    const RPiGPIOPin IN4 = RPI_V2_GPIO_P1_37; // GPIO 26
 
-    std::vector<Conversion> conversions = {
-        {30, 0}, {40, 45}, {60, 100}, {80, 185}, {100, 275}, {130, 351}};
+    // GPIO pin connected to the interruptor switch
+    const RPiGPIOPin BUTTON_PIN = RPI_V2_GPIO_P1_32; // GPIO 12 (Pin 32)
+
+    std::vector<Conversion>
+        conversions = {
+            {30, 0}, {40, 45}, {60, 100}, {80, 185}, {100, 275}, {130, 351}};
 
     Logger logger = Logger("TempGauge");
     Stepper motor = Stepper(2038, IN1, IN3, IN2, IN4);
-    Button button;
+    Button button = Button(BUTTON_PIN);
     uint16_t currentStep = -1;
 
     void goToStartPosition();

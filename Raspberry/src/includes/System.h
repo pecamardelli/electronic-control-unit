@@ -24,9 +24,11 @@ private:
     const std::string configFile = "config.ini";
     ConfigMap config;
     ConfigMap defaultConfigValues = {
-        {"global", {{"hostname", "torino-ecu"}, {"main_loop_rate", "100000"}}},
-        {"FlowSensor", {{"flow_sensor_loop_rate", "1000"}}},
-        {"logging", {{"log_level", "INFO"}}}};
+        {"global", {{"hostname", "torino-ecu"}, {"main_loop_interval", "50000"}, {"logo_screen_time", "2"}}},
+        {"logging", {{"log_level", "INFO"}}},
+        {"FlowSensor", {{"loop_interval", "1000"}, {"pulses_per_liter", "287"}}},
+        {"TempGauge", {{"loop_interval", "1000"}}},
+        {"GPS", {{"loop_interval", "1000000"}}}};
 
     ConfigMap loadConfig(const std::string &);
 
