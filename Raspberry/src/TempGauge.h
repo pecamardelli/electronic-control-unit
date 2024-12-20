@@ -14,7 +14,7 @@
 #include "System.h"
 #include "Button.h"
 
-#include "../lib/Stepper/Stepper.h"
+#include "lib/Stepper/Stepper.h"
 
 #include <iostream>
 #include <vector>

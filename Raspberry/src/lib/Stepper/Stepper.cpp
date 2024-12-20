@@ -8,7 +8,7 @@
  * High-speed stepping mod         by Eugene Kozlenko
  * Timer rollover fix              by Eugene Kozlenko
  * Five phase five wire    (1.1.0) by Ryan Orendorff
- * Ported to Raspberry     (1.1.0) by Pablo Camardelli
+ * Ported to Raspberry PI  (1.1.0) by Pablo Camardelli
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

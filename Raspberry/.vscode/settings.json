@@ -73,7 +73,8 @@
     "logger.h": "c",
     "variant": "cpp",
     "wait.h": "c",
-    "common.h": "c"
+    "common.h": "c",
+    "images.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

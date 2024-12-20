@@ -1,6 +1,6 @@
-#include "RoundDisplay.h"
+#include "DigitalGauge.h"
 
-RoundDisplay::RoundDisplay(/* args */)
+DigitalGauge::DigitalGauge(/* args */)
 {
     logger.info("Initializing Round Display.");
     /* Module Init */
@@ -22,25 +22,25 @@ RoundDisplay::RoundDisplay(/* args */)
     }
 }
 
-RoundDisplay::~RoundDisplay()
+DigitalGauge::~DigitalGauge()
 {
     free(BlackImage);
     BlackImage = NULL;
     DEV_ModuleExit();
 }
 
-void RoundDisplay::setup()
+void DigitalGauge::setup()
 {
 }
 
-void RoundDisplay::drawBmpFile(const char *pathToImageFile)
+void DigitalGauge::drawBmpFile(const char *pathToImageFile)
 {
     clear();
     GUI_ReadBmp(pathToImageFile);
     LCD_1IN28_Display(BlackImage);
 }
 
-void RoundDisplay::setScreen(Screen screen)
+void DigitalGauge::setScreen(Screen screen)
 {
     switch (screen)
     {
@@ -60,21 +60,21 @@ void RoundDisplay::setScreen(Screen screen)
     currentScreen = screen;
 }
 
-void RoundDisplay::showLogo()
+void DigitalGauge::showLogo()
 {
     clear();
     drawBmpFile(TORINO_LOGO_PATH.c_str());
     LCD_1IN28_Display(BlackImage);
 }
 
-void RoundDisplay::clear()
+void DigitalGauge::clear()
 {
     Paint_NewImage(BlackImage, LCD_1IN28_WIDTH, LCD_1IN28_HEIGHT, 0, BLACK, 16);
     Paint_Clear(BLACK);
     LCD_1IN28_Display(BlackImage);
 }
 
-void RoundDisplay::draw(EngineValues *engineValues)
+void DigitalGauge::draw(EngineValues *engineValues)
 {
     switch (currentScreen)
     {
@@ -91,7 +91,7 @@ void RoundDisplay::draw(EngineValues *engineValues)
     LCD_1IN28_Display(BlackImage);
 }
 
-void RoundDisplay::drawTemp(uint8_t temp)
+void DigitalGauge::drawTemp(uint8_t temp)
 {
     if (temp == lastTempValue)
         return;
@@ -125,7 +125,7 @@ void RoundDisplay::drawTemp(uint8_t temp)
     lastTempValue = temp;
 }
 
-void RoundDisplay::drawKml(float kml)
+void DigitalGauge::drawKml(float kml)
 {
     if (kml == lastKmlValue)
         return;
@@ -157,7 +157,7 @@ void RoundDisplay::drawKml(float kml)
     lastKmlValue = kml;
 }
 
-void RoundDisplay::drawVolts(float volts)
+void DigitalGauge::drawVolts(float volts)
 {
     if (volts == lastVoltsValue)
         return;
@@ -195,7 +195,7 @@ void RoundDisplay::drawVolts(float volts)
     lastVoltsValue = volts;
 }
 
-void RoundDisplay::drawFuelConsumption(float fuelConsumption)
+void DigitalGauge::drawFuelConsumption(float fuelConsumption)
 {
     if (fuelConsumption == lastFuelConsValue)
         return;

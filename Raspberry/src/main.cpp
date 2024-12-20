@@ -12,20 +12,18 @@ int main(int argc, char *argv[])
 	// Adding derived class objects to the vector
 	processes.push_back(std::make_shared<TempGauge>());
 	processes.push_back(std::make_shared<FlowSensor>());
-	printf("Hola1\n");
-	RoundDisplay roundDisplay;
+
+	DigitalGauge digitalGauge;
 	AnalogConverter analogConverter;
 	CoolantTempSensor coolantTempSensor;
 	GPS gps;
-	printf("Hola2\n");
 
 	// Exception handling: ctrl + c
 	signal(SIGINT, signalHandler);
 
-	roundDisplay.showLogo();
+	digitalGauge.showLogo();
 	sleep(2);
-	roundDisplay.setScreen(DIGITAL_GAUGE);
-	printf("Hola3\n");
+	digitalGauge.setScreen(DIGITAL_GAUGE);
 
 	logger.info("Setting up shared memory for the engine readings.");
 	EngineValues *engineValues = (EngineValues *)mmap(
@@ -102,7 +100,7 @@ int main(int argc, char *argv[])
 		engineValues->fuelConsumption = flowSensorData->totalConsumption;
 		engineValues->kml = flowSensorData->totalPulseCount;
 
-		roundDisplay.draw(engineValues);
+		digitalGauge.draw(engineValues);
 
 		if (engineValues->volts < 6)
 		{
@@ -122,8 +120,8 @@ int main(int argc, char *argv[])
 
 	logger.info("Exiting main loop. Cleaning up resources.");
 
-	roundDisplay.setScreen(TORINO_LOGO);
-	roundDisplay.showLogo();
+	digitalGauge.setScreen(TORINO_LOGO);
+	digitalGauge.showLogo();
 
 	terminateChildProcesses(childProcesses);
 

@@ -11,10 +11,10 @@
 
 extern std::string IMAGES_PATH;
 
-class RoundDisplay
+class DigitalGauge
 {
 private:
-  Logger logger = Logger(description);
+  Logger logger = Logger("DigitalGauge");
   UWORD *BlackImage;
   UDOUBLE Imagesize = LCD_1IN28_HEIGHT * LCD_1IN28_WIDTH * 2;
   uint8_t lowerCaseOffset = 97;
@@ -72,9 +72,9 @@ private:
   void drawFuelConsumption(float);
 
 public:
-  RoundDisplay(/* args */);
-  ~RoundDisplay();
-  const std::string description = "RoundDisplay";
+  DigitalGauge(/* args */);
+  ~DigitalGauge();
+  const std::string description = "DigitalGauge";
 
   void setup();
   void draw(EngineValues *);

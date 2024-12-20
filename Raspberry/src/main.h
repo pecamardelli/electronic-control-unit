@@ -15,7 +15,7 @@
 #include "TempGauge.h"
 #include "GPS.h"
 #include "helpers.h"
-#include "RoundDisplay.h"
+#include "DigitalGauge.h"
 #include "Process.h"
 
 const char *ASSETS_PATH = "./src/assets";

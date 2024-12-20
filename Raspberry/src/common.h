@@ -1,10 +1,5 @@
 #pragma once
 
-#ifndef MAP_H_
-#define MAP_H_
-#include <map>
-#endif
-
 #ifndef STRING_H_
 #define STRING_H_
 #include <string>

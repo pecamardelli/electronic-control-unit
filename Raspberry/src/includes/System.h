@@ -4,6 +4,11 @@
 #include "Relay.h"
 #include "../helpers/helpers.h"
 
+#ifndef MAP_H_
+#define MAP_H_
+#include <map>
+#endif
+
 #ifndef SSTREAM_H_
 #define SSTREAM_H_
 #include <sstream>
