@@ -5,13 +5,16 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include "includes/Common.h"
+
+#include "common.h"
+#include "Logger.h"
 
 extern std::string IMAGES_PATH;
 
 class RoundDisplay
 {
 private:
+  Logger logger = Logger(description);
   UWORD *BlackImage;
   UDOUBLE Imagesize = LCD_1IN28_HEIGHT * LCD_1IN28_WIDTH * 2;
   uint8_t lowerCaseOffset = 97;
@@ -71,6 +74,8 @@ private:
 public:
   RoundDisplay(/* args */);
   ~RoundDisplay();
+  const std::string description = "RoundDisplay";
+
   void setup();
   void draw(EngineValues *);
   void setScreen(Screen);

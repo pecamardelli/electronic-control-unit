@@ -2,6 +2,7 @@
 
 TempGauge::TempGauge(/* args */)
 {
+    description = "TempGauge";
     loopInterval = sys.getConfigValue<useconds_t>(description, "loop_interval");
     motor.setSpeed(2);
 }
@@ -13,9 +14,9 @@ TempGauge::~TempGauge()
     logger.info("Done!");
 }
 
-void TempGauge::loop(float temp)
+void TempGauge::loop()
 {
-    uint16_t stepToGo = tempToStep(temp);
+    uint16_t stepToGo = tempToStep(0);
 
     if (stepToGo == currentStep)
         return;

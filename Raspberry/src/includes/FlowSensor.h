@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include "Logger.h"
 #include "System.h"
+#include "Process.h"
 
 #define FLOW_SENSOR_PIN RPI_GPIO_P1_12 // GPIO18 (Pin 12)
 
@@ -18,7 +19,7 @@ typedef struct _flowSensorData
 
 extern System sys;
 
-class FlowSensor
+class FlowSensor : public Process
 {
 private:
     /* data */
@@ -32,7 +33,6 @@ public:
     FlowSensor(/* args */);
     ~FlowSensor();
     FlowSensorData data = {0};
-    const std::string description = "FlowSensor";
 
-    FlowSensorData loop();
+    void loop() override;
 };

@@ -31,5 +31,3 @@ enum Screen
     TORINO_LOGO,
     DIGITAL_GAUGE
 };
-
-using ConfigMap = std::map<std::string, std::map<std::string, std::string>>;

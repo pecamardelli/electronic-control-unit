@@ -9,10 +9,12 @@
 
 #pragma once
 
+#include "Process.h"
 #include "Logger.h"
 #include "System.h"
-#include "../lib/Stepper/Stepper.h"
 #include "Button.h"
+
+#include "../lib/Stepper/Stepper.h"
 
 #include <iostream>
 #include <vector>
@@ -25,7 +27,7 @@ struct Conversion
 };
 
 extern System sys;
-class TempGauge
+class TempGauge : public Process
 {
 private:
     // Define GPIO pins for the ULN2003AN
@@ -49,8 +51,7 @@ private:
 public:
     TempGauge(/* args */);
     ~TempGauge();
-    const std::string description = "TempGauge";
 
-    void setup();
-    void loop(float);
+    void setup() override;
+    void loop() override;
 };

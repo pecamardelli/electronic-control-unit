@@ -6,7 +6,6 @@
 #endif
 
 #include "Logger.h"
-// #include <unistd.h>
 
 #define RELAY_PIN RPI_GPIO_P1_11 // Physical Pin 11, corresponds to GPIO17
 

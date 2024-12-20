@@ -43,7 +43,7 @@ ${TARGET}:${OBJ_O}
 	$(CC) $(CFLAGS) $(OBJ_O) -o $@ $(LIB)
     
 ${DIR_BIN}/%.o:$(DIR_MAIN)/%.cpp
-	$(CC) $(CFLAGS) -c $< -o $@ $(DISPLAY) -I $(DIR_STEPPER)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_MAIN) $(DISPLAY) -I $(DIR_STEPPER) -I $(DIR_HELPERS) -I $(DIR_INCLUDES)
     
 ${DIR_BIN}/%.o:$(DIR_DISPLAY)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_DISPLAY_CONFIG) -I $(DIR_DISPLAY_GUI) -I $(DIR_DISPLAY_EPD)

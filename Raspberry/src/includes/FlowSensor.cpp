@@ -2,8 +2,10 @@
 
 FlowSensor::FlowSensor(/* args */)
 {
+    description = "FlowSensor";
     loopInterval = sys.getConfigValue<useconds_t>(description, "loop_interval");
     PULSES_PER_LITER = sys.getConfigValue<u_int16_t>(description, "pulses_per_liter");
+
     // Initialize bcm2835
     if (!bcm2835_init())
     {
@@ -14,17 +16,17 @@ FlowSensor::FlowSensor(/* args */)
     bcm2835_gpio_fsel(FLOW_SENSOR_PIN, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_set_pud(FLOW_SENSOR_PIN, BCM2835_GPIO_PUD_UP);
 
-    logger.info("Flow sensor inited...");
-
     // Variables for detecting rising edges
     lastState = bcm2835_gpio_lev(FLOW_SENSOR_PIN);
+
+    logger.info("Flow sensor inited...");
 }
 
 FlowSensor::~FlowSensor()
 {
 }
 
-FlowSensorData FlowSensor::loop()
+void FlowSensor::loop()
 {
     // Read the current state of the pin
     currentState = bcm2835_gpio_lev(FLOW_SENSOR_PIN);
@@ -41,6 +43,4 @@ FlowSensorData FlowSensor::loop()
     lastState = currentState;
 
     usleep(loopInterval);
-
-    return data;
 }

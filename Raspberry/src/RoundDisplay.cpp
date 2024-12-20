@@ -2,6 +2,7 @@
 
 RoundDisplay::RoundDisplay(/* args */)
 {
+    logger.info("Initializing Round Display.");
     /* Module Init */
     if (DEV_ModuleInit() != 0)
     {

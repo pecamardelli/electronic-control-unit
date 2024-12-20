@@ -10,7 +10,7 @@
 #include <vector>
 #endif
 
-#include "../includes/Common.h"
+#include "../common.h"
 #include "../includes/Logger.h"
 
 void signalHandler(int);

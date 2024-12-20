@@ -72,7 +72,8 @@
     "helpers.h": "c",
     "logger.h": "c",
     "variant": "cpp",
-    "wait.h": "c"
+    "wait.h": "c",
+    "common.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

@@ -1,7 +1,5 @@
 #include "main.h"
 
-#include <signal.h>
-
 int main(int argc, char *argv[])
 {
 	Logger logger("Main");
@@ -9,20 +7,25 @@ int main(int argc, char *argv[])
 
 	useconds_t mainLoopInterval = sys.getConfigValue<useconds_t>("global", "main_loop_interval");
 
+	// Vector of smart pointers to the base class
+	std::vector<std::shared_ptr<Process>> processes;
+	// Adding derived class objects to the vector
+	processes.push_back(std::make_shared<TempGauge>());
+	processes.push_back(std::make_shared<FlowSensor>());
+	printf("Hola1\n");
 	RoundDisplay roundDisplay;
 	AnalogConverter analogConverter;
 	CoolantTempSensor coolantTempSensor;
-	FlowSensor flowSensor;
-	TempGauge tempGauge;
 	GPS gps;
+	printf("Hola2\n");
 
 	// Exception handling: ctrl + c
 	signal(SIGINT, signalHandler);
 
-	logger.info("Initializing Round Display.");
 	roundDisplay.showLogo();
 	sleep(2);
 	roundDisplay.setScreen(DIGITAL_GAUGE);
+	printf("Hola3\n");
 
 	logger.info("Setting up shared memory for the engine readings.");
 	EngineValues *engineValues = (EngineValues *)mmap(
@@ -53,70 +56,46 @@ int main(int argc, char *argv[])
 		logger.error("mmap failed for Flow Sensor data or returned NULL pointer.");
 	}
 
-	logger.info("Creating child process for Flow Sensor.");
-	logger.debug("Parent process PID: " + std::to_string(getpid()));
-	logger.debug("Flow Sensor process will fork.");
-
-	pid_t flowSensorPid = fork();
-
-	if (flowSensorPid < 0)
+	// Iterating and calling the loop method on each process
+	for (const auto &process : processes)
 	{
-		logger.error("Fork failed for Flow Sensor process.");
-		munmap(flowSensorData, sizeof(FlowSensorData));
-	}
-	else if (flowSensorPid == 0)
-	{
-		logger.setDescription("FlowSensorProcess");
-		logger.info("Flow Sensor child process started.");
+		pid_t pid = fork();
 
-		signal(SIGTERM, signalHandler);
-
-		while (!terminateChildProcess)
+		if (pid < 0)
 		{
-			*flowSensorData = flowSensor.loop();
+			logger.error("Fork failed for " + process->description);
 		}
-
-		logger.info("Received SIGTERM signal. Cleaning up resources...");
-
-		return 0;
-	}
-	// Track the child PID and description
-	ChildProcess flowSensorProcess = {flowSensorPid, "Flow Sensor"};
-	childProcesses.push_back(flowSensorProcess);
-
-	pid_t tempGaugePid = fork();
-
-	if (tempGaugePid < 0)
-	{
-		logger.error("Fork failed for Temp Gauge process.");
-	}
-	else if (tempGaugePid == 0)
-	{
-		logger.setDescription("TempGaugeProcess");
-		logger.info("Temp Gauge child process started.");
-
-		signal(SIGTERM, signalHandler);
-
-		tempGauge.setup();
-
-		while (!terminateChildProcess)
+		else if (pid == 0)
 		{
-			tempGauge.loop(engineValues->temp);
+			logger.setDescription(process->description + "Process");
+			logger.info(process->description + " child process started.");
+
+			signal(SIGTERM, signalHandler);
+
+			process->setup();
+
+			while (!terminateChildProcess)
+			{
+				process->loop();
+			}
+
+			logger.info("Received SIGTERM signal. Cleaning up resources...");
+
+			return 0;
 		}
-
-		logger.info("Received SIGTERM signal. Cleaning up resources...");
-
-		return 0;
+		else
+		{
+			// Track the child PID and description
+			ChildProcess childProcess = {pid, process->description};
+			childProcesses.push_back(childProcess);
+		}
 	}
-	// Track the child PID and description
-	ChildProcess tempGauteProcess = {tempGaugePid, "Temp Gauge"};
-	childProcesses.push_back(tempGauteProcess);
 
 	// gps.readData();
 
 	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###
-	while (1)
+	while (true)
 	{
 		engineValues->temp = coolantTempSensor.readTemp();
 		engineValues->volts = analogConverter.getVolts();

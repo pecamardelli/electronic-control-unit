@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Common.h"
 #include "Logger.h"
 #include "Relay.h"
 #include "../helpers/helpers.h"
@@ -10,6 +9,7 @@
 #include <sstream>
 #endif
 
+using ConfigMap = std::map<std::string, std::map<std::string, std::string>>;
 class System
 {
 private:

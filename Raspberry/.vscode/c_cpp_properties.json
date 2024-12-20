@@ -4,7 +4,11 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/lib/display/lib/Config"
+                "${workspaceFolder}/src/lib/LCD_display/Config",
+                "${workspaceFolder}/src/includes/**",
+                "${workspaceFolder}",
+                "${workspaceFolder}",
+                "${workspaceFolder}/src/includes"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
