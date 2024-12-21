@@ -82,92 +82,92 @@
  * two-wire constructor.
  * Sets which wires should control the motor.
  */
-Stepper::Stepper(int number_of_steps, int motor_pin_1, int motor_pin_2)
+Stepper::Stepper(int steps, int pin_1, int pin_2)
 {
-  this->step_number = 0;    // which step the motor is on
-  this->direction = 0;      // motor direction
-  this->last_step_time = 0; // time stamp in us of the last step taken
-  this->number_of_steps =
-      number_of_steps; // total number of steps for this motor
+  step_number = 0;    // which step the motor is on
+  direction = 0;      // motor direction
+  last_step_time = 0; // time stamp in us of the last step taken
+  number_of_steps =
+      steps; // total number of steps for this motor
 
   // Arduino pins for the motor control connection:
-  this->motor_pin_1 = motor_pin_1;
-  this->motor_pin_2 = motor_pin_2;
+  motor_pin_1 = pin_1;
+  motor_pin_2 = pin_2;
 
   // setup the pins on the microcontroller:
-  bcm2835_gpio_fsel(this->motor_pin_1, BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_fsel(this->motor_pin_2, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(motor_pin_1, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(motor_pin_2, BCM2835_GPIO_FSEL_OUTP);
 
   // When there are only 2 pins, set the others to 0:
-  this->motor_pin_3 = 0;
-  this->motor_pin_4 = 0;
-  this->motor_pin_5 = 0;
+  motor_pin_3 = 0;
+  motor_pin_4 = 0;
+  motor_pin_5 = 0;
 
   // pin_count is used by the stepMotor() method:
-  this->pin_count = 2;
+  pin_count = 2;
 }
 
 /*
  *   constructor for four-pin version
  *   Sets which wires should control the motor.
  */
-Stepper::Stepper(int number_of_steps, int motor_pin_1, int motor_pin_2,
-                 int motor_pin_3, int motor_pin_4)
+Stepper::Stepper(int steps, int pin_1, int pin_2,
+                 int pin_3, int pin_4)
 {
-  this->step_number = 0;    // which step the motor is on
-  this->direction = 0;      // motor direction
-  this->last_step_time = 0; // time stamp in us of the last step taken
-  this->number_of_steps =
-      number_of_steps; // total number of steps for this motor
+  step_number = 0;    // which step the motor is on
+  direction = 0;      // motor direction
+  last_step_time = 0; // time stamp in us of the last step taken
+  number_of_steps =
+      steps; // total number of steps for this motor
 
   // Arduino pins for the motor control connection:
-  this->motor_pin_1 = motor_pin_1;
-  this->motor_pin_2 = motor_pin_2;
-  this->motor_pin_3 = motor_pin_3;
-  this->motor_pin_4 = motor_pin_4;
+  motor_pin_1 = pin_1;
+  motor_pin_2 = pin_2;
+  motor_pin_3 = pin_3;
+  motor_pin_4 = pin_4;
 
   // setup the pins on the microcontroller:
-  bcm2835_gpio_fsel(this->motor_pin_1, BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_fsel(this->motor_pin_2, BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_fsel(this->motor_pin_3, BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_fsel(this->motor_pin_4, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(motor_pin_1, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(motor_pin_2, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(motor_pin_3, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(motor_pin_4, BCM2835_GPIO_FSEL_OUTP);
 
   // When there are 4 pins, set the others to 0:
-  this->motor_pin_5 = 0;
+  motor_pin_5 = 0;
 
   // pin_count is used by the stepMotor() method:
-  this->pin_count = 4;
+  pin_count = 4;
 }
 
 /*
  *   constructor for five phase motor with five wires
  *   Sets which wires should control the motor.
  */
-Stepper::Stepper(int number_of_steps, int motor_pin_1, int motor_pin_2,
-                 int motor_pin_3, int motor_pin_4, int motor_pin_5)
+Stepper::Stepper(int steps, int pin_1, int pin_2,
+                 int pin_3, int pin_4, int pin_5)
 {
-  this->step_number = 0;    // which step the motor is on
-  this->direction = 0;      // motor direction
-  this->last_step_time = 0; // time stamp in us of the last step taken
-  this->number_of_steps =
-      number_of_steps; // total number of steps for this motor
+  step_number = 0;    // which step the motor is on
+  direction = 0;      // motor direction
+  last_step_time = 0; // time stamp in us of the last step taken
+  number_of_steps =
+      steps; // total number of steps for this motor
 
   // Arduino pins for the motor control connection:
-  this->motor_pin_1 = motor_pin_1;
-  this->motor_pin_2 = motor_pin_2;
-  this->motor_pin_3 = motor_pin_3;
-  this->motor_pin_4 = motor_pin_4;
-  this->motor_pin_5 = motor_pin_5;
+  motor_pin_1 = pin_1;
+  motor_pin_2 = pin_2;
+  motor_pin_3 = pin_3;
+  motor_pin_4 = pin_4;
+  motor_pin_5 = pin_5;
 
   // setup the pins on the microcontroller:
-  bcm2835_gpio_fsel(this->motor_pin_1, BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_fsel(this->motor_pin_2, BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_fsel(this->motor_pin_3, BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_fsel(this->motor_pin_4, BCM2835_GPIO_FSEL_OUTP);
-  bcm2835_gpio_fsel(this->motor_pin_5, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(motor_pin_1, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(motor_pin_2, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(motor_pin_3, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(motor_pin_4, BCM2835_GPIO_FSEL_OUTP);
+  bcm2835_gpio_fsel(motor_pin_5, BCM2835_GPIO_FSEL_OUTP);
 
   // pin_count is used by the stepMotor() method:
-  this->pin_count = 5;
+  pin_count = 5;
 }
 
 /*
@@ -175,7 +175,7 @@ Stepper::Stepper(int number_of_steps, int motor_pin_1, int motor_pin_2,
  */
 void Stepper::setSpeed(long whatSpeed)
 {
-  this->step_delay = 60L * 1000L * 1000L / this->number_of_steps / whatSpeed;
+  step_delay = 60L * 1000L * 1000L / number_of_steps / whatSpeed;
 }
 
 /*
@@ -189,11 +189,11 @@ void Stepper::step(int steps_to_move)
   // determine direction based on whether steps_to_mode is + or -:
   if (steps_to_move > 0)
   {
-    this->direction = 1;
+    direction = 1;
   }
   if (steps_to_move < 0)
   {
-    this->direction = 0;
+    direction = 0;
   }
 
   // decrement the number of steps, moving one step each time:
@@ -201,35 +201,35 @@ void Stepper::step(int steps_to_move)
   {
     unsigned long now = System::uptime();
     // move only if the appropriate delay has passed:
-    if (now - this->last_step_time >= this->step_delay)
+    if (now - last_step_time >= step_delay)
     {
       // get the timeStamp of when you stepped:
-      this->last_step_time = now;
+      last_step_time = now;
       // increment or decrement the step number,
       // depending on direction:
-      if (this->direction == 1)
+      if (direction == 1)
       {
-        this->step_number++;
-        if (this->step_number == this->number_of_steps)
+        step_number++;
+        if (step_number == number_of_steps)
         {
-          this->step_number = 0;
+          step_number = 0;
         }
       }
       else
       {
-        if (this->step_number == 0)
+        if (step_number == 0)
         {
-          this->step_number = this->number_of_steps;
+          step_number = number_of_steps;
         }
-        this->step_number--;
+        step_number--;
       }
       // decrement the steps left:
       steps_left--;
       // step the motor to step number 0, 1, ..., {3 or 10}
-      if (this->pin_count == 5)
-        stepMotor(this->step_number % 10);
+      if (pin_count == 5)
+        stepMotor(step_number % 10);
       else
-        stepMotor(this->step_number % 4);
+        stepMotor(step_number % 4);
     }
   }
 }
@@ -239,7 +239,7 @@ void Stepper::step(int steps_to_move)
  */
 void Stepper::stepMotor(int thisStep)
 {
-  if (this->pin_count == 2)
+  if (pin_count == 2)
   {
     switch (thisStep)
     {
@@ -261,7 +261,7 @@ void Stepper::stepMotor(int thisStep)
       break;
     }
   }
-  if (this->pin_count == 4)
+  if (pin_count == 4)
   {
     switch (thisStep)
     {
@@ -292,7 +292,7 @@ void Stepper::stepMotor(int thisStep)
     }
   }
 
-  if (this->pin_count == 5)
+  if (pin_count == 5)
   {
     switch (thisStep)
     {

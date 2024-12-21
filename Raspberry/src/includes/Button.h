@@ -15,5 +15,5 @@ public:
     Button(RPiGPIOPin);
     ~Button();
     void check();
-    volatile bool pressed;
+    bool pressed;
 };

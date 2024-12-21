@@ -14,14 +14,18 @@
 #include <sstream>
 #endif
 
+#include <cstring>
+
 using ConfigMap = std::map<std::string, std::map<std::string, std::string>>;
+extern char *programName;
+
 class System
 {
 private:
     /* data */
     Relay mainRelay;
     Logger logger = Logger("System");
-    const std::string configFile = "config.ini";
+    const std::string configFile = "/etc/torino-ecu/config.ini";
     ConfigMap config;
     ConfigMap defaultConfigValues = {
         {"global", {{"hostname", "torino-ecu"}, {"main_loop_interval", "50000"}, {"logo_screen_time", "2"}}},
@@ -36,6 +40,7 @@ public:
     System(/* args */);
     ~System();
 
+    void setProgramName(const char *);
     void shutdown();
     static uint64_t uptime();
 

@@ -21,6 +21,8 @@ System::~System()
 {
 }
 
+void System::setProgramName(const char *fullName) {}
+
 void System::shutdown()
 {
     logger.info("Shutting down...");

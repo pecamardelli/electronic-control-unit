@@ -6,7 +6,7 @@ GPS::GPS(/* args */)
     loopInterval = sys.getConfigValue<useconds_t>(description, "loop_interval");
     baudRate = sys.getConfigValue<std::string>(description, "baud_rate");
     // Configure the Raspberry Pi UART interface (if needed)
-    std::string command = "stty - F /dev/serial0 " + baudRate + " raw - echo";
+    std::string command = "stty -F /dev/serial0 " + baudRate + " raw - echo";
     system(command.c_str());
 }
 
@@ -29,8 +29,8 @@ void GPS::loop()
         // Filter NMEA sentences if needed, e.g., $GPGGA or $GPRMC
         if (line.find("$GPGGA") != std::string::npos || line.find("$GPRMC") != std::string::npos)
         {
+            std::cout << "GPS Data: " << line << std::endl;
         }
-        std::cout << "GPS Data: " << line << std::endl;
     }
 
     usleep(loopInterval);

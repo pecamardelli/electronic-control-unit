@@ -46,7 +46,8 @@ private:
     Logger logger = Logger("TempGauge");
     Stepper motor = Stepper(2038, IN1, IN3, IN2, IN4);
     Button button = Button(BUTTON_PIN);
-    uint16_t currentStep = -1;
+    int currentStep = -1;
+    int stepOffset = 0;
 
     void goToStartPosition();
     uint16_t tempToStep(float);

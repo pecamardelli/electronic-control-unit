@@ -4,6 +4,7 @@ TempGauge::TempGauge(/* args */)
 {
     description = "TempGauge";
     loopInterval = sys.getConfigValue<useconds_t>(description, "loop_interval");
+    stepOffset = sys.getConfigValue<int>(description, "step_offset");
     motor.setSpeed(2);
 }
 
@@ -48,6 +49,7 @@ void TempGauge::setup()
     logger.info("Setting up...");
     button.check();
 
+    logger.info("Interruptor switch is pressed: " + button.pressed);
     // Step forward until button is released.
     while (button.pressed)
     {
@@ -58,19 +60,25 @@ void TempGauge::setup()
 
     // Get back to the initial position.
     goToStartPosition();
-
-    motor.stop();
     logger.info("Temp Gauge ready!");
 }
 
 void TempGauge::goToStartPosition()
 {
+    logger.info("Going to start position...");
+    button.check();
+
     while (!button.pressed)
     {
         motor.step(-1);
         usleep(loopInterval);
         button.check();
     }
+
+    logger.info("Applying offset of " + std::to_string(stepOffset) + " steps");
+    // Add offset to place the gauge needle correctly.
+    motor.step(stepOffset);
+    motor.stop();
 
     currentStep = 0;
 }

@@ -1,11 +1,13 @@
 #include "Button.h"
 
-Button::Button(RPiGPIOPin pin)
+Button::Button(RPiGPIOPin _pin)
 {
     if (!bcm2835_init())
     {
-        std::cerr << "Failed to initialize bcm2835!" << std::endl;
+        logger.error("Failed to initialize bcm2835!");
     }
+
+    pin = _pin;
 
     // Set BUTTON_PIN as input with a pull-up resistor
     bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);

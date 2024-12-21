@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 			logger.setDescription(process->description + "Process");
 			logger.info(process->description + " child process started.");
 
-			// signal(SIGTERM, signalHandler);
+			signal(SIGTERM, signalHandler);
 
 			process->setup();
 
