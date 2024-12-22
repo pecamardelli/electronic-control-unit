@@ -9,10 +9,13 @@ int main(int argc, char *argv[])
 	useconds_t mainLoopInterval = sys->getConfigValue<useconds_t>("global", "main_loop_interval");
 	unsigned int logoTime = sys->getConfigValue<unsigned int>("global", "logo_screen_time");
 
-	// Adding derived class objects to the vector
-	processes.push_back(std::make_shared<GPS>());
-	processes.push_back(std::make_shared<TempGauge>());
-	processes.push_back(std::make_shared<FlowSensor>());
+	// Add factories to the vector
+	processFactories.push_back([]()
+							   { return std::make_shared<TempGauge>(); });
+	processFactories.push_back([]()
+							   { return std::make_shared<FlowSensor>(); });
+	processFactories.push_back([]()
+							   { return std::make_shared<GPS>(); });
 
 	DigitalGauge digitalGauge;
 	AnalogConverter analogConverter;
@@ -50,38 +53,41 @@ int main(int argc, char *argv[])
 		logger.error("mmap failed for Flow Sensor data or returned NULL pointer.");
 	}
 
-	// Iterating and calling the setup and loop methods on each process
-	for (const auto &process : processes)
+	// Iterate and instantiate processes during iteration
+	for (const auto &factory : processFactories)
 	{
-		pid_t pid = fork();
-
-		if (pid < 0)
 		{
-			logger.error("Fork failed for " + process->description);
-		}
-		else if (pid == 0)
-		{
-			logger.setDescription(process->description + "Process");
-			logger.info(process->description + " child process started.");
+			pid_t pid = fork();
 
-			signal(SIGTERM, signalHandler);
-
-			process->setup();
-
-			while (!terminateChildProcess)
+			if (pid < 0)
 			{
-				process->loop();
+				logger.error("Fork failed for ");
 			}
+			else if (pid == 0)
+			{
+				std::shared_ptr<Process> process = factory(); // Instantiate here
+				logger.setDescription(process->description + "Process");
+				logger.info(process->description + " child process started.");
 
-			logger.info("Received SIGTERM signal. Cleaning up resources...");
+				signal(SIGTERM, signalHandler);
 
-			return 0;
-		}
-		else
-		{
-			// Track the child PID and description
-			ChildProcess childProcess = {pid, process->description};
-			childProcesses.push_back(childProcess);
+				process->setup();
+
+				while (!terminateChildProcess)
+				{
+					process->loop();
+				}
+
+				logger.info("Received SIGTERM signal. Cleaning up resources...");
+
+				return 0;
+			}
+			else
+			{
+				// Track the child PID and description
+				ChildProcess childProcess = {pid, "Sarasa"};
+				childProcesses.push_back(childProcess);
+			}
 		}
 	}
 

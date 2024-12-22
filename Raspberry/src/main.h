@@ -4,6 +4,9 @@
 #include <sys/mman.h>
 #include <signal.h>
 #include <memory> // For smart pointers
+#include <iostream>
+#include <vector>
+#include <functional>
 
 #include "common.h"
 #include "Logger.h"
@@ -22,8 +25,8 @@ const char *ASSETS_PATH = "./src/assets";
 std::string IMAGES_PATH = std::string(ASSETS_PATH) + "/images";
 std::vector<ChildProcess> childProcesses; // Vector to store child processes
 
-// Vector of smart pointers to the base class
-std::vector<std::shared_ptr<Process>> processes;
+// Store factory functions
+std::vector<std::function<std::shared_ptr<Process>()>> processFactories;
 
 System *sys;
 
