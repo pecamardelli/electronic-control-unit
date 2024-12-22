@@ -14,7 +14,7 @@ public:
     std::string description;
     // Pure virtual function
     virtual void loop() = 0;
-    virtual void setup() {};
+    virtual void setup() = 0;
 
 protected:
     useconds_t loopInterval;

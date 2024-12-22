@@ -2,14 +2,10 @@
 
 Button::Button(RPiGPIOPin _pin)
 {
-    if (!bcm2835_init())
-    {
-        logger.error("Failed to initialize bcm2835!");
-    }
-
+    BCM2835Manager::getInstance();
     pin = _pin;
 
-    // Set BUTTON_PIN as input with a pull-up resistor
+    // Set the pin as input with a pull-up resistor
     bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_set_pud(pin, BCM2835_GPIO_PUD_UP);
 }

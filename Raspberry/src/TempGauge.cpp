@@ -17,12 +17,10 @@ TempGauge::~TempGauge()
 
 void TempGauge::loop()
 {
-    uint16_t stepToGo = tempToStep(0);
+    uint16_t stepToGo = tempToStep(100);
 
     if (stepToGo == currentStep)
         return;
-
-    // std::cout << "Step to go: " << stepToGo << std::endl;
 
     if (currentStep < stepToGo)
     {
@@ -49,7 +47,6 @@ void TempGauge::setup()
     logger.info("Setting up...");
     button.check();
 
-    logger.info("Interruptor switch is pressed: " + button.pressed);
     // Step forward until button is released.
     while (button.pressed)
     {
@@ -75,7 +72,6 @@ void TempGauge::goToStartPosition()
         button.check();
     }
 
-    logger.info("Applying offset of " + std::to_string(stepOffset) + " steps");
     // Add offset to place the gauge needle correctly.
     motor.step(stepOffset);
     motor.stop();

@@ -10,9 +10,9 @@ int main(int argc, char *argv[])
 	unsigned int logoTime = sys->getConfigValue<unsigned int>("global", "logo_screen_time");
 
 	// Adding derived class objects to the vector
+	processes.push_back(std::make_shared<GPS>());
 	processes.push_back(std::make_shared<TempGauge>());
 	processes.push_back(std::make_shared<FlowSensor>());
-	processes.push_back(std::make_shared<GPS>());
 
 	DigitalGauge digitalGauge;
 	AnalogConverter analogConverter;

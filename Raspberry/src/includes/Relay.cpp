@@ -2,11 +2,7 @@
 
 Relay::Relay(/* args */)
 {
-    // Initialize the bcm2835 library
-    if (!bcm2835_init())
-    {
-        logger.error("bcm2835 initialization failed!");
-    }
+    BCM2835Manager::getInstance();
 
     // Set the relay pin as an output
     bcm2835_gpio_fsel(RELAY_PIN, BCM2835_GPIO_FSEL_OUTP);
@@ -14,8 +10,6 @@ Relay::Relay(/* args */)
 
 Relay::~Relay()
 {
-    // Close the bcm2835 library
-    bcm2835_close();
 }
 
 void Relay::state(int state)

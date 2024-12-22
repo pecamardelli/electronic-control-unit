@@ -7,7 +7,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <bcm2835.h>
 #include <unistd.h>
 
 #define GPS_UART "/dev/serial0" // Raspberry Pi UART port
@@ -24,4 +23,5 @@ public:
     ~GPS();
 
     void loop() override;
+    void setup() override;
 };

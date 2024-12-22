@@ -15,7 +15,7 @@
 #include "Debug.h"
 
 #ifdef USE_BCM2835_LIB
-#include <bcm2835.h>
+#include "../../../includes/BCM2835Manager.h"
 #elif USE_WIRINGPI_LIB
 #include <wiringPi.h>
 #include <wiringPiSPI.h>

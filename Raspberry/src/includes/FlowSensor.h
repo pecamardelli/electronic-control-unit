@@ -1,10 +1,10 @@
 #pragma once
 
-#include <bcm2835.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "Logger.h"
+#include "BCM2835Manager.h"
 #include "System.h"
 #include "Process.h"
 
@@ -34,4 +34,5 @@ public:
     FlowSensorData data = {0};
 
     void loop() override;
+    void setup() override;
 };

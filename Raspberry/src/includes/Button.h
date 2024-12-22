@@ -1,8 +1,7 @@
 #pragma once
 
-#include <bcm2835.h>
-#include <iostream>
 #include "Logger.h"
+#include "BCM2835Manager.h"
 
 class Button
 {

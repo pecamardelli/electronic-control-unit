@@ -80,8 +80,8 @@
 #ifndef STEPPER_H_
 #define STEPPER_H_
 
-#include <bcm2835.h>
 #include "../../includes/System.h"
+#include "../../includes/BCM2835Manager.h"
 
 // library interface description
 class Stepper
@@ -120,8 +120,7 @@ private:
         int motor_pin_4;
         int motor_pin_5; // Only 5 phase motor
 
-        unsigned long
-            last_step_time; // time stamp in us of when the last step was taken
+        unsigned long last_step_time; // time stamp in us of when the last step was taken
 };
 
 #endif

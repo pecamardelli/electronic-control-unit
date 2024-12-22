@@ -6,11 +6,15 @@ GPS::GPS(/* args */)
     loopInterval = sys->getConfigValue<useconds_t>(description, "loop_interval");
     baudRate = sys->getConfigValue<std::string>(description, "baud_rate");
     // Configure the Raspberry Pi UART interface (if needed)
-    std::string command = "stty -F /dev/serial0 " + baudRate + " raw - echo";
+    std::string command = "stty -F /dev/serial0 " + baudRate + " raw -echo";
     system(command.c_str());
 }
 
 GPS::~GPS()
+{
+}
+
+void GPS::setup()
 {
 }
 

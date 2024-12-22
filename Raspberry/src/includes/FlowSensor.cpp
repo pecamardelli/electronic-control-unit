@@ -6,11 +6,7 @@ FlowSensor::FlowSensor(/* args */)
     loopInterval = sys->getConfigValue<useconds_t>(description, "loop_interval");
     PULSES_PER_LITER = sys->getConfigValue<u_int16_t>(description, "pulses_per_liter");
 
-    // Initialize bcm2835
-    if (!bcm2835_init())
-    {
-        logger.error("bcm2835_init failed. Are you running as root?");
-    }
+    BCM2835Manager::getInstance();
 
     // Configure GPIO pin
     bcm2835_gpio_fsel(FLOW_SENSOR_PIN, BCM2835_GPIO_FSEL_INPT);
@@ -23,6 +19,10 @@ FlowSensor::FlowSensor(/* args */)
 }
 
 FlowSensor::~FlowSensor()
+{
+}
+
+void FlowSensor::setup()
 {
 }
 

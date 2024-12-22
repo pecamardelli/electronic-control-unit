@@ -84,11 +84,11 @@
  */
 Stepper::Stepper(int steps, int pin_1, int pin_2)
 {
-  step_number = 0;    // which step the motor is on
-  direction = 0;      // motor direction
-  last_step_time = 0; // time stamp in us of the last step taken
-  number_of_steps =
-      steps; // total number of steps for this motor
+  BCM2835Manager::getInstance();
+  step_number = 0;         // which step the motor is on
+  direction = 0;           // motor direction
+  last_step_time = 0;      // time stamp in us of the last step taken
+  number_of_steps = steps; // total number of steps for this motor
 
   // Arduino pins for the motor control connection:
   motor_pin_1 = pin_1;
@@ -114,11 +114,11 @@ Stepper::Stepper(int steps, int pin_1, int pin_2)
 Stepper::Stepper(int steps, int pin_1, int pin_2,
                  int pin_3, int pin_4)
 {
-  step_number = 0;    // which step the motor is on
-  direction = 0;      // motor direction
-  last_step_time = 0; // time stamp in us of the last step taken
-  number_of_steps =
-      steps; // total number of steps for this motor
+  BCM2835Manager::getInstance();
+  step_number = 0;         // which step the motor is on
+  direction = 0;           // motor direction
+  last_step_time = 0;      // time stamp in us of the last step taken
+  number_of_steps = steps; // total number of steps for this motor
 
   // Arduino pins for the motor control connection:
   motor_pin_1 = pin_1;
@@ -146,11 +146,11 @@ Stepper::Stepper(int steps, int pin_1, int pin_2,
 Stepper::Stepper(int steps, int pin_1, int pin_2,
                  int pin_3, int pin_4, int pin_5)
 {
-  step_number = 0;    // which step the motor is on
-  direction = 0;      // motor direction
-  last_step_time = 0; // time stamp in us of the last step taken
-  number_of_steps =
-      steps; // total number of steps for this motor
+  BCM2835Manager::getInstance();
+  step_number = 0;         // which step the motor is on
+  direction = 0;           // motor direction
+  last_step_time = 0;      // time stamp in us of the last step taken
+  number_of_steps = steps; // total number of steps for this motor
 
   // Arduino pins for the motor control connection:
   motor_pin_1 = pin_1;
