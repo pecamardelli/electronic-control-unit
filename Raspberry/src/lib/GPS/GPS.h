@@ -11,7 +11,7 @@
 #include <unistd.h>
 
 #define GPS_UART "/dev/serial0" // Raspberry Pi UART port
-extern System sys;
+extern System *sys;
 class GPS : public Process
 {
 private:

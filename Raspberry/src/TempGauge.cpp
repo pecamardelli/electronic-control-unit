@@ -3,8 +3,8 @@
 TempGauge::TempGauge(/* args */)
 {
     description = "TempGauge";
-    loopInterval = sys.getConfigValue<useconds_t>(description, "loop_interval");
-    stepOffset = sys.getConfigValue<int>(description, "step_offset");
+    loopInterval = sys->getConfigValue<useconds_t>(description, "loop_interval");
+    stepOffset = sys->getConfigValue<int>(description, "step_offset");
     motor.setSpeed(2);
 }
 

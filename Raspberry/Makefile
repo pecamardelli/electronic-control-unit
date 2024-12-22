@@ -1,4 +1,4 @@
-DIR_SRC		= ./src
+DIR_SRC			= ./src
 DIR_LIB			= ${DIR_SRC}/lib
 DIR_INCLUDES	= ${DIR_SRC}/includes
 DIR_HELPERS		= ${DIR_SRC}/helpers
@@ -17,7 +17,7 @@ DIR_GPS			= $(DIR_LIB)/GPS
 TARGET = torino-ecu
 BUILD_DIR := build
 DEST_DIR := /usr/local/bin
-CONFIG_DIR := /etc/$(TARGET)
+CONFIG_DIR := /etc
 CONFIG_FILE := $(DIR_SRC)/config.ini
 
 # Rules
@@ -28,6 +28,8 @@ all: prepare $(TARGET)
 
 # Pre-build step
 prepare:
+	@echo "Removing build directory: $(BUILD_DIR)..."
+	@rm -rf $(BUILD_DIR)
 	@echo "Running pre-build scripts..."
 	@mkdir -p $(BUILD_DIR)
 	@echo "Checking dependencies..."
@@ -95,17 +97,16 @@ ${BUILD_DIR}/%.o:$(DIR_GPS)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_INCLUDES)
 	
 # Install
-install: all clean
+install: all
 	@echo "Installing to $(DEST_DIR)..."
 	@mkdir -p $(DEST_DIR)
 	@cp $(TARGET) $(DEST_DIR)
 	@echo "Copying configuration file to $(CONFIG_DIR)..."
 	@mkdir -p $(CONFIG_DIR)
-	@cp $(CONFIG_FILE) $(CONFIG_DIR)
-	@echo "Copying assets to $(CONFIG_DIR)..."
+	@cp $(CONFIG_FILE) $(CONFIG_DIR)/$(TARGET)
 	@echo "Running initial setup script..."
-	@cp -R $(DIR_ASSETS) $(CONFIG_DIR)
-	@bash setup.sh $(TARGET) $(DEST_DIR) $(CONFIG_DIR)
+	@bash setup.sh $(TARGET) $(DEST_DIR)
+	@$(MAKE) clean
 
 # Clean up
 clean:

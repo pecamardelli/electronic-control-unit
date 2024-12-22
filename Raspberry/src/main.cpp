@@ -2,11 +2,12 @@
 
 int main(int argc, char *argv[])
 {
+	sys = new System(getProgramName(argv[0]));
 	Logger logger("Main");
 	logger.info("Program started.");
 
-	useconds_t mainLoopInterval = sys.getConfigValue<useconds_t>("global", "main_loop_interval");
-	unsigned int logoTime = sys.getConfigValue<unsigned int>("global", "logo_screen_time");
+	useconds_t mainLoopInterval = sys->getConfigValue<useconds_t>("global", "main_loop_interval");
+	unsigned int logoTime = sys->getConfigValue<unsigned int>("global", "logo_screen_time");
 
 	// Adding derived class objects to the vector
 	processes.push_back(std::make_shared<TempGauge>());
@@ -118,7 +119,7 @@ int main(int argc, char *argv[])
 	terminateChildProcesses(childProcesses);
 
 	logger.info("Exiting...");
-	sys.shutdown();
+	sys->shutdown();
 
 	logger.info("Program terminated.");
 }

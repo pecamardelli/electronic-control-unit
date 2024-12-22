@@ -1,9 +1,9 @@
 #include "System.h"
 
-System::System(/* args */)
+System::System(std::string programName)
 {
     mainRelay.state(HIGH);
-    config = loadConfig(configFile);
+    config = loadConfig("/etc/" + programName);
 
     // Display parsed configuration
     // for (const auto &[section, values] : config)

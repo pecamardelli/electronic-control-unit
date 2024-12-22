@@ -17,7 +17,7 @@ typedef struct _flowSensorData
     float totalConsumption;
 } FlowSensorData;
 
-extern System sys;
+extern System *sys;
 
 class FlowSensor : public Process
 {

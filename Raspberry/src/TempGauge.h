@@ -26,7 +26,7 @@ struct Conversion
     uint16_t step;
 };
 
-extern System sys;
+extern System *sys;
 class TempGauge : public Process
 {
 private:

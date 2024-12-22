@@ -25,19 +25,18 @@ private:
     /* data */
     Relay mainRelay;
     Logger logger = Logger("System");
-    const std::string configFile = "/etc/torino-ecu/config.ini";
     ConfigMap config;
     ConfigMap defaultConfigValues = {
-        {"global", {{"hostname", "torino-ecu"}, {"main_loop_interval", "50000"}, {"logo_screen_time", "2"}}},
+        {"global", {{"main_loop_interval", "50000"}, {"logo_screen_time", "2"}}},
         {"logging", {{"log_level", "INFO"}}},
         {"FlowSensor", {{"loop_interval", "1000"}, {"pulses_per_liter", "287"}}},
-        {"TempGauge", {{"loop_interval", "1000"}}},
-        {"GPS", {{"loop_interval", "1000000"}}}};
+        {"TempGauge", {{"loop_interval", "1000"}, {"step_offset", "-115"}}},
+        {"GPS", {{"loop_interval", "1000000"}, {"baud_rate", "9600"}}}};
 
     ConfigMap loadConfig(const std::string &);
 
 public:
-    System(/* args */);
+    System(std::string);
     ~System();
 
     void setProgramName(const char *);

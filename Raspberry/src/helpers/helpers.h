@@ -10,9 +10,15 @@
 #include <vector>
 #endif
 
+#ifndef CSTRING_H_
+#define CSTRING_H_
+#include <cstring>
+#endif
+
 #include "../common.h"
 #include "../includes/Logger.h"
 
 void signalHandler(int);
 void terminateChildProcesses(std::vector<ChildProcess>);
 std::string trim(const std::string &);
+std::string getProgramName(char *);

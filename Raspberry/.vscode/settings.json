@@ -74,7 +74,8 @@
     "variant": "cpp",
     "wait.h": "c",
     "common.h": "c",
-    "images.h": "c"
+    "images.h": "c",
+    "cstring": "cpp"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

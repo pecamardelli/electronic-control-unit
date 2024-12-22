@@ -25,7 +25,7 @@ std::vector<ChildProcess> childProcesses; // Vector to store child processes
 // Vector of smart pointers to the base class
 std::vector<std::shared_ptr<Process>> processes;
 
-System sys;
+System *sys;
 
 bool terminateProgram = false;
 volatile bool terminateChildProcess = false;
