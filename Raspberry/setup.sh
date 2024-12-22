@@ -32,10 +32,10 @@ StandardError=syslog
 WantedBy=multi-user.target
 EOT
 
-systemctl daemon-reload
-systemctl start $1.service
-systemctl enable $1.service
-systemctl status $1.service
+# systemctl daemon-reload
+# systemctl start $1.service
+# systemctl enable $1.service
+# systemctl status $1.service
 
 
 

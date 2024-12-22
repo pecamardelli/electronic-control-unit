@@ -23,6 +23,9 @@ CONFIG_FILE := $(DIR_SRC)/config.ini
 # Rules
 all: prepare $(TARGET)
 
+# Phony targets
+.PHONY: all prepare install clean
+
 # Pre-build step
 prepare:
 	@echo "Running pre-build scripts..."
@@ -92,7 +95,7 @@ ${BUILD_DIR}/%.o:$(DIR_GPS)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_INCLUDES)
 	
 # Install
-install: all
+install: all clean
 	@echo "Installing to $(DEST_DIR)..."
 	@mkdir -p $(DEST_DIR)
 	@cp $(TARGET) $(DEST_DIR)
@@ -108,6 +111,3 @@ install: all
 clean:
 	@echo "Cleaning up..."
 	@rm -rf $(BUILD_DIR) $(TARGET)
-
-# Phony targets
-.PHONY: all prepare install clean
