@@ -3,6 +3,8 @@
 FlowSensor::FlowSensor(/* args */)
 {
     description = "FlowSensor";
+    logger = new Logger(description);
+
     loopInterval = sys->getConfigValue<useconds_t>(description, "loop_interval");
     PULSES_PER_LITER = sys->getConfigValue<u_int16_t>(description, "pulses_per_liter");
 
@@ -15,18 +17,15 @@ FlowSensor::FlowSensor(/* args */)
     // Variables for detecting rising edges
     lastState = bcm2835_gpio_lev(FLOW_SENSOR_PIN);
 
-    logger.info("Flow sensor inited...");
+    logger->info("Flow sensor inited...");
 }
 
 FlowSensor::~FlowSensor()
 {
+    delete logger;
 }
 
-void FlowSensor::setup()
-{
-}
-
-void FlowSensor::loop()
+void FlowSensor::loop(EngineValues *engineValues)
 {
     // Read the current state of the pin
     currentState = bcm2835_gpio_lev(FLOW_SENSOR_PIN);
@@ -41,6 +40,9 @@ void FlowSensor::loop()
 
     // Update the last state
     lastState = currentState;
+
+    engineValues->fuelConsumption.store(data.totalConsumption);
+    engineValues->kml.store(data.totalPulseCount);
 
     usleep(loopInterval);
 }

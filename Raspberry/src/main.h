@@ -21,6 +21,9 @@
 #include "DigitalGauge.h"
 #include "Process.h"
 
+// Initialize static member
+std::atomic<bool> Process::terminateFlag(false);
+
 const char *ASSETS_PATH = "./src/assets";
 std::string IMAGES_PATH = std::string(ASSETS_PATH) + "/images";
 std::vector<ChildProcess> childProcesses; // Vector to store child processes
@@ -29,6 +32,7 @@ std::vector<ChildProcess> childProcesses; // Vector to store child processes
 std::vector<std::function<std::shared_ptr<Process>()>> processFactories;
 
 System *sys;
+EngineValues *engineValues;
 
 bool terminateProgram = false;
 volatile bool terminateChildProcess = false;

@@ -7,6 +7,7 @@
 #include "BCM2835Manager.h"
 #include "System.h"
 #include "Process.h"
+#include "../common.h"
 
 #define FLOW_SENSOR_PIN RPI_GPIO_P1_12 // GPIO18 (Pin 12)
 
@@ -26,13 +27,11 @@ private:
     u_int16_t PULSES_PER_LITER;
     uint8_t lastState;
     uint8_t currentState;
-    Logger logger = Logger("FlowSensor");
 
 public:
     FlowSensor(/* args */);
     ~FlowSensor();
     FlowSensorData data = {0};
 
-    void loop() override;
-    void setup() override;
+    void loop(EngineValues *) override;
 };

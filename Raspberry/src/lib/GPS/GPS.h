@@ -3,6 +3,7 @@
 #include "Logger.h"
 #include "Process.h"
 #include "System.h"
+#include "../../common.h"
 
 #include <iostream>
 #include <fstream>
@@ -15,13 +16,11 @@ class GPS : public Process
 {
 private:
     /* data */
-    Logger logger = Logger(description);
     std::string baudRate;
 
 public:
     GPS(/* args */);
     ~GPS();
 
-    void loop() override;
-    void setup() override;
+    void loop(EngineValues *) override;
 };

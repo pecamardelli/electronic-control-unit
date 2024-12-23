@@ -14,7 +14,7 @@ echo "Creating service file..."
 
 SERVICE_FILE="/etc/systemd/system/$1.service"
 
-tee $SERVICE_FILE <<EOT
+tee $SERVICE_FILE > /dev/null <<EOT
 [Unit]
 Description=Custom Electronic Control Unit
 After=network.target
@@ -30,7 +30,7 @@ StandardError=syslog
 
 [Install]
 WantedBy=multi-user.target
-EOT
+EOT > /dev/null
 
 # systemctl daemon-reload
 # systemctl start $1.service

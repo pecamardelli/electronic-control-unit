@@ -5,17 +5,29 @@
 #include <string>
 #endif
 
+#include <iostream>
+#include <csignal>
+#include <atomic>
+
+#include "Logger.h"
+#include "../common.h"
+
 class Process
 {
 private:
     /* data */
 public:
-    virtual ~Process() = default;
+    Process();
+    virtual ~Process();
     std::string description;
+
     // Pure virtual function
-    virtual void loop() = 0;
-    virtual void setup() = 0;
+    virtual void loop(EngineValues *) = 0;
+
+    static void handleSignal(int);
 
 protected:
+    static std::atomic<bool> terminateFlag; // Shared termination flag
     useconds_t loopInterval;
+    Logger *logger;
 };

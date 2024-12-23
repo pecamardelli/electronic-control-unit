@@ -5,6 +5,8 @@
 #include <string>
 #endif
 
+#include <atomic>
+
 // Struct to store child PID and description
 typedef struct _childProcess
 {
@@ -14,11 +16,11 @@ typedef struct _childProcess
 
 typedef struct _engineValues
 {
-    uint8_t temp;
-    float kml;
-    float volts;
-    float fuelConsumption;
-    bool ignition;
+    std::atomic<uint8_t> temp;
+    std::atomic<float> kml;
+    std::atomic<float> volts;
+    std::atomic<float> fuelConsumption;
+    std::atomic<bool> ignition;
 } EngineValues;
 
 enum Screen

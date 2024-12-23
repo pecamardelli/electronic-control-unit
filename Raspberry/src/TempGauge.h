@@ -13,6 +13,7 @@
 #include "Logger.h"
 #include "System.h"
 #include "Button.h"
+#include "common.h"
 
 #include "lib/Stepper/Stepper.h"
 
@@ -38,13 +39,13 @@ private:
 
     std::vector<Conversion>
         conversions = {
-            {30, 0}, {40, 45}, {60, 100}, {80, 185}, {100, 275}, {130, 351}};
+            {0, 0}, {40, 45}, {60, 100}, {80, 185}, {100, 275}, {130, 351}};
 
-    Logger logger = Logger("TempGauge");
     Stepper motor = Stepper(2038, IN1, IN3, IN2, IN4);
     Button button = Button(RPI_V2_GPIO_P1_32);
-    int currentStep = -1;
+    int currentStep;
     int stepOffset = 0;
+    uint16_t stepToGo;
 
     void goToStartPosition();
     uint16_t tempToStep(float);
@@ -53,6 +54,5 @@ public:
     TempGauge(/* args */);
     ~TempGauge();
 
-    void setup() override;
-    void loop() override;
+    void loop(EngineValues *) override;
 };

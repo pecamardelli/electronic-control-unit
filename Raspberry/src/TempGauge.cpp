@@ -3,48 +3,14 @@
 TempGauge::TempGauge(/* args */)
 {
     description = "TempGauge";
+    logger = new Logger(description);
+
     loopInterval = sys->getConfigValue<useconds_t>(description, "loop_interval");
     stepOffset = sys->getConfigValue<int>(description, "step_offset");
+
     motor.setSpeed(2);
-}
 
-TempGauge::~TempGauge()
-{
-    logger.info("Going to start position...");
-    goToStartPosition();
-    logger.info("Done!");
-}
-
-void TempGauge::loop()
-{
-    uint16_t stepToGo = tempToStep(100);
-
-    if (stepToGo == currentStep)
-        return;
-
-    if (currentStep < stepToGo)
-    {
-        while (currentStep < stepToGo)
-        {
-            motor.step(1);
-            currentStep++;
-            usleep(loopInterval);
-        }
-    }
-    else
-    {
-        while (currentStep > stepToGo)
-        {
-            motor.step(-1);
-            currentStep--;
-            usleep(loopInterval);
-        }
-    }
-}
-
-void TempGauge::setup()
-{
-    logger.info("Setting up...");
+    logger->info("Setting up...");
     button.check();
 
     // Step forward until button is released.
@@ -57,12 +23,49 @@ void TempGauge::setup()
 
     // Get back to the initial position.
     goToStartPosition();
-    logger.info("Temp Gauge ready!");
+
+    motor.setSpeed(1);
+    logger->info("Temp Gauge ready!");
+}
+
+TempGauge::~TempGauge()
+{
+    logger->info("Going to start position...");
+    goToStartPosition();
+    logger->info("Done!");
+
+    delete logger;
+}
+
+void TempGauge::loop(EngineValues *engineValues)
+{
+    while (!terminateFlag.load())
+    {
+        stepToGo = tempToStep(engineValues->temp.load());
+
+        if (stepToGo == currentStep)
+            return;
+
+        if (currentStep < stepToGo)
+        {
+            motor.step(1);
+            currentStep++;
+        }
+        else
+        {
+            motor.step(-1);
+            currentStep--;
+        }
+
+        motor.stop();
+        usleep(loopInterval);
+    }
+    logger->info("Terminating process...");
 }
 
 void TempGauge::goToStartPosition()
 {
-    logger.info("Going to start position...");
+    logger->info("Going to start position...");
     button.check();
 
     while (!button.pressed)

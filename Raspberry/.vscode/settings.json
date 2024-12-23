@@ -76,7 +76,9 @@
     "common.h": "c",
     "images.h": "c",
     "cstring": "cpp",
-    "bcm2835manager.h": "c"
+    "bcm2835manager.h": "c",
+    "button.h": "c",
+    "process.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

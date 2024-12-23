@@ -3,6 +3,7 @@
 GPS::GPS(/* args */)
 {
     description = "GPS";
+    logger = new Logger(description);
     loopInterval = sys->getConfigValue<useconds_t>(description, "loop_interval");
     baudRate = sys->getConfigValue<std::string>(description, "baud_rate");
     // Configure the Raspberry Pi UART interface (if needed)
@@ -12,20 +13,17 @@ GPS::GPS(/* args */)
 
 GPS::~GPS()
 {
+    delete logger;
 }
 
-void GPS::setup()
-{
-}
-
-void GPS::loop()
+void GPS::loop(EngineValues *engineValues)
 {
     std::ifstream gpsStream(GPS_UART, std::ios::in);
     std::string line;
 
     if (!gpsStream.is_open())
     {
-        logger.error("Error: Could not open GPS UART port.");
+        logger->error("Error: Could not open GPS UART port.");
     }
 
     if (std::getline(gpsStream, line))
