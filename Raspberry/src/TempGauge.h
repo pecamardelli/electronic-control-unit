@@ -43,7 +43,7 @@ private:
 
     Stepper motor = Stepper(2038, IN1, IN3, IN2, IN4);
     Button button = Button(RPI_V2_GPIO_P1_32);
-    int currentStep;
+    int currentStep = 0;
     int stepOffset = 0;
     uint16_t stepToGo;
 

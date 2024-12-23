@@ -1,7 +1,6 @@
 #pragma once
 
 #include <sys/wait.h>
-#include <sys/mman.h>
 #include <signal.h>
 #include <memory> // For smart pointers
 #include <iostream>
@@ -32,7 +31,6 @@ std::vector<ChildProcess> childProcesses; // Vector to store child processes
 std::vector<std::function<std::shared_ptr<Process>()>> processFactories;
 
 System *sys;
-EngineValues *engineValues;
 
 bool terminateProgram = false;
 volatile bool terminateChildProcess = false;

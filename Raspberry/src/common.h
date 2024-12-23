@@ -14,14 +14,14 @@ typedef struct _childProcess
     std::string description;
 } ChildProcess;
 
-typedef struct _engineValues
+struct EngineValues
 {
     std::atomic<uint8_t> temp;
     std::atomic<float> kml;
     std::atomic<float> volts;
     std::atomic<float> fuelConsumption;
     std::atomic<bool> ignition;
-} EngineValues;
+};
 
 enum Screen
 {

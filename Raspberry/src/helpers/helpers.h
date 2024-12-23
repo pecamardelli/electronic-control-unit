@@ -15,6 +15,16 @@
 #include <cstring>
 #endif
 
+#ifndef MMAN_H_
+#define MMAN_H_
+#include <sys/mman.h>
+#endif
+
+#ifndef FCNTL_H_
+#define FCNTL_H_
+#include <fcntl.h>
+#endif
+
 #include "../common.h"
 #include "../includes/Logger.h"
 
@@ -22,3 +32,6 @@ void signalHandler(int);
 void terminateChildProcesses(std::vector<ChildProcess>);
 std::string trim(const std::string &);
 std::string getProgramName(char *);
+
+template <typename T>
+T *createSharedMemory(const char *, bool);

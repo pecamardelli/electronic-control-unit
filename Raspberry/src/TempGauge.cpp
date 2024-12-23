@@ -41,17 +41,15 @@ void TempGauge::loop(EngineValues *engineValues)
 {
     while (!terminateFlag.load())
     {
-        stepToGo = tempToStep(engineValues->temp.load());
-
-        if (stepToGo == currentStep)
-            return;
+        std::cout << engineValues->temp.load() << std::endl;
+        stepToGo = 278;
 
         if (currentStep < stepToGo)
         {
             motor.step(1);
             currentStep++;
         }
-        else
+        else if (currentStep > stepToGo)
         {
             motor.step(-1);
             currentStep--;
@@ -84,6 +82,11 @@ void TempGauge::goToStartPosition()
 
 uint16_t TempGauge::tempToStep(float temp)
 {
+    if (!temp || temp < 0)
+        temp = 0;
+    else if (temp > 130)
+        temp = 130;
+
     // Find the proper map object.
     auto conversion = std::find_if(conversions.begin(), conversions.end(), [temp](const Conversion &c)
                                    { return temp <= c.temp; });

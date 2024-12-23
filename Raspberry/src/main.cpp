@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
 	// Add smart pointer factories to the vector
 	processFactories.push_back([]()
 							   { return std::make_shared<TempGauge>(); });
-	processFactories.push_back([]()
-							   { return std::make_shared<FlowSensor>(); });
+	// processFactories.push_back([]()
+	// 						   { return std::make_shared<FlowSensor>(); });
 	// processFactories.push_back([]()
 	// 						   { return std::make_shared<GPS>(); });
 
@@ -25,19 +25,7 @@ int main(int argc, char *argv[])
 	digitalGauge.setScreen(DIGITAL_GAUGE);
 
 	logger.info("Setting up shared memory for the engine readings.");
-	engineValues = (EngineValues *)mmap(
-		NULL,
-		sizeof(EngineValues),
-		PROT_READ | PROT_WRITE,
-		MAP_SHARED | MAP_ANONYMOUS,
-		-1,
-		0);
-
-	if (engineValues == MAP_FAILED || engineValues == NULL)
-	{
-		logger.error("mmap failed for engine readings or returned NULL pointer.");
-		exit(1);
-	}
+	EngineValues *engineValues = createSharedMemory<EngineValues>("/engineValuesMemory", true);
 
 	// Iterate and instantiate processes during iteration
 	for (const auto &factory : processFactories)
@@ -88,6 +76,10 @@ int main(int argc, char *argv[])
 	}
 
 	logger.info("Exiting main loop. Cleaning up resources.");
+
+	// Cleanup
+	munmap(engineValues, sizeof(EngineValues));
+	shm_unlink("/engineValuesMemory"); // Remove shared memory segment
 
 	digitalGauge.setScreen(TORINO_LOGO);
 	digitalGauge.showLogo(logoTime);
