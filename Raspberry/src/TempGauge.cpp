@@ -25,6 +25,9 @@ TempGauge::TempGauge(/* args */)
     goToStartPosition();
 
     motor.setSpeed(1);
+
+    // test();
+
     logger->info("Temp Gauge ready!");
 }
 
@@ -39,10 +42,21 @@ TempGauge::~TempGauge()
 
 void TempGauge::loop(EngineValues *engineValues)
 {
+    int stepToGo;
+    float temp = 0;
+
+    logger->info("Entering loop...");
+
     while (!terminateFlag.load())
     {
-        std::cout << engineValues->temp.load() << std::endl;
-        stepToGo = 278;
+        temp = engineValues->temp.load();
+
+        if (!temp || temp < 0)
+            temp = 0;
+        else if (temp > 130)
+            temp = 130;
+
+        stepToGo = tempToStep(temp);
 
         if (currentStep < stepToGo)
         {
@@ -54,8 +68,11 @@ void TempGauge::loop(EngineValues *engineValues)
             motor.step(-1);
             currentStep--;
         }
+        else
+        {
+            motor.stop();
+        }
 
-        motor.stop();
         usleep(loopInterval);
     }
     logger->info("Terminating process...");
@@ -82,11 +99,6 @@ void TempGauge::goToStartPosition()
 
 uint16_t TempGauge::tempToStep(float temp)
 {
-    if (!temp || temp < 0)
-        temp = 0;
-    else if (temp > 130)
-        temp = 130;
-
     // Find the proper map object.
     auto conversion = std::find_if(conversions.begin(), conversions.end(), [temp](const Conversion &c)
                                    { return temp <= c.temp; });
@@ -106,4 +118,20 @@ uint16_t TempGauge::tempToStep(float temp)
     uint16_t stepToGo = lowerConversion.step + (temp - lowerConversion.temp) / tempDiff * stepsDiff;
 
     return stepToGo;
+}
+
+void TempGauge::test()
+{
+    logger->info("Entering test mode...");
+    int previousStep = 0;
+
+    for (const auto &conversion : conversions)
+    {
+        logger->info("Placing needle at " + std::to_string(conversion.temp) + " degrees.");
+        motor.step(conversion.step - previousStep);
+        previousStep = conversion.step;
+    }
+
+    goToStartPosition();
+    logger->info("Done...");
 }

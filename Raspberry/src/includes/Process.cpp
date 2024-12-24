@@ -8,7 +8,7 @@ Process::Process(/* args */)
 
 Process::~Process()
 {
-    // Reset signal handler (optional)
+    // Reset signal handler
     std::signal(SIGTERM, SIG_DFL);
 }
 

@@ -55,7 +55,7 @@ else ifeq ($(USELIB), USE_DEV_LIB)
 endif
 
 CC = g++
-MSG = -g -O0 -Wall
+MSG = -std=c++23 -Wall -O2
 CFLAGS += $(MSG) $(DEBUG)
 
 DISPLAY = -I $(DIR_DISPLAY_CONFIG) -I $(DIR_DISPLAY_GUI) -I $(DIR_DISPLAY_EPD) -I $(DIR_DISPLAY) -I $(DIR_IMAGES)

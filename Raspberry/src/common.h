@@ -14,9 +14,9 @@ typedef struct _childProcess
     std::string description;
 } ChildProcess;
 
-struct EngineValues
+struct alignas(64) EngineValues
 {
-    std::atomic<uint8_t> temp;
+    std::atomic<float> temp;
     std::atomic<float> kml;
     std::atomic<float> volts;
     std::atomic<float> fuelConsumption;

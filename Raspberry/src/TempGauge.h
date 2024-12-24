@@ -24,7 +24,7 @@
 struct Conversion
 {
     float temp;
-    uint16_t step;
+    int step;
 };
 
 extern System *sys;
@@ -39,13 +39,12 @@ private:
 
     std::vector<Conversion>
         conversions = {
-            {0, 0}, {40, 45}, {60, 100}, {80, 185}, {100, 275}, {130, 351}};
+            {20, 0}, {40, 45}, {60, 100}, {80, 185}, {100, 275}, {130, 351}};
 
     Stepper motor = Stepper(2038, IN1, IN3, IN2, IN4);
     Button button = Button(RPI_V2_GPIO_P1_32);
     int currentStep = 0;
     int stepOffset = 0;
-    uint16_t stepToGo;
 
     void goToStartPosition();
     uint16_t tempToStep(float);
@@ -55,4 +54,5 @@ public:
     ~TempGauge();
 
     void loop(EngineValues *) override;
+    void test();
 };
