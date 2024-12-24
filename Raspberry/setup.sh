@@ -37,6 +37,9 @@ EOT > /dev/null
 # systemctl enable $1.service
 # systemctl status $1.service
 
+sudo apt-get install -y ccache
+
+
 
 
 

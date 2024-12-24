@@ -24,18 +24,20 @@ CONFIG_FILE := $(DIR_SRC)/config.ini
 all: prepare $(TARGET)
 
 # Phony targets
-.PHONY: all prepare install clean
+.PHONY: all prepare install
 
 # Pre-build step
 prepare:
-	@echo "Removing build directory: $(BUILD_DIR)..."
-	@rm -rf $(BUILD_DIR)
 	@echo "Running pre-build scripts..."
 	@mkdir -p $(BUILD_DIR)
 	@echo "Checking dependencies..."
 	@if ! dpkg -s libbcm2835-dev > /dev/null 2>&1; then \
 	    echo "'libbcm2835-dev' is not installed."; \
 	    apt-get install -y libbcm2835-dev; \
+	fi
+	@if ! dpkg -s ccache > /dev/null 2>&1; then \
+	    echo "'ccache' is not installed."; \
+	    apt-get install -y ccache; \
 	fi
 
 SRC_C = $(wildcard ${DIR_DISPLAY}/*.c ${DIR_DISPLAY_EPD}/*.c ${DIR_DISPLAY_FONTS}/*.c ${DIR_DISPLAY_GUI}/*.c ${DIR_DISPLAY_CONFIG}/*.c)
@@ -54,7 +56,7 @@ else ifeq ($(USELIB), USE_DEV_LIB)
     LIB = -lpthread -lm 
 endif
 
-CC = g++
+CC = ccache g++
 MSG = -std=c++23 -Wall -O2
 CFLAGS += $(MSG) $(DEBUG)
 
@@ -106,7 +108,6 @@ install: all
 	@cp $(CONFIG_FILE) $(CONFIG_DIR)/$(TARGET)
 	@echo "Running initial setup script..."
 	@bash setup.sh $(TARGET) $(DEST_DIR)
-	@$(MAKE) clean
 
 # Clean up
 clean:

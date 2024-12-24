@@ -26,7 +26,7 @@ TempGauge::TempGauge(/* args */)
 
     motor.setSpeed(1);
 
-    // test();
+    test();
 
     logger->info("Temp Gauge ready!");
 }
