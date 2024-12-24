@@ -15,7 +15,7 @@ TempGauge::TempGauge(/* args */)
     conversions[4].step = sys->getConfigValue<int>(description, "temp_100_step");
     conversions[5].step = sys->getConfigValue<int>(description, "temp_130_step");
 
-    motor.setSpeed(2);
+    motor.setSpeed(3);
 
     logger->info("Setting up...");
     button.check();
@@ -24,27 +24,24 @@ TempGauge::TempGauge(/* args */)
     while (button.pressed)
     {
         motor.step(1);
-        usleep(loopInterval);
         button.check();
     }
 
     // Get back to the initial position.
     goToStartPosition();
 
-    motor.setSpeed(1);
+    if (sys->getConfigValue<bool>(description, "test_enabled"))
+    {
+        test();
+    }
 
-    test();
+    motor.setSpeed(1);
 
     logger->info("Temp Gauge ready!");
 }
 
 TempGauge::~TempGauge()
 {
-    logger->info("Going to start position...");
-    goToStartPosition();
-    logger->info("Done!");
-
-    delete logger;
 }
 
 void TempGauge::loop(EngineValues *engineValues)
@@ -82,7 +79,12 @@ void TempGauge::loop(EngineValues *engineValues)
 
         usleep(loopInterval);
     }
+
     logger->info("Terminating process...");
+    motor.step(-currentStep);
+    logger->info("Done!");
+
+    delete logger;
 }
 
 void TempGauge::goToStartPosition()
@@ -93,7 +95,6 @@ void TempGauge::goToStartPosition()
     while (!button.pressed)
     {
         motor.step(-1);
-        usleep(loopInterval);
         button.check();
     }
 
@@ -131,6 +132,7 @@ void TempGauge::test()
 {
     logger->info("Entering test mode...");
     int previousStep = 0;
+    motor.setSpeed(sys->getConfigValue<long>(description, "test_motor_speed"));
 
     for (const auto &conversion : conversions)
     {
@@ -141,5 +143,6 @@ void TempGauge::test()
     }
 
     goToStartPosition();
+
     logger->info("Done...");
 }

@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Exception handling: ctrl + c
-	signal(SIGINT, signalHandler);
+	// signal(SIGINT, signalHandler);
 
 	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###
@@ -65,6 +65,10 @@ int main(int argc, char *argv[])
 
 		if (engineValues->volts < 6)
 		{
+			if (engineValues->ignition)
+			{
+				terminateProgram = true;
+			}
 			engineValues->ignition = false;
 		}
 		else

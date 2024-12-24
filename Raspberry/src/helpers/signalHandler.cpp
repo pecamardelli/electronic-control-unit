@@ -16,6 +16,7 @@ void signalHandler(int signal)
         break;
     case SIGTERM:
         // Terminate child processes
+        logger.info("SIGTERM received: terminating child processes...");
         terminateChildProcess = true;
         break;
     default:

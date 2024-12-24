@@ -63,15 +63,31 @@ public:
 
         // Retrieve the value as a string
         const std::string &valueStr = keyIt->second;
-
         // Convert the string value to the requested type
-        std::istringstream iss(valueStr);
-        T convertedValue;
-        if (!(iss >> convertedValue))
+        if constexpr (std::is_same<T, bool>::value)
         {
-            throw std::runtime_error("Conversion failed for key [" + key + "] in section [" + section + "]: " + valueStr);
+            if (valueStr == "1" || valueStr == "true" || valueStr == "TRUE" || valueStr == "True")
+            {
+                return true;
+            }
+            else if (valueStr == "0" || valueStr == "false" || valueStr == "FALSE" || valueStr == "False")
+            {
+                return false;
+            }
+            else
+            {
+                throw std::runtime_error("Conversion failed for key [" + key + "] in section [" + section + "]: Invalid boolean value " + valueStr);
+            }
         }
-
-        return convertedValue;
+        else
+        {
+            std::istringstream iss(valueStr);
+            T convertedValue;
+            if (!(iss >> convertedValue))
+            {
+                throw std::runtime_error("Conversion failed for key [" + key + "] in section [" + section + "]: " + valueStr);
+            }
+            return convertedValue;
+        }
     }
 };
