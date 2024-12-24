@@ -8,6 +8,13 @@ TempGauge::TempGauge(/* args */)
     loopInterval = sys->getConfigValue<useconds_t>(description, "loop_interval");
     stepOffset = sys->getConfigValue<int>(description, "step_offset");
 
+    conversions[0].step = sys->getConfigValue<int>(description, "temp_20_step");
+    conversions[1].step = sys->getConfigValue<int>(description, "temp_40_step");
+    conversions[2].step = sys->getConfigValue<int>(description, "temp_60_step");
+    conversions[3].step = sys->getConfigValue<int>(description, "temp_80_step");
+    conversions[4].step = sys->getConfigValue<int>(description, "temp_100_step");
+    conversions[5].step = sys->getConfigValue<int>(description, "temp_130_step");
+
     motor.setSpeed(2);
 
     logger->info("Setting up...");
@@ -127,9 +134,10 @@ void TempGauge::test()
 
     for (const auto &conversion : conversions)
     {
-        logger->info("Placing needle at " + std::to_string(conversion.temp) + " degrees.");
+        logger->info("Placing needle at " + std::to_string(conversion.temp) + " degrees. Steps: " + std::to_string(conversion.step));
         motor.step(conversion.step - previousStep);
         previousStep = conversion.step;
+        sleep(5);
     }
 
     goToStartPosition();
