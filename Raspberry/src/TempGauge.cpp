@@ -137,7 +137,7 @@ void TempGauge::test()
         logger->info("Placing needle at " + std::to_string(conversion.temp) + " degrees. Steps: " + std::to_string(conversion.step));
         motor.step(conversion.step - previousStep);
         previousStep = conversion.step;
-        sleep(5);
+        sleep(sys->getConfigValue<unsigned int>(description, "test_wait_time"));
     }
 
     goToStartPosition();
