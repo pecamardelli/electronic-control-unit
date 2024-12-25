@@ -1,13 +1,13 @@
 #pragma once
 
 #include <sys/wait.h>
-#include <signal.h>
 #include <memory> // For smart pointers
 #include <iostream>
 #include <vector>
 #include <functional>
 
 #include "common.h"
+#include "Process.h"
 #include "Logger.h"
 #include "System.h"
 #include "AnalogConverter.h"
@@ -18,7 +18,7 @@
 #include "GPS.h"
 #include "helpers.h"
 #include "DigitalGauge.h"
-#include "Process.h"
+#include "SpeedSensor.h"
 
 // Initialize static member
 std::atomic<bool> Process::terminateFlag(false);

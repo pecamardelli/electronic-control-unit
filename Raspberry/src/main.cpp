@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
 	// Add smart pointer factories to the vector
 	processFactories.push_back([]()
 							   { return std::make_shared<TempGauge>(); });
-	// processFactories.push_back([]()
-	// 						   { return std::make_shared<FlowSensor>(); });
+	processFactories.push_back([]()
+							   { return std::make_shared<SpeedSensor>(); });
 	// processFactories.push_back([]()
 	// 						   { return std::make_shared<GPS>(); });
 
@@ -50,9 +50,6 @@ int main(int argc, char *argv[])
 			childProcesses.push_back(childProcess);
 		}
 	}
-
-	// Exception handling: ctrl + c
-	// signal(SIGINT, signalHandler);
 
 	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###

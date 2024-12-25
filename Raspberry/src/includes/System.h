@@ -31,7 +31,8 @@ private:
         {"logging", {{"log_level", "INFO"}}},
         {"FlowSensor", {{"loop_interval", "1000"}, {"pulses_per_liter", "287"}}},
         {"TempGauge", {{"loop_interval", "1000"}, {"step_offset", "-115"}}},
-        {"GPS", {{"loop_interval", "1000000"}, {"baud_rate", "9600"}}}};
+        {"GPS", {{"loop_interval", "1000000"}, {"baud_rate", "9600"}}},
+        {"SpeedSensor", {{"loop_interval", "10"}}}};
 
     ConfigMap loadConfig(const std::string &);
 
