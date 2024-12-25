@@ -4,9 +4,10 @@ FlowSensor::FlowSensor(/* args */)
 {
     description = "FlowSensor";
     logger = new Logger(description);
+    config = new Config(description);
 
-    loopInterval = sys->getConfigValue<useconds_t>(description, "loop_interval");
-    PULSES_PER_LITER = sys->getConfigValue<u_int16_t>(description, "pulses_per_liter");
+    loopInterval = config->get<useconds_t>("loop_interval");
+    pulsesPerLiter = config->get<u_int16_t>("pulses_per_liter");
 
     BCM2835Manager::getInstance();
 
@@ -35,7 +36,7 @@ void FlowSensor::loop(EngineValues *engineValues)
     {
         data.partialPulseCount++;
         data.totalPulseCount++;
-        data.totalConsumption = (float)data.totalPulseCount / PULSES_PER_LITER;
+        data.totalConsumption = (float)data.totalPulseCount / pulsesPerLiter;
     }
 
     // Update the last state

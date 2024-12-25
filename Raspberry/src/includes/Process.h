@@ -10,6 +10,7 @@
 #include <atomic>
 
 #include "Logger.h"
+#include "Config.h"
 #include "../common.h"
 
 class Process
@@ -30,4 +31,5 @@ protected:
     static std::atomic<bool> terminateFlag; // Shared termination flag
     useconds_t loopInterval;
     Logger *logger;
+    Config *config;
 };

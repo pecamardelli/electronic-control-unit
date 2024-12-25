@@ -3,7 +3,8 @@
 SpeedSensor::SpeedSensor(/* args */)
 {
     description = "SpeedSensor";
-    loopInterval = sys->getConfigValue<useconds_t>(description, "loop_interval");
+    config = new Config(description);
+    loopInterval = config->get<useconds_t>("loop_interval");
     // Configure D0_PIN as input
     bcm2835_gpio_fsel(D0_PIN, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_set_pud(D0_PIN, BCM2835_GPIO_PUD_UP); // Enable pull-up resistor

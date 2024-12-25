@@ -2,10 +2,6 @@
 
 #include "BCM2835Manager.h"
 #include "Process.h"
-#include "System.h"
-
-extern System *sys;
-
 class SpeedSensor : public Process
 {
 private:

@@ -114,3 +114,15 @@ ConfigMap System::loadConfig(const std::string &filename)
 
     return result;
 }
+
+SectionMap System::getConfig(const std::string &section)
+{
+    // Locate the section
+    auto sectionIt = config.find(section);
+    if (sectionIt == config.end())
+    {
+        throw std::runtime_error("Section not found: " + section);
+    }
+
+    return sectionIt->second; // Dereference the iterator to get the section
+}

@@ -5,7 +5,6 @@
 #include <unistd.h>
 #include "Logger.h"
 #include "BCM2835Manager.h"
-#include "System.h"
 #include "Process.h"
 #include "../common.h"
 
@@ -18,13 +17,11 @@ typedef struct _flowSensorData
     float totalConsumption;
 } FlowSensorData;
 
-extern System *sys;
-
 class FlowSensor : public Process
 {
 private:
     /* data */
-    u_int16_t PULSES_PER_LITER;
+    u_int16_t pulsesPerLiter;
     uint8_t lastState;
     uint8_t currentState;
 

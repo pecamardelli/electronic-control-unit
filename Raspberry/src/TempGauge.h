@@ -11,7 +11,6 @@
 
 #include "Process.h"
 #include "Logger.h"
-#include "System.h"
 #include "Button.h"
 #include "common.h"
 
@@ -27,7 +26,6 @@ struct Conversion
     int step;
 };
 
-extern System *sys;
 class TempGauge : public Process
 {
 private:

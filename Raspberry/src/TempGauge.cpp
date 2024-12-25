@@ -4,16 +4,17 @@ TempGauge::TempGauge(/* args */)
 {
     description = "TempGauge";
     logger = new Logger(description);
+    config = new Config(description);
 
-    loopInterval = sys->getConfigValue<useconds_t>(description, "loop_interval");
-    stepOffset = sys->getConfigValue<int>(description, "step_offset");
+    loopInterval = config->get<useconds_t>("loop_interval");
+    stepOffset = config->get<int>("step_offset");
 
-    conversions[0].step = sys->getConfigValue<int>(description, "temp_20_step");
-    conversions[1].step = sys->getConfigValue<int>(description, "temp_40_step");
-    conversions[2].step = sys->getConfigValue<int>(description, "temp_60_step");
-    conversions[3].step = sys->getConfigValue<int>(description, "temp_80_step");
-    conversions[4].step = sys->getConfigValue<int>(description, "temp_100_step");
-    conversions[5].step = sys->getConfigValue<int>(description, "temp_130_step");
+    conversions[0].step = config->get<int>("temp_20_step");
+    conversions[1].step = config->get<int>("temp_40_step");
+    conversions[2].step = config->get<int>("temp_60_step");
+    conversions[3].step = config->get<int>("temp_80_step");
+    conversions[4].step = config->get<int>("temp_100_step");
+    conversions[5].step = config->get<int>("temp_130_step");
 
     motor.setSpeed(3);
 
@@ -30,7 +31,7 @@ TempGauge::TempGauge(/* args */)
     // Get back to the initial position.
     goToStartPosition();
 
-    if (sys->getConfigValue<bool>(description, "test_enabled"))
+    if (config->get<bool>("test_enabled"))
     {
         test();
     }
@@ -132,14 +133,14 @@ void TempGauge::test()
 {
     logger->info("Entering test mode...");
     int previousStep = 0;
-    motor.setSpeed(sys->getConfigValue<long>(description, "test_motor_speed"));
+    motor.setSpeed(config->get<long>("test_motor_speed"));
 
     for (const auto &conversion : conversions)
     {
         logger->info("Placing needle at " + std::to_string(conversion.temp) + " degrees. Steps: " + std::to_string(conversion.step));
         motor.step(conversion.step - previousStep);
         previousStep = conversion.step;
-        sleep(sys->getConfigValue<unsigned int>(description, "test_wait_time"));
+        sleep(config->get<unsigned int>("test_wait_time"));
     }
 
     goToStartPosition();

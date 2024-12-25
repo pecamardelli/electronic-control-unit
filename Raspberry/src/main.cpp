@@ -5,9 +5,10 @@ int main(int argc, char *argv[])
 	sys = new System(getProgramName(argv[0]));
 	Logger logger("Main");
 	logger.info("Program started.");
+	Config config("global");
 
-	useconds_t mainLoopInterval = sys->getConfigValue<useconds_t>("global", "main_loop_interval");
-	unsigned int logoTime = sys->getConfigValue<unsigned int>("global", "logo_screen_time");
+	useconds_t mainLoopInterval = config.get<useconds_t>("main_loop_interval");
+	unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
 
 	// Add smart pointer factories to the vector
 	processFactories.push_back([]()
