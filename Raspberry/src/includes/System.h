@@ -33,9 +33,10 @@ private:
         {"FlowSensor", {{"loop_interval", "1000"}, {"pulses_per_liter", "287"}}},
         {"TempGauge", {{"loop_interval", "1000"}, {"step_offset", "-115"}}},
         {"GPS", {{"loop_interval", "1000000"}, {"baud_rate", "9600"}}},
-        {"SpeedSensor", {{"loop_interval", "10"}}}};
+        {"SpeedSensor", {{"loop_interval", "10"}, {"differential_pinion", "13"}, {"differential_crown", "43"}, {"tire_width", "215"}, {"aspect_ratio", "60"}, {"rim_diameter", "15"}, {"transitions_per_lap", "4"}}}};
 
-    ConfigMap loadConfig(const std::string &);
+    ConfigMap
+    loadConfig(const std::string &);
 
 public:
     System(std::string);

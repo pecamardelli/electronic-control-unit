@@ -21,6 +21,8 @@ struct alignas(64) EngineValues
     std::atomic<float> volts;
     std::atomic<float> fuelConsumption;
     std::atomic<bool> ignition;
+    std::atomic<double> speed;
+    std::atomic<double> distanceCovered;
 };
 
 enum Screen

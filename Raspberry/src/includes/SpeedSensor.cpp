@@ -3,8 +3,20 @@
 SpeedSensor::SpeedSensor(/* args */)
 {
     description = "SpeedSensor";
+    logger = new Logger(description);
     config = new Config(description);
+
     loopInterval = config->get<useconds_t>("loop_interval");
+    gearRatio = config->get<double>("differential_crown") / config->get<double>("differential_pinion");
+    tireWidth = config->get<double>("tire_width");
+    aspectRatio = config->get<double>("aspect_ratio");
+    rimDiameter = config->get<double>("rim_diameter");
+    transitionsPerLap = config->get<double>("transitions_per_lap");
+    tireCircumference = calculateTireCircumference();
+    kilometersPerTransition = 1.0 / gearRatio / 4.0 * tireCircumference / 1000.0;
+
+    logger->info("Gear ratio: " + std::to_string(gearRatio) + " - Tire circumference: " + std::to_string(tireCircumference));
+
     // Configure D0_PIN as input
     bcm2835_gpio_fsel(D0_PIN, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_set_pud(D0_PIN, BCM2835_GPIO_PUD_UP); // Enable pull-up resistor
@@ -12,47 +24,75 @@ SpeedSensor::SpeedSensor(/* args */)
 
 SpeedSensor::~SpeedSensor()
 {
+    delete config, logger;
 }
 
 void SpeedSensor::loop(EngineValues *engineValues)
 {
-    uint8_t current_state;
+    uint32_t transitions = 0;
+    uint8_t lastState = LOW; // Store the last state of the sensor
+    uint64_t lastTime = 0;   // Time of the last detection in microseconds
+    uint8_t currentState;
+    uint64_t currentTime;
+    uint64_t elapsedTime;
 
     while (!terminateFlag.load())
     {
         // Read the current state of the digital output (D0)
-        current_state = bcm2835_gpio_lev(D0_PIN);
-        uint64_t current_time;
-        uint64_t elapsed_time;
+        currentState = bcm2835_gpio_lev(D0_PIN);
 
         // Detect a transition from HIGH to LOW (object detection edge)
-        if (last_state == HIGH && current_state == LOW)
+        if (lastState == HIGH && currentState == LOW)
         {
-            object_count++;
+            transitions++;
+            engineValues->distanceCovered += kilometersPerTransition;
 
             // Get the current time in microseconds
-            current_time = bcm2835_st_read();
+            currentTime = bcm2835_st_read();
 
-            if (last_time != 0)
-            {                                            // If this isn't the first detection
-                elapsed_time = current_time - last_time; // Calculate time elapsed
-                std::cout << "Object detected! Count: " << object_count
-                          << ", Time elapsed: " << elapsed_time << " µs" << std::endl;
-            }
-            else
+            if (lastTime != 0)
             {
-                std::cout << "Object detected! Count: " << object_count
-                          << ", First detection (no elapsed time)." << std::endl;
+                // If this isn't the first detection
+                engineValues->speed = calculateSpeed(currentTime - lastTime);
+                // std::cout << "Object detected! Count: " << transitions
+                //           << ", Speed: " << engineValues->speed << " km/h, distance: " << engineValues->distanceCovered << std::endl;
             }
 
             // Update the last detection time
-            last_time = current_time;
+            lastTime = currentTime;
         }
 
         // Update the last state
-        last_state = current_state;
+        lastState = currentState;
 
         // Small delay to debounce the signal
         bcm2835_delay(loopInterval);
     }
+}
+
+double SpeedSensor::calculateTireCircumference()
+{
+    // Tire circumference in meters
+    double tireDiameter = (tireWidth * aspectRatio / 100.0 * 2 + rimDiameter * 25.4) / 1000.0;
+    return M_PI * tireDiameter;
+}
+
+double SpeedSensor::calculateSpeed(uint64_t elapsedTime)
+{
+    if (elapsedTime == 0)
+    {
+        return 0.0; // Avoid division by zero
+    }
+
+    // Driveshaft laps per second
+    double driveshaftLapsPerSecond = 1e6 / elapsedTime / transitionsPerLap;
+
+    // Wheel laps per second
+    double wheelLapsPerSecond = driveshaftLapsPerSecond / gearRatio;
+
+    // Speed in meters per second
+    double speedMps = wheelLapsPerSecond * tireCircumference;
+
+    // Convert to kilometers per hour
+    return speedMps * 3.6;
 }

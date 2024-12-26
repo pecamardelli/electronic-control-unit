@@ -79,7 +79,8 @@
     "bcm2835manager.h": "c",
     "button.h": "c",
     "process.h": "c",
-    "mman.h": "c"
+    "mman.h": "c",
+    "chrono": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,
