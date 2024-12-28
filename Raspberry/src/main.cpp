@@ -15,8 +15,8 @@ int main(int argc, char *argv[])
 							   { return std::make_shared<TempGauge>(); });
 	processFactories.push_back([]()
 							   { return std::make_shared<SpeedSensor>(); });
-	// processFactories.push_back([]()
-	// 						   { return std::make_shared<GPS>(); });
+	processFactories.push_back([]()
+							   { return std::make_shared<Speedometer>(); });
 
 	DigitalGauge digitalGauge;
 	AnalogConverter analogConverter;
@@ -58,6 +58,8 @@ int main(int argc, char *argv[])
 	{
 		engineValues->temp.store(coolantTempSensor.readTemp());
 		engineValues->volts.store(analogConverter.getVolts());
+
+		std::cout << "Volts: " << engineValues->volts.load() << std::endl;
 
 		digitalGauge.draw(engineValues);
 

@@ -13,6 +13,7 @@ DIR_DISPLAY_GUI			= ${DIR_DISPLAY}/GUI
 
 DIR_STEPPER		= $(DIR_LIB)/Stepper
 DIR_GPS			= $(DIR_LIB)/GPS
+DIR_SSD1306		= $(DIR_LIB)/SSD1306
 
 TARGET = torino-ecu
 BUILD_DIR := build
@@ -41,7 +42,7 @@ prepare:
 	fi
 
 SRC_C = $(wildcard ${DIR_DISPLAY}/*.c ${DIR_DISPLAY_EPD}/*.c ${DIR_DISPLAY_FONTS}/*.c ${DIR_DISPLAY_GUI}/*.c ${DIR_DISPLAY_CONFIG}/*.c)
-SRC_CPP = $(wildcard ${DIR_SRC}/*.cpp ${DIR_INCLUDES}/*.cpp ${DIR_HELPERS}/*.cpp ${DIR_IMAGES}/*.cpp ${DIR_STEPPER}/*.cpp ${DIR_GPS}/*.cpp)
+SRC_CPP = $(wildcard ${DIR_SRC}/*.cpp ${DIR_INCLUDES}/*.cpp ${DIR_HELPERS}/*.cpp ${DIR_IMAGES}/*.cpp ${DIR_STEPPER}/*.cpp ${DIR_GPS}/*.cpp ${DIR_SSD1306}/*.cpp)
 OBJ_O = $(patsubst %.c,${BUILD_DIR}/%.o,$(notdir ${SRC_C})) $(patsubst %.cpp,${BUILD_DIR}/%.o,$(notdir ${SRC_CPP}))
 
 USELIB = USE_BCM2835_LIB
@@ -66,7 +67,7 @@ ${TARGET}:${OBJ_O}
 	$(CC) $(CFLAGS) $(OBJ_O) -o $@ $(LIB)
     
 ${BUILD_DIR}/%.o:$(DIR_SRC)/%.cpp
-	$(CC) $(CFLAGS) -c $< -o $@ $(DISPLAY) -I $(DIR_STEPPER) -I $(DIR_GPS) -I $(DIR_HELPERS) -I $(DIR_INCLUDES)
+	$(CC) $(CFLAGS) -c $< -o $@ $(DISPLAY) -I $(DIR_STEPPER) -I $(DIR_GPS) -I $(DIR_SSD1306) -I $(DIR_HELPERS) -I $(DIR_INCLUDES)
     
 ${BUILD_DIR}/%.o:$(DIR_DISPLAY)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_DISPLAY_CONFIG) -I $(DIR_DISPLAY_GUI) -I $(DIR_DISPLAY_EPD)
@@ -97,6 +98,9 @@ ${BUILD_DIR}/%.o:$(DIR_STEPPER)/%.cpp
 
 ${BUILD_DIR}/%.o:$(DIR_GPS)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(DIR_INCLUDES)
+
+${BUILD_DIR}/%.o:$(DIR_SSD1306)/%.cpp
+	$(CC) $(CFLAGS) -c $< -o $@ $(DISPLAY)
 	
 # Install
 install: all

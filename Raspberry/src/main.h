@@ -19,6 +19,7 @@
 #include "helpers.h"
 #include "DigitalGauge.h"
 #include "SpeedSensor.h"
+#include "Speedometer.h"
 
 // Initialize static member
 std::atomic<bool> Process::terminateFlag(false);
