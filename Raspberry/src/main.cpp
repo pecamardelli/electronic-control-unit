@@ -11,10 +11,10 @@ int main(int argc, char *argv[])
 	unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
 
 	// Add smart pointer factories to the vector
-	processFactories.push_back([]()
-							   { return std::make_shared<TempGauge>(); });
-	processFactories.push_back([]()
-							   { return std::make_shared<SpeedSensor>(); });
+	// processFactories.push_back([]()
+	// 						   { return std::make_shared<TempGauge>(); });
+	// processFactories.push_back([]()
+	// 						   { return std::make_shared<SpeedSensor>(); });
 	processFactories.push_back([]()
 							   { return std::make_shared<Speedometer>(); });
 
@@ -57,9 +57,9 @@ int main(int argc, char *argv[])
 	while (!terminateProgram)
 	{
 		engineValues->temp.store(coolantTempSensor.readTemp());
-		engineValues->volts.store(analogConverter.getVolts());
+		// engineValues->volts.store(analogConverter.getVolts());
 
-		std::cout << "Volts: " << engineValues->volts.load() << std::endl;
+		// std::cout << "Volts: " << engineValues->volts.load() << std::endl;
 
 		digitalGauge.draw(engineValues);
 

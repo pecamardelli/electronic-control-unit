@@ -6,7 +6,7 @@ SSD1306::SSD1306(/* args */)
     ssd1306_init();
     ssd1306_clear();
 
-    ssd1306_drawString(0, 0, "Hello, Font!", LiberationSansNarrow_Bold16);
+    ssd1306_drawString(30, 0, "1366.8", LiberationSansNarrow_Bold28);
     ssd1306_display();
 
     bcm2835_delay(5000); // Display message for 5 seconds
@@ -109,7 +109,15 @@ void SSD1306::ssd1306_drawString(int x, int y, const char *str, const sFONT &fon
     while (*str)
     {
         ssd1306_drawChar(x, y, *str, font);
-        x += font.Width + 1; // Advance to next character (font width + spacing)
+        // Advance to next character (font width + spacing)
+        if (strcmp(str, ".") == 0)
+        {
+            std::cout << "Dot" << std::endl;
+            x += font.Width - 7;
+        }
+        else
+            x += font.Width + 1;
+
         if (x + font.Width > SSD1306_WIDTH)
         {
             x = 0;

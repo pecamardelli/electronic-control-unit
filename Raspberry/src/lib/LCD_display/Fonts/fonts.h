@@ -86,13 +86,14 @@ extern "C"
   extern sFONT Font8;
   extern sFONT LiberationSansNarrow_Bold16;
   extern sFONT LiberationSansNarrow_Bold24;
+  extern sFONT LiberationSansNarrow_Bold28;
+  extern sFONT LiberationSansNarrow_Bold30;
   extern sFONT LiberationSansNarrow_Bold36;
   extern sFONT LiberationSansNarrow_Bold48;
   extern sFONT LiberationSansNarrow_Bold54;
   extern sFONT LiberationSansNarrow_Bold60;
   extern sFONT LiberationSansNarrow_Bold72;
   extern sFONT LiberationSansNarrow_Bold80;
-
 #ifdef __cplusplus
 }
 #endif

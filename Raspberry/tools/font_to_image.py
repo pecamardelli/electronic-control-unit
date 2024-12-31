@@ -70,8 +70,8 @@ font_name = font_name.replace("-","_")
 # font_name = f"{os.getcwd()}/assets/fonts/BebasNeue-Regular.ttf"
 # font_size = calculate_max_font_size(string.ascii_uppercase,width=width,height=height,font_name=font_name)
 # font_size = 60
-font_sizes = [16,24,36,48,54,60,72,80]
-path = f"{os.getcwd()}/lib/LCD_display/Fonts"
+font_sizes = [28,30]
+path = f"{os.getcwd()}/tools"
 background_color = (0, 0, 0)  # black background
 text_color = (255, 255, 255)  # white color for the number
 
