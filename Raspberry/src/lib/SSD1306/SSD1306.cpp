@@ -6,7 +6,7 @@ SSD1306::SSD1306(/* args */)
     ssd1306_init();
     ssd1306_clear();
 
-    ssd1306_drawString(30, 0, "1366.8", LiberationSansNarrow_Bold28);
+    ssd1306_drawString(SSD1306_WIDTH - (LiberationSansNarrow_Bold28.Width * 6) - 5, -1, "136628", LiberationSansNarrow_Bold28);
     ssd1306_display();
 
     bcm2835_delay(5000); // Display message for 5 seconds

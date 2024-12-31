@@ -8,6 +8,7 @@
 #include <iostream>
 #include <csignal>
 #include <atomic>
+#include <memory>
 
 #include "Logger.h"
 #include "Config.h"
@@ -29,7 +30,7 @@ public:
 
 protected:
     static std::atomic<bool> terminateFlag; // Shared termination flag
+    std::unique_ptr<Logger> logger;
+    std::unique_ptr<Config> config;
     useconds_t loopInterval;
-    Logger *logger;
-    Config *config;
 };

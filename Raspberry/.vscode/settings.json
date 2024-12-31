@@ -83,7 +83,8 @@
     "chrono": "c",
     "lcd_0in96.h": "c",
     "lcd_display.h": "c",
-    "lcd_1in28.h": "c"
+    "lcd_1in28.h": "c",
+    "cinttypes": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

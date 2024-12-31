@@ -3,55 +3,50 @@
 Speedometer::Speedometer(/* args */)
 {
     description = "Speedometer";
-    logger = new Logger(description);
-    config = new Config(description);
+
+    motor = std::make_unique<Stepper>(2038, IN1, IN3, IN2, IN4);
+    interruptor = std::make_unique<Button>(RPI_V2_GPIO_P1_07);
+    logger = std::make_unique<Logger>(description);
+    config = std::make_unique<Config>(description);
+    upperDisplay = new SSD1306();
 
     logger->info("Setting up...");
 
-    conversions[0].step = config->get<int>("km_20_step");
-    conversions[1].step = config->get<int>("km_30_step");
-    conversions[2].step = config->get<int>("km_40_step");
-    conversions[3].step = config->get<int>("km_50_step");
-    conversions[4].step = config->get<int>("km_60_step");
-    conversions[5].step = config->get<int>("km_70_step");
-    conversions[6].step = config->get<int>("km_80_step");
-    conversions[7].step = config->get<int>("km_90_step");
-    conversions[8].step = config->get<int>("km_100_step");
-    conversions[9].step = config->get<int>("km_110_step");
-    conversions[10].step = config->get<int>("km_120_step");
-    conversions[11].step = config->get<int>("km_130_step");
-    conversions[12].step = config->get<int>("km_140_step");
-    conversions[13].step = config->get<int>("km_150_step");
-    conversions[14].step = config->get<int>("km_160_step");
-    conversions[15].step = config->get<int>("km_170_step");
-    conversions[16].step = config->get<int>("km_180_step");
-    conversions[17].step = config->get<int>("km_190_step");
-    conversions[18].step = config->get<int>("km_200_step");
-    conversions[19].step = config->get<int>("km_210_step");
-    conversions[20].step = config->get<int>("km_220_step");
-    conversions[21].step = config->get<int>("km_230_step");
-    conversions[22].step = config->get<int>("km_240_step");
+    conversions.emplace_back(20, config->get<int>("km_20_step"));
+    conversions.emplace_back(30, config->get<int>("km_30_step"));
+    conversions.emplace_back(40, config->get<int>("km_40_step"));
+    conversions.emplace_back(50, config->get<int>("km_50_step"));
+    conversions.emplace_back(60, config->get<int>("km_60_step"));
+    conversions.emplace_back(70, config->get<int>("km_70_step"));
+    conversions.emplace_back(80, config->get<int>("km_80_step"));
+    conversions.emplace_back(90, config->get<int>("km_90_step"));
+    conversions.emplace_back(100, config->get<int>("km_100_step"));
+    conversions.emplace_back(110, config->get<int>("km_110_step"));
+    conversions.emplace_back(120, config->get<int>("km_120_step"));
+    conversions.emplace_back(130, config->get<int>("km_130_step"));
+    conversions.emplace_back(140, config->get<int>("km_140_step"));
+    conversions.emplace_back(150, config->get<int>("km_150_step"));
+    conversions.emplace_back(160, config->get<int>("km_160_step"));
+    conversions.emplace_back(170, config->get<int>("km_170_step"));
+    conversions.emplace_back(180, config->get<int>("km_180_step"));
+    conversions.emplace_back(190, config->get<int>("km_190_step"));
+    conversions.emplace_back(200, config->get<int>("km_200_step"));
+    conversions.emplace_back(210, config->get<int>("km_210_step"));
+    conversions.emplace_back(220, config->get<int>("km_220_step"));
+    conversions.emplace_back(230, config->get<int>("km_230_step"));
+    conversions.emplace_back(240, config->get<int>("km_240_step"));
 
     loopInterval = config->get<useconds_t>("loop_interval");
     stepOffset = config->get<int>("step_offset");
+    logger->info("Initiating...");
+    init();
 
-    ssd1306 = new SSD1306();
-
-    motor.setSpeed(3);
-    button.check();
-
-    // Step forward until button is released.
-    while (button.pressed)
+    if (config->get<bool>("test_enabled"))
     {
-        motor.step(1);
-        button.check();
+        test(config->get<unsigned int>("test_motor_speed"), config->get<unsigned int>("test_wait_time"));
     }
 
-    // Get back to the initial position.
-    goToStartPosition();
-
-    motor.setSpeed(3);
-
+    motor->setSpeed(1);
     logger->info("Speedometer ready!");
 }
 
@@ -73,26 +68,8 @@ void Speedometer::loop(EngineValues *engineValues)
         }
         else
         {
-            motor.step(number);
+            motor->step(number);
         }
         usleep(loopInterval);
     }
-}
-
-void Speedometer::goToStartPosition()
-{
-    logger->info("Going to start position...");
-    button.check();
-
-    while (!button.pressed)
-    {
-        motor.step(-1);
-        button.check();
-    }
-
-    // Add offset to place the gauge needle correctly.
-    motor.step(stepOffset);
-    motor.stop();
-
-    currentStep = 0;
 }

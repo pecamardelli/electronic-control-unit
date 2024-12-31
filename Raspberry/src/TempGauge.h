@@ -10,23 +10,14 @@
 #pragma once
 
 #include "Process.h"
+#include "Gauge.h"
 #include "Logger.h"
 #include "Button.h"
 #include "common.h"
 
 #include "lib/Stepper/Stepper.h"
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <string>
-struct Conversion
-{
-    float temp;
-    int step;
-};
-
-class TempGauge : public Process
+class TempGauge : public Process, public Gauge
 {
 private:
     // Define GPIO pins for the ULN2003AN
@@ -39,18 +30,9 @@ private:
         conversions = {
             {20, 0}, {40, 45}, {60, 100}, {80, 185}, {100, 275}, {130, 351}};
 
-    Stepper motor = Stepper(2038, IN1, IN3, IN2, IN4);
-    Button button = Button(RPI_V2_GPIO_P1_32);
-    int currentStep = 0;
-    int stepOffset = 0;
-
-    void goToStartPosition();
-    uint16_t tempToStep(float);
-
 public:
     TempGauge(/* args */);
     ~TempGauge();
 
     void loop(EngineValues *) override;
-    void test();
 };
