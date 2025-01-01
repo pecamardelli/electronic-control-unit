@@ -3,8 +3,8 @@
 SpeedSensor::SpeedSensor(/* args */)
 {
     description = "SpeedSensor";
-    logger = new Logger(description);
-    config = new Config(description);
+    logger = std::make_unique<Logger>(description);
+    config = std::make_unique<Config>(description);
 
     loopInterval = config->get<useconds_t>("loop_interval");
     gearRatio = config->get<double>("differential_crown") / config->get<double>("differential_pinion");
@@ -24,7 +24,6 @@ SpeedSensor::SpeedSensor(/* args */)
 
 SpeedSensor::~SpeedSensor()
 {
-    delete config, logger;
 }
 
 void SpeedSensor::loop(EngineValues *engineValues)

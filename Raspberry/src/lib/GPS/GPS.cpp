@@ -3,8 +3,8 @@
 GPS::GPS(/* args */)
 {
     description = "GPS";
-    logger = new Logger(description);
-    config = new Config(description);
+    logger = std::make_unique<Logger>(description);
+    config = std::make_unique<Config>(description);
 
     loopInterval = config->get<useconds_t>("loop_interval");
     baudRate = config->get<std::string>("baud_rate");
@@ -15,7 +15,6 @@ GPS::GPS(/* args */)
 
 GPS::~GPS()
 {
-    delete logger;
 }
 
 void GPS::loop(EngineValues *engineValues)

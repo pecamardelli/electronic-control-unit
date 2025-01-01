@@ -2,9 +2,10 @@
 
 FlowSensor::FlowSensor(/* args */)
 {
+    BCM2835Manager::getInstance();
     description = "FlowSensor";
-    logger = new Logger(description);
-    config = new Config(description);
+    logger = std::make_unique<Logger>(description);
+    config = std::make_unique<Config>(description);
 
     loopInterval = config->get<useconds_t>("loop_interval");
     pulsesPerLiter = config->get<u_int16_t>("pulses_per_liter");
@@ -23,7 +24,6 @@ FlowSensor::FlowSensor(/* args */)
 
 FlowSensor::~FlowSensor()
 {
-    delete logger;
 }
 
 void FlowSensor::loop(EngineValues *engineValues)
