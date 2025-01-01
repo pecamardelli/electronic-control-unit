@@ -10,8 +10,6 @@ FlowSensor::FlowSensor(/* args */)
     loopInterval = config->get<useconds_t>("loop_interval");
     pulsesPerLiter = config->get<u_int16_t>("pulses_per_liter");
 
-    BCM2835Manager::getInstance();
-
     // Configure GPIO pin
     bcm2835_gpio_fsel(FLOW_SENSOR_PIN, BCM2835_GPIO_FSEL_INPT);
     bcm2835_gpio_set_pud(FLOW_SENSOR_PIN, BCM2835_GPIO_PUD_UP);
