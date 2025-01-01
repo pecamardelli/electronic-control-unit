@@ -8,6 +8,8 @@ TempGauge::TempGauge(/* args */)
     logger = std::make_unique<Logger>(description);
     config = std::make_unique<Config>(description);
 
+    logger->info("Setting up...");
+
     loopInterval = config->get<useconds_t>("loop_interval");
     stepOffset = config->get<int>("step_offset");
 
@@ -17,8 +19,6 @@ TempGauge::TempGauge(/* args */)
     conversions.emplace_back(80, config->get<int>("temp_80_step"));
     conversions.emplace_back(100, config->get<int>("temp_100_step"));
     conversions.emplace_back(130, config->get<int>("temp_130_step"));
-
-    logger->info("Setting up...");
     init();
 
     if (config->get<bool>("test_enabled"))
@@ -32,7 +32,7 @@ TempGauge::TempGauge(/* args */)
     }
 
     motor->setSpeed(1);
-    logger->info("Temp Gauge ready!");
+    logger->info("Ready!");
 }
 
 TempGauge::~TempGauge()
@@ -43,8 +43,6 @@ void TempGauge::loop(EngineValues *engineValues)
 {
     int stepToGo;
     float temp = 0;
-
-    logger->info("Entering loop...");
 
     while (!terminateFlag.load())
     {

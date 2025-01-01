@@ -60,12 +60,11 @@ void DigitalGauge::setScreen(Screen screen)
     currentScreen = screen;
 }
 
-void DigitalGauge::showLogo(unsigned int timeToShow)
+void DigitalGauge::showLogo()
 {
     clear();
     drawBmpFile(TORINO_LOGO_PATH.c_str());
     LCD_1IN28_Display(BlackImage);
-    sleep(timeToShow);
 }
 
 void DigitalGauge::clear()

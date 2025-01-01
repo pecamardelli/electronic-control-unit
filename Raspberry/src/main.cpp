@@ -8,13 +8,13 @@ int main(int argc, char *argv[])
 	Config config("global");
 
 	useconds_t mainLoopInterval = config.get<useconds_t>("main_loop_interval");
-	unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
+	// unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
 
 	// Add smart pointer factories to the vector
-	// processFactories.push_back([]()
-	// 						   { return std::make_shared<TempGauge>(); });
-	// processFactories.push_back([]()
-	// 						   { return std::make_shared<SpeedSensor>(); });
+	processFactories.push_back([]()
+							   { return std::make_shared<TempGauge>(); });
+	processFactories.push_back([]()
+							   { return std::make_shared<SpeedSensor>(); });
 	processFactories.push_back([]()
 							   { return std::make_shared<Speedometer>(); });
 
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	AnalogConverter analogConverter;
 	CoolantTempSensor coolantTempSensor;
 
-	digitalGauge.showLogo(logoTime);
+	digitalGauge.showLogo();
 	digitalGauge.setScreen(DIGITAL_GAUGE);
 
 	logger.info("Setting up shared memory for the engine readings.");
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 	shm_unlink("/engineValuesMemory"); // Remove shared memory segment
 
 	digitalGauge.setScreen(TORINO_LOGO);
-	digitalGauge.showLogo(logoTime);
+	digitalGauge.showLogo();
 
 	terminateChildProcesses(childProcesses);
 

@@ -38,7 +38,7 @@ Speedometer::Speedometer(/* args */)
 
     loopInterval = config->get<useconds_t>("loop_interval");
     stepOffset = config->get<int>("step_offset");
-    logger->info("Initiating...");
+
     init();
 
     if (config->get<bool>("test_enabled"))
@@ -52,7 +52,7 @@ Speedometer::Speedometer(/* args */)
     }
 
     motor->setSpeed(1);
-    logger->info("Speedometer ready!");
+    logger->info("Ready!");
 }
 
 Speedometer::~Speedometer()

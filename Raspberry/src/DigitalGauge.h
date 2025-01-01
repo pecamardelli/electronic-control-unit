@@ -79,7 +79,7 @@ public:
   void setup();
   void draw(EngineValues *);
   void setScreen(Screen);
-  void showLogo(unsigned int);
+  void showLogo();
 
   void drawBmpFile(const char *);
   void clear();
