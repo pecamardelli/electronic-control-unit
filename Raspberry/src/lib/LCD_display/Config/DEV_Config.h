@@ -15,7 +15,7 @@
 #include "Debug.h"
 
 #ifdef USE_BCM2835_LIB
-#include "../../../includes/BCM2835Manager.h"
+#include <bcm2835.h>
 #elif USE_WIRINGPI_LIB
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
@@ -34,7 +34,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include "../../../includes/Logger.h"
 
 /**
  * data

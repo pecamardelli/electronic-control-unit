@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 			childProcesses.push_back(childProcess);
 		}
 	}
-	terminateProgram = true;
+
 	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###
 	while (!terminateProgram)

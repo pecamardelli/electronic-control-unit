@@ -19,7 +19,6 @@
 #include "Debug.h"
 #include "LCD_1in54.h"
 #include "../Fonts/fonts.h"
-#include "../../includes/Logger.h"
 
 /**
  * Display orientation

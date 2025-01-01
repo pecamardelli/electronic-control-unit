@@ -21,8 +21,6 @@
 #include "GUI_Paint.h"
 // #include "GUI_Cache.h"
 
-extern Logger logger;
-
 UBYTE GUI_ReadBmp(const char *path)
 {
 	FILE *fp;					 // Define a file pointer
@@ -33,14 +31,14 @@ UBYTE GUI_ReadBmp(const char *path)
 	if ((fp = fopen(path, "rb")) == NULL)
 	{ // fp = 0x00426aa0
 		DEBUG("Cann't open the file!\n");
-		logger.error("Can't open the file!");
+		printf("Can't open the file!");
 		return 0;
 	}
 
-	fseek(fp, 0, SEEK_SET);								   // Set the file pointer from the beginning
-	fread(&bmpFileHeader, sizeof(BMPFILEHEADER), 1, fp);   // Gets the BMP file header
-	fread(&bmpInfoHeader, sizeof(BMPINF), 1, fp);		   // Gets BMP Info Header
-	logger.debug("bBitCount= " + bmpInfoHeader.bBitCount); // Print a pixel takes several bit!!!
+	fseek(fp, 0, SEEK_SET);								 // Set the file pointer from the beginning
+	fread(&bmpFileHeader, sizeof(BMPFILEHEADER), 1, fp); // Gets the BMP file header
+	fread(&bmpInfoHeader, sizeof(BMPINF), 1, fp);		 // Gets BMP Info Header
+	printf("bBitCount= " + bmpInfoHeader.bBitCount);	 // Print a pixel takes several bit!!!
 
 	// Get palette information, Max 256 color information
 	// You can use the malloc function to reduce the memory required to run this program
@@ -91,7 +89,7 @@ UBYTE GUI_ReadBmp(const char *path)
 			{
 				if (fread((char *)&data, 1, len, fp) != (size_t)len)
 				{
-					logger.debug("get bmpdata:\r\n");
+					printf("get bmpdata:\r\n");
 					break;
 				}
 				// ARGB4444 format cannot be recognized for the time being. It can only be used to identify RGB565 format information!!
@@ -113,7 +111,7 @@ UBYTE GUI_ReadBmp(const char *path)
 				if (fread((char *)&argb, 1, len, fp) != (size_t)len)
 				{
 					printf("x:%d,y:%d\r\n", col, row);
-					logger.debug("get bmpdata: \r\n");
+					printf("get bmpdata: \r\n");
 					break;
 				}
 				data = RGB((argb.rgbRed), (argb.rgbGreen), (argb.rgbBlue));
@@ -125,7 +123,7 @@ UBYTE GUI_ReadBmp(const char *path)
 			{
 				if (fread((char *)&pixels, 1, 1, fp) != 1)
 				{
-					logger.debug("get bmpdata:\r\n");
+					printf("get bmpdata:\r\n");
 					break;
 				}
 				for (temp = 0; (temp < (8 / bmpInfoHeader.bBitCount)) && (col < bmpInfoHeader.bWidth); temp++, col++)

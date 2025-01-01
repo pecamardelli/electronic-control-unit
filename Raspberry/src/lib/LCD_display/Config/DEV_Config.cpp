@@ -11,8 +11,6 @@
  ******************************************************************************/
 #include "DEV_Config.h"
 
-Logger logger("LCD_Display");
-
 #if USE_DEV_LIB
 pthread_t t1;
 UWORD pwm_dule = 100;
@@ -164,7 +162,11 @@ UBYTE DEV_ModuleInit(void)
 {
 
 #ifdef USE_BCM2835_LIB
-    BCM2835Manager::getInstance();
+    if (!bcm2835_init())
+    {
+        printf("bcm2835 init failed  !!! \r\n");
+        exit(1);
+    }
     DEV_GPIO_Init();
     bcm2835_spi_begin();                                       // Start spi interface, set spi pin for the reuse function
     bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);   // High first transmission

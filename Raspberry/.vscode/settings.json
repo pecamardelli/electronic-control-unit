@@ -84,7 +84,9 @@
     "lcd_0in96.h": "c",
     "lcd_display.h": "c",
     "lcd_1in28.h": "c",
-    "cinttypes": "c"
+    "cinttypes": "c",
+    "bcm2835.h": "c",
+    "gui_bmp.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,
