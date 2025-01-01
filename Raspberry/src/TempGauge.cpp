@@ -19,6 +19,7 @@ TempGauge::TempGauge(/* args */)
     conversions.emplace_back(80, config->get<int>("temp_80_step"));
     conversions.emplace_back(100, config->get<int>("temp_100_step"));
     conversions.emplace_back(130, config->get<int>("temp_130_step"));
+
     init();
 
     if (config->get<bool>("test_enabled"))

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <typeinfo>
 
 #include "common.h"
 #include "Process.h"
@@ -28,8 +29,14 @@ const char *ASSETS_PATH = "./src/assets";
 std::string IMAGES_PATH = std::string(ASSETS_PATH) + "/images";
 std::vector<ChildProcess> childProcesses; // Vector to store child processes
 
+struct Factory
+{
+    std::string typeName;
+    std::function<std::shared_ptr<Process>()> create;
+};
+
 // Store factory functions
-std::vector<std::function<std::shared_ptr<Process>()>> processFactories;
+std::vector<Factory> processFactories;
 
 System *sys;
 

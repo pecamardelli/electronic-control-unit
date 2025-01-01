@@ -11,12 +11,12 @@ int main(int argc, char *argv[])
 	// unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
 
 	// Add smart pointer factories to the vector
-	processFactories.push_back([]()
-							   { return std::make_shared<TempGauge>(); });
-	processFactories.push_back([]()
-							   { return std::make_shared<SpeedSensor>(); });
-	processFactories.push_back([]()
-							   { return std::make_shared<Speedometer>(); });
+	processFactories.push_back({"TempGauge", []()
+								{ return std::make_shared<TempGauge>(); }});
+	processFactories.push_back({"SpeedSensor", []()
+								{ return std::make_shared<SpeedSensor>(); }});
+	processFactories.push_back({"Speedometer", []()
+								{ return std::make_shared<Speedometer>(); }});
 
 	DigitalGauge digitalGauge;
 	AnalogConverter analogConverter;
@@ -40,18 +40,18 @@ int main(int argc, char *argv[])
 		else if (pid == 0)
 		{
 			// Instantiate here
-			std::shared_ptr<Process> process = factory();
+			std::shared_ptr<Process> process = factory.create();
 			process->loop(engineValues);
 			exit(0);
 		}
 		else
 		{
 			// Track the child PID and description
-			ChildProcess childProcess = {pid, "Sarasa"};
+			ChildProcess childProcess = {pid, factory.typeName};
 			childProcesses.push_back(childProcess);
 		}
 	}
-
+	terminateProgram = true;
 	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###
 	while (!terminateProgram)

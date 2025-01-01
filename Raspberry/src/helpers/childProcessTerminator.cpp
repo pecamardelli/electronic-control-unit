@@ -10,11 +10,11 @@ void terminateChildProcesses(std::vector<ChildProcess> childProcesses)
     {
         if (kill(child.pid, SIGTERM) == 0)
         { // Send SIGTERM to each child
-            logger.info("Terminated child process for " + child.description + " (" + std::to_string(child.pid) + ")");
+            logger.info("Sending SIGTERM to " + child.description + " process (" + std::to_string(child.pid) + ")");
         }
         else
         {
-            logger.info("Failed to terminate child process for " + child.description + " (" + std::to_string(child.pid) + ")");
+            logger.info("SIGTERM sending failed for " + child.description + " process (" + std::to_string(child.pid) + ")");
         }
     }
 
