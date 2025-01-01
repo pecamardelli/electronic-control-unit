@@ -11,12 +11,12 @@ TempGauge::TempGauge(/* args */)
     loopInterval = config->get<useconds_t>("loop_interval");
     stepOffset = config->get<int>("step_offset");
 
-    conversions[0].step = config->get<int>("temp_20_step");
-    conversions[1].step = config->get<int>("temp_40_step");
-    conversions[2].step = config->get<int>("temp_60_step");
-    conversions[3].step = config->get<int>("temp_80_step");
-    conversions[4].step = config->get<int>("temp_100_step");
-    conversions[5].step = config->get<int>("temp_130_step");
+    conversions.emplace_back(20, config->get<int>("temp_20_step"));
+    conversions.emplace_back(40, config->get<int>("temp_40_step"));
+    conversions.emplace_back(60, config->get<int>("temp_60_step"));
+    conversions.emplace_back(80, config->get<int>("temp_80_step"));
+    conversions.emplace_back(100, config->get<int>("temp_100_step"));
+    conversions.emplace_back(130, config->get<int>("temp_130_step"));
 
     logger->info("Setting up...");
     init();
@@ -24,6 +24,11 @@ TempGauge::TempGauge(/* args */)
     if (config->get<bool>("test_enabled"))
     {
         test(config->get<unsigned int>("test_motor_speed"), config->get<unsigned int>("test_wait_time"));
+    }
+
+    if (config->get<bool>("calibration_enabled"))
+    {
+        calibrate();
     }
 
     motor->setSpeed(1);

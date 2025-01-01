@@ -82,3 +82,34 @@ void Gauge::test(long motorSpeed, unsigned int testInterval)
 
     goToStartPosition();
 }
+
+void Gauge::calibrate()
+{
+    int number = 0;
+    std::cout << "Entering calibration mode." << std::endl;
+    std::cout << "Enter 0 to go to the start position and a non integer value to exit." << std::endl;
+
+    motor->setSpeed(3);
+
+    while (true)
+    {
+        std::cout << "Enter a number to move the gauge needle (current step: " << currentStep << "): ";
+        std::cin >> number;
+
+        if (std::cin.fail())
+        {
+            std::cout << "Exiting calibration mode." << std::endl;
+            currentStep = 0;
+            break;
+        }
+        else if (number == 0)
+        {
+            goToStartPosition();
+        }
+        else
+        {
+            motor->step(number);
+            currentStep += number;
+        }
+    }
+}

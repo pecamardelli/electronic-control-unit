@@ -26,10 +26,6 @@ private:
     const RPiGPIOPin IN3 = RPI_V2_GPIO_P1_40; // GPIO 21
     const RPiGPIOPin IN4 = RPI_V2_GPIO_P1_12; // GPIO 26
 
-    std::vector<Conversion>
-        conversions = {
-            {20, 0}, {40, 45}, {60, 100}, {80, 185}, {100, 275}, {130, 351}};
-
 public:
     TempGauge(/* args */);
     ~TempGauge();

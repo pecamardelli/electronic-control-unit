@@ -46,6 +46,11 @@ Speedometer::Speedometer(/* args */)
         test(config->get<unsigned int>("test_motor_speed"), config->get<unsigned int>("test_wait_time"));
     }
 
+    if (config->get<bool>("calibration_enabled"))
+    {
+        calibrate();
+    }
+
     motor->setSpeed(1);
     logger->info("Speedometer ready!");
 }
@@ -56,20 +61,8 @@ Speedometer::~Speedometer()
 
 void Speedometer::loop(EngineValues *engineValues)
 {
-    int number = 0;
     while (!terminateFlag.load())
     {
-
-        std::cout << "Enter an integer: ";
-        std::cin >> number; // Store user input into the variable
-        if (number == 0)
-        {
-            goToStartPosition();
-        }
-        else
-        {
-            motor->step(number);
-        }
         usleep(loopInterval);
     }
 }

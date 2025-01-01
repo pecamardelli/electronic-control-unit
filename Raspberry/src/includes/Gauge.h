@@ -22,6 +22,7 @@ private:
 public:
     Gauge(/* args */);
     ~Gauge();
+    void calibrate();
 
 protected:
     std::unique_ptr<Stepper> motor;
