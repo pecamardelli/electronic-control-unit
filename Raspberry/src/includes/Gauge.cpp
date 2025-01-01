@@ -112,4 +112,6 @@ void Gauge::calibrate()
             currentStep += number;
         }
     }
+
+    goToStartPosition();
 }

@@ -88,7 +88,7 @@ target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
 
 # Installation
 install(TARGETS ${PROJECT_NAME} DESTINATION ${DEST_DIR})
-install(FILES ${CONFIG_FILE} DESTINATION ${CONFIG_DIR})
+install(FILES ${CONFIG_FILE} DESTINATION ${CONFIG_DIR}/${PROJECT_NAME})
 
 # Dependency Checks
 find_program(BCM2835_CHECK bcm2835-config PATHS /usr/local/bin)
@@ -109,6 +109,7 @@ endif()
 
 # Ensure Build Directory Exists
 file(MAKE_DIRECTORY ${BUILD_DIR})
+file(MAKE_DIRECTORY ${CONFIG_DIR}/${PROJECT_NAME})
 
 # Custom Clean Target
 add_custom_target(custom_clean

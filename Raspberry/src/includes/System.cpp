@@ -3,7 +3,7 @@
 System::System(std::string programName)
 {
     mainRelay.state(HIGH);
-    config = loadConfig("/etc/" + programName);
+    config = loadConfig("/etc/" + programName + "/config.ini");
 
     // Display parsed configuration
     // for (const auto &[section, values] : config)
