@@ -18,20 +18,30 @@
 #define SSD1306_WIDTH 128
 #define SSD1306_HEIGHT 32
 
+typedef enum
+{
+    SSD1306_ALIGN_LEFT = 0,
+    SSD1306_ALIGN_CENTER,
+    SSD1306_ALIGN_RIGHT
+} SSD1306_Align_t;
+
 class SSD1306
 {
 private:
     /* data */
-    // Buffer for each display
     uint8_t buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
-    void ssd1306_init();
-    void ssd1306_sendCommand(uint8_t);
-    void ssd1306_clear();
-    void ssd1306_drawChar(int, int, char, const sFONT &);
-    void ssd1306_drawString(int, int, const char *, const sFONT &);
+    const int paddingInline = 4;
+    const int paddingBlock = 1;
+    void init();
+    void sendCommand(uint8_t);
+    void clear();
+    void drawChar(int, int, char, const sFONT &);
+    void display();
 
 public:
     SSD1306(/* args */);
     ~SSD1306();
-    void ssd1306_display();
+
+    void drawString(int, int, const char *, const sFONT &);
+    void drawString(SSD1306_Align_t, const char *, const sFONT &);
 };

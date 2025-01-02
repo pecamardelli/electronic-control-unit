@@ -55,12 +55,13 @@ int main(int argc, char *argv[])
 			childProcesses.push_back(childProcess);
 		}
 	}
-
+	engineValues->speed.store(60);
 	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###
 	while (!terminateProgram)
 	{
 		engineValues->temp.store(coolantTempSensor.readTemp());
+		// engineValues->totalMileage.store(engineValues->totalMileage.load() + 1);
 		// engineValues->volts.store(analogConverter.getVolts());
 
 		// std::cout << "Volts: " << engineValues->volts.load() << std::endl;

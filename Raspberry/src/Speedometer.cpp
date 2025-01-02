@@ -8,7 +8,7 @@ Speedometer::Speedometer(/* args */)
     interruptor = std::make_unique<Button>(RPI_V2_GPIO_P1_07);
     logger = std::make_unique<Logger>(description);
     config = std::make_unique<Config>(description);
-    upperDisplay = new SSD1306();
+    upperDisplay = std::make_unique<SSD1306>();
 
     logger->info("Setting up...");
 
@@ -51,7 +51,7 @@ Speedometer::Speedometer(/* args */)
         calibrate();
     }
 
-    motor->setSpeed(1);
+    motor->setSpeed(4);
     logger->info("Ready!");
 }
 
@@ -61,8 +61,39 @@ Speedometer::~Speedometer()
 
 void Speedometer::loop(EngineValues *engineValues)
 {
+    uint64_t lastTotalMileage = 0;
+    float speed = 0;
+    float lastSpeed = 0;
+    int stepToGo;
+
     while (!terminateFlag.load())
     {
         usleep(loopInterval);
+
+        if (lastTotalMileage != engineValues->totalMileage.load())
+        {
+            lastTotalMileage = engineValues->totalMileage.load();
+            upperDisplay->drawString(SSD1306_ALIGN_RIGHT, std::to_string(lastTotalMileage).c_str(), LiberationSansNarrow_Bold28);
+        }
+
+        speed = engineValues->speed.load();
+
+        if (speed == lastSpeed)
+        {
+            continue;
+        }
+
+        lastSpeed = speed;
+
+        if (!speed || speed < 0)
+            speed = 0;
+        else if (speed > 240)
+            speed = 240;
+
+        stepToGo = convertToStep(speed);
+
+        motor->step(stepToGo - currentStep);
+        motor->stop();
+        currentStep = stepToGo;
     }
 }
