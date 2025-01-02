@@ -23,6 +23,8 @@ struct alignas(64) EngineValues
     std::atomic<bool> ignition;
     std::atomic<double> speed;
     std::atomic<double> distanceCovered;
+    std::atomic<unsigned long> totalMileage;
+    std::atomic<unsigned long> partialMileage;
 };
 
 enum Screen

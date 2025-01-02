@@ -89,7 +89,7 @@ UBYTE GUI_ReadBmp(const char *path)
 			{
 				if (fread((char *)&data, 1, len, fp) != (size_t)len)
 				{
-					printf("get bmpdata:\r\n");
+					// printf("get bmpdata:\r\n");
 					break;
 				}
 				// ARGB4444 format cannot be recognized for the time being. It can only be used to identify RGB565 format information!!
@@ -110,8 +110,8 @@ UBYTE GUI_ReadBmp(const char *path)
 			{
 				if (fread((char *)&argb, 1, len, fp) != (size_t)len)
 				{
-					printf("x:%d,y:%d\r\n", col, row);
-					printf("get bmpdata: \r\n");
+					// printf("x:%d,y:%d\r\n", col, row);
+					// printf("get bmpdata: \r\n");
 					break;
 				}
 				data = RGB((argb.rgbRed), (argb.rgbGreen), (argb.rgbBlue));
@@ -123,7 +123,7 @@ UBYTE GUI_ReadBmp(const char *path)
 			{
 				if (fread((char *)&pixels, 1, 1, fp) != 1)
 				{
-					printf("get bmpdata:\r\n");
+					// printf("get bmpdata:\r\n");
 					break;
 				}
 				for (temp = 0; (temp < (8 / bmpInfoHeader.bBitCount)) && (col < bmpInfoHeader.bWidth); temp++, col++)

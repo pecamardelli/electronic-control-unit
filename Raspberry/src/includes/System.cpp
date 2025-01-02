@@ -4,6 +4,8 @@ System::System(std::string programName)
 {
     mainRelay.state(HIGH);
     config = loadConfig("/etc/" + programName + "/config.ini");
+    dataPath = "/var/" + programName + "/";
+    totalMileage.open("/var/" + programName + "/total_mileage");
 
     // Display parsed configuration
     // for (const auto &[section, values] : config)
@@ -125,4 +127,18 @@ SectionMap System::getConfig(const std::string &section)
     }
 
     return sectionIt->second; // Dereference the iterator to get the section
+}
+
+uint64_t System::getTotalMileage()
+{
+    if (!totalMileage.is_open())
+    {
+        logger.error("Could not open total mileage file!");
+        return 0;
+    }
+
+    std::string line;
+    std::getline(totalMileage, line);
+
+    return std::stoul(line);
 }

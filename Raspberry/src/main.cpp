@@ -2,7 +2,9 @@
 
 int main(int argc, char *argv[])
 {
-	sys = new System(getProgramName(argv[0]));
+	std::string programName = getProgramName(argv[0]);
+
+	sys = new System(programName);
 	Logger logger("Main");
 	logger.info("Program started.");
 	Config config("global");
@@ -27,6 +29,8 @@ int main(int argc, char *argv[])
 
 	logger.info("Setting up shared memory for the engine readings.");
 	EngineValues *engineValues = createSharedMemory<EngineValues>("/engineValuesMemory", true);
+
+	engineValues->totalMileage.store(sys->getTotalMileage());
 
 	// Iterate and instantiate processes during iteration
 	for (const auto &factory : processFactories)

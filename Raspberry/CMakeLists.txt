@@ -30,6 +30,7 @@ set(BUILD_DIR "${CMAKE_BINARY_DIR}/build")
 set(DEST_DIR "/usr/local/bin")
 set(CONFIG_DIR "/etc")
 set(CONFIG_FILE "${DIR_SRC}/config.ini")
+set(DATA_DIR "/var/${PROJECT_NAME}")
 
 # Collect Sources
 file(GLOB SRC_CPP
@@ -107,9 +108,10 @@ if(NOT CCACHE_CHECK)
     message(STATUS "ccache installed: ${CCACHE_OUTPUT}")
 endif()
 
-# Ensure Build Directory Exists
+# Ensure Required Directories Exist
 file(MAKE_DIRECTORY ${BUILD_DIR})
 file(MAKE_DIRECTORY ${CONFIG_DIR}/${PROJECT_NAME})
+file(MAKE_DIRECTORY ${DATA_DIR})
 
 # Custom Clean Target
 add_custom_target(custom_clean

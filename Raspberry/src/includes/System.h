@@ -36,6 +36,8 @@ private:
         {"SpeedSensor", {{"loop_interval", "10"}, {"differential_pinion", "13"}, {"differential_crown", "43"}, {"tire_width", "215"}, {"aspect_ratio", "60"}, {"rim_diameter", "15"}, {"transitions_per_lap", "4"}}},
         {"Speedometer", {{"loop_interval", "1000"}, {"step_offset", "0"}}},
     };
+    std::string dataPath;
+    std::ifstream totalMileage;
 
     ConfigMap
     loadConfig(const std::string &);
@@ -47,6 +49,7 @@ public:
     void setProgramName(const char *);
     void shutdown();
     SectionMap getConfig(const std::string &);
+    uint64_t getTotalMileage();
 
     static uint64_t uptime();
 };
