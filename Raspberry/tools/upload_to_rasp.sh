@@ -3,7 +3,7 @@
 # Configuration
 LOCAL_PATH="/home/pablin/electronic-control-unit/Raspberry"
 REMOTE_PATH="/home/pablin/ecu"
-HOST="192.168.0.102"
+HOST="192.168.0.105"
 USER="pablin"
 SSH_KEY_PATH="$HOME/.ssh/id_rsa"            # Path to your private SSH key
 

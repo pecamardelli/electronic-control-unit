@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 	while (!terminateProgram)
 	{
 		engineValues->temp.store(coolantTempSensor.readTemp());
-		// engineValues->totalMileage.store(engineValues->totalMileage.load() + 1);
+		engineValues->totalMileage.store(engineValues->totalMileage.load() + 1);
 		// engineValues->volts.store(analogConverter.getVolts());
 
 		// std::cout << "Volts: " << engineValues->volts.load() << std::endl;

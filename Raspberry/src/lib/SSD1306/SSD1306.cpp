@@ -114,30 +114,89 @@ void SSD1306::drawString(SSD1306_Align_t align, const char *str, const sFONT &fo
     }
 }
 
-// Draw a string
 void SSD1306::drawString(int x, int y, const char *str, const sFONT &font)
 {
+    // Clear the entire buffer
     clear();
 
     while (*str)
     {
         drawChar(x, y, *str, font);
-        // Advance to next character (font width + spacing)
+
+        // Advance to the next character (accounting for spacing)
         if (strcmp(str, ".") == 0)
         {
-            std::cout << "Dot" << std::endl;
-            x += font.Width - 7;
+            x += font.Width - 7; // Adjust for smaller spacing after a period
         }
         else
-            x += font.Width + 1;
+        {
+            x += font.Width + 1; // Standard spacing
+        }
 
+        // Wrap to the next line if the current line is full
         if (x + font.Width > SSD1306_WIDTH)
         {
             x = 0;
             y += font.Height;
         }
+
         str++;
     }
 
+    // Update the display with the new buffer content
     display();
+}
+
+void SSD1306::drawRectangle(int x, int y, int width, int height, int thickness)
+{
+    // Draw the top and bottom horizontal lines
+    for (int i = 0; i < thickness; i++)
+    {
+        drawHorizontalLine(x, y + i, width);              // Top border
+        drawHorizontalLine(x, y + height - 1 - i, width); // Bottom border
+    }
+
+    // Draw the left and right vertical lines
+    for (int i = 0; i < thickness; i++)
+    {
+        drawVerticalLine(x + i, y, height);             // Left border
+        drawVerticalLine(x + width - 1 - i, y, height); // Right border
+    }
+}
+
+// Draw a horizontal line
+void SSD1306::drawHorizontalLine(int x, int y, int length)
+{
+    for (int i = 0; i < length; i++)
+    {
+        setPixel(x + i, y, true);
+    }
+}
+
+// Draw a vertical line
+void SSD1306::drawVerticalLine(int x, int y, int length)
+{
+    for (int i = 0; i < length; i++)
+    {
+        setPixel(x, y + i, true);
+    }
+}
+
+// Set a pixel in the buffer
+void SSD1306::setPixel(int x, int y, bool on)
+{
+    if (x < 0 || x >= SSD1306_WIDTH || y < 0 || y >= SSD1306_HEIGHT)
+        return; // Out of bounds
+
+    int byteIndex = x + (y / 8) * SSD1306_WIDTH;
+    int bitIndex = y % 8;
+
+    if (on)
+    {
+        buffer[byteIndex] |= (1 << bitIndex); // Turn the pixel on
+    }
+    else
+    {
+        buffer[byteIndex] &= ~(1 << bitIndex); // Turn the pixel off
+    }
 }
