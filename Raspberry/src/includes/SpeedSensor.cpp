@@ -44,7 +44,7 @@ void SpeedSensor::loop(EngineValues *engineValues)
         if (lastState == HIGH && currentState == LOW)
         {
             transitions++;
-            engineValues->distanceCovered += kilometersPerTransition;
+            engineValues->distanceCovered.store(engineValues->distanceCovered.load() + kilometersPerTransition);
 
             // Get the current time in microseconds
             currentTime = bcm2835_st_read();
@@ -53,8 +53,8 @@ void SpeedSensor::loop(EngineValues *engineValues)
             {
                 // If this isn't the first detection
                 engineValues->speed = calculateSpeed(currentTime - lastTime);
-                // std::cout << "Object detected! Count: " << transitions
-                //           << ", Speed: " << engineValues->speed << " km/h, distance: " << engineValues->distanceCovered << std::endl;
+                std::cout << "Object detected! Count: " << transitions
+                          << ", Speed: " << engineValues->speed << " km/h, distance: " << engineValues->distanceCovered << std::endl;
             }
 
             // Update the last detection time

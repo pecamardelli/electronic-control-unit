@@ -9,7 +9,7 @@ class SpeedSensor : public Process
 {
 private:
     /* data */
-    const RPiGPIOPin D0_PIN = RPI_GPIO_P1_26; // Pin for Digital Output (D0)
+    const RPiGPIOPin D0_PIN = RPI_V2_GPIO_P1_13; // Pin for Digital Output (D0)
     // Constants for speed calculation
     double gearRatio = 43.0 / 13.0;       // Final gear ratio
     double tireWidth = 215.0;             // Tire width in mm
