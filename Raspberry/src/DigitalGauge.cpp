@@ -17,7 +17,7 @@ DigitalGauge::DigitalGauge(/* args */)
 
     if ((BlackImage = (UWORD *)malloc(Imagesize)) == NULL)
     {
-        printf("Failed to apply for black memory...\r\n");
+        logger.error("Failed to apply for black memory...\r\n");
         BlackImage = NULL;
     }
 }

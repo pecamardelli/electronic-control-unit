@@ -13,21 +13,7 @@
 #define _DEV_CONFIG_H_
 
 #include "Debug.h"
-
-#ifdef USE_BCM2835_LIB
 #include <bcm2835.h>
-#elif USE_WIRINGPI_LIB
-#include <wiringPi.h>
-#include <wiringPiSPI.h>
-#elif USE_DEV_LIB
-#include "sysfs_gpio.h"
-#include "dev_hardware_SPI.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <pthread.h>
-// #define USE_DEV_LIB_PWM
-#endif
 #include <unistd.h>
 
 #include <errno.h>
@@ -42,10 +28,10 @@
 #define UWORD uint16_t
 #define UDOUBLE uint32_t
 
-#define LCD_CS 8
-#define LCD_RST 27
-#define LCD_DC 25
-#define LCD_BL 18
+#define LCD_RST RPI_V2_GPIO_P1_16
+#define LCD_CS RPI_V2_GPIO_P1_18
+#define LCD_DC RPI_V2_GPIO_P1_22
+#define LCD_BL RPI_V2_GPIO_P1_24
 
 // LCD
 #define LCD_CS_0 DEV_Digital_Write(LCD_CS, 0)

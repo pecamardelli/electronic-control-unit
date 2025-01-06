@@ -4,7 +4,7 @@ TempGauge::TempGauge(/* args */)
 {
     description = "TempGauge";
     motor = std::make_unique<Stepper>(2038, IN1, IN3, IN2, IN4);
-    interruptor = std::make_unique<Button>(RPI_V2_GPIO_P1_22);
+    interruptor = std::make_unique<Button>(INTERRUPTOR);
     logger = std::make_unique<Logger>(description);
     config = std::make_unique<Config>(description);
 
