@@ -19,7 +19,6 @@ void Gauge::init()
         motor->step(1);
         interruptor->check();
     }
-
     // Get back to the initial position.
     goToStartPosition();
     motor->setSpeed(1);

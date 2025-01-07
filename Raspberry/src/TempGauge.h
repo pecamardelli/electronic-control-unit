@@ -25,7 +25,7 @@ private:
     const RPiGPIOPin IN2 = RPI_V2_GPIO_P1_36;         // GPIO 20
     const RPiGPIOPin IN3 = RPI_V2_GPIO_P1_38;         // GPIO 21
     const RPiGPIOPin IN4 = RPI_V2_GPIO_P1_40;         // GPIO 26
-    const RPiGPIOPin INTERRUPTOR = RPI_V2_GPIO_P1_12; // GPIO 26
+    const RPiGPIOPin INTERRUPTOR = RPI_V2_GPIO_P1_12; // GPIO 18
 
 public:
     TempGauge(/* args */);
