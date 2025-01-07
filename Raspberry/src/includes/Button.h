@@ -7,6 +7,8 @@ class Button
 private:
     /* data */
     RPiGPIOPin pin;
+    uint8_t buttonState;
+    uint8_t stateCount = 0;
 
 public:
     Button(RPiGPIOPin);

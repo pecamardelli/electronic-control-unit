@@ -29,9 +29,9 @@
 #define UDOUBLE uint32_t
 
 #define LCD_RST RPI_V2_GPIO_P1_16
-#define LCD_CS RPI_V2_GPIO_P1_18
+#define LCD_CS RPI_V2_GPIO_P1_24
 #define LCD_DC RPI_V2_GPIO_P1_22
-#define LCD_BL RPI_V2_GPIO_P1_24
+#define LCD_BL RPI_V2_GPIO_P1_40
 
 // LCD
 #define LCD_CS_0 DEV_Digital_Write(LCD_CS, 0)

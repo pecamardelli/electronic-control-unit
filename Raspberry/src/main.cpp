@@ -20,8 +20,11 @@ int main(int argc, char *argv[])
 	processFactories.push_back({"Speedometer", []()
 								{ return std::make_shared<Speedometer>(); }});
 
+	// I2CMultiplexer i2cMultiplexer;
+	// // Select a channel (example: channel 0)
+	// i2cMultiplexer.selectChannel(1);
 	DigitalGauge digitalGauge;
-	AnalogConverter analogConverter;
+	// AnalogConverter analogConverter;
 	CoolantTempSensor coolantTempSensor;
 
 	digitalGauge.showLogo();

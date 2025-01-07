@@ -2,6 +2,7 @@
 
 DigitalGauge::DigitalGauge(/* args */)
 {
+    BCM2835Manager::getInstance();
     logger.info("Initializing Round Display.");
     /* Module Init */
     if (DEV_ModuleInit() != 0)
@@ -20,6 +21,8 @@ DigitalGauge::DigitalGauge(/* args */)
         logger.error("Failed to apply for black memory...\r\n");
         BlackImage = NULL;
     }
+
+    logger.info("Done!");
 }
 
 DigitalGauge::~DigitalGauge()
