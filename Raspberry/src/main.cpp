@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 			childProcesses.push_back(childProcess);
 		}
 	}
-	engineValues->speed.store(60);
+
 	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###
 	while (!terminateProgram)
