@@ -22,6 +22,7 @@
 #include "SpeedSensor.h"
 #include "Speedometer.h"
 #include "I2CMultiplexer.h"
+#include "TempSensor.h"
 
 // Initialize static member
 std::atomic<bool> Process::terminateFlag(false);

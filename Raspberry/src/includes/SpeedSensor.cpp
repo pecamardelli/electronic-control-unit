@@ -12,6 +12,7 @@ SpeedSensor::SpeedSensor(/* args */)
     aspectRatio = config->get<double>("aspect_ratio");
     rimDiameter = config->get<double>("rim_diameter");
     transitionsPerLap = config->get<double>("transitions_per_lap");
+    demultiplication = config->get<double>("demultiplication");
     tireCircumference = calculateTireCircumference();
     kilometersPerTransition = 1.0 / gearRatio / 4.0 * tireCircumference / 1000.0;
 
@@ -28,13 +29,6 @@ SpeedSensor::~SpeedSensor()
 
 void SpeedSensor::loop(EngineValues *engineValues)
 {
-    uint32_t transitions = 0;
-    uint8_t lastState = LOW; // Store the last state of the sensor
-    uint64_t lastTime = 0;   // Time of the last detection in microseconds
-    uint8_t currentState;
-    uint64_t currentTime;
-    uint64_t elapsedTime;
-
     while (!terminateFlag.load())
     {
         // Read the current state of the digital output (D0)
@@ -44,7 +38,7 @@ void SpeedSensor::loop(EngineValues *engineValues)
         if (lastState == HIGH && currentState == LOW)
         {
             transitions++;
-            engineValues->distanceCovered.store(engineValues->distanceCovered.load() + kilometersPerTransition);
+            // engineValues->distanceCovered.store(engineValues->distanceCovered.load() + kilometersPerTransition);
 
             // Get the current time in microseconds
             currentTime = bcm2835_st_read();
@@ -52,9 +46,8 @@ void SpeedSensor::loop(EngineValues *engineValues)
             if (lastTime != 0)
             {
                 // If this isn't the first detection
-                engineValues->speed = calculateSpeed(currentTime - lastTime);
-                std::cout << "Object detected! Count: " << transitions
-                          << ", Speed: " << engineValues->speed << " km/h, distance: " << engineValues->distanceCovered << std::endl;
+                // engineValues->speed = calculateSpeed(currentTime - lastTime);
+                std::cout << "Object detected! Count: " << transitions << std::endl;
             }
 
             // Update the last detection time
@@ -65,15 +58,14 @@ void SpeedSensor::loop(EngineValues *engineValues)
         lastState = currentState;
 
         // Small delay to debounce the signal
-        bcm2835_delay(loopInterval);
+        usleep(loopInterval);
     }
 }
 
 double SpeedSensor::calculateTireCircumference()
 {
     // Tire circumference in meters
-    double tireDiameter = (tireWidth * aspectRatio / 100.0 * 2 + rimDiameter * 25.4) / 1000.0;
-    return M_PI * tireDiameter;
+    return M_PI * (tireWidth * aspectRatio / 100.0 * 2 + rimDiameter * 25.4) / 1000.0;
 }
 
 double SpeedSensor::calculateSpeed(uint64_t elapsedTime)
@@ -83,15 +75,14 @@ double SpeedSensor::calculateSpeed(uint64_t elapsedTime)
         return 0.0; // Avoid division by zero
     }
 
-    // Driveshaft laps per second
-    double driveshaftLapsPerSecond = 1e6 / elapsedTime / transitionsPerLap;
+    driveshaftRevsPerSecond = 1e6 / elapsedTime / transitionsPerLap * demultiplication;
 
     // Wheel laps per second
-    double wheelLapsPerSecond = driveshaftLapsPerSecond / gearRatio;
+    wheelRevsPerSecond = driveshaftRevsPerSecond / gearRatio;
 
     // Speed in meters per second
-    double speedMps = wheelLapsPerSecond * tireCircumference;
+    metersPerSecond = wheelRevsPerSecond * tireCircumference;
 
     // Convert to kilometers per hour
-    return speedMps * 3.6;
+    return metersPerSecond * 3.6;
 }

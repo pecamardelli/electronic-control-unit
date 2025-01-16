@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 	Logger logger("Main");
 	logger.info("Program started.");
 	Config config("global");
+	TempSensor tempSensor;
 
 	useconds_t mainLoopInterval = config.get<useconds_t>("main_loop_interval");
 	// unsigned int logoTime = config.get<unsigned int>("logo_screen_time");

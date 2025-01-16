@@ -18,6 +18,17 @@ private:
     double transitionsPerLap = 4.0;       // Transitions per driveshaft lap
     double tireCircumference = 0.0;       // Tire circumference in mm
     double kilometersPerTransition = 0.0; // Distance covered per transition in km
+    double demultiplication = 2.8;        // Driveshaft revolutions per sensor revolutions.
+    double driveshaftRevsPerSecond;       // Driveshaft revolutions per second
+    double wheelRevsPerSecond;
+    double metersPerSecond;
+
+    uint32_t transitions = 0;
+    uint8_t lastState = LOW; // Store the last state of the sensor
+    uint64_t lastTime = 0;   // Time of the last detection in microseconds
+    uint8_t currentState;
+    uint64_t currentTime;
+    uint64_t elapsedTime;
 
     double calculateTireCircumference();
     double calculateSpeed(uint64_t);
