@@ -40,6 +40,8 @@ struct Factory
 // Store factory functions
 std::vector<Factory> processFactories;
 
+uint32_t *speedSensorTransitions;
+
 System *sys;
 
 bool terminateProgram = false;

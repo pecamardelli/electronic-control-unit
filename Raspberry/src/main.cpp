@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
 
 	logger.info("Setting up shared memory for the engine readings.");
 	EngineValues *engineValues = createSharedMemory<EngineValues>("/engineValuesMemory", true);
+	speedSensorTransitions = createSharedMemory<uint32_t>("/speedSensorTransitions", true);
 
 	engineValues->totalMileage.store(sys->getTotalMileage());
 

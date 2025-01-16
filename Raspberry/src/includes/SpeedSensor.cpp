@@ -16,6 +16,8 @@ SpeedSensor::SpeedSensor(/* args */)
     tireCircumference = calculateTireCircumference();
     kilometersPerTransition = 1.0 / gearRatio / 4.0 * tireCircumference / 1000.0;
 
+    speedSensorTransitions = 0;
+
     logger->info("Gear ratio: " + std::to_string(gearRatio) + " - Tire circumference: " + std::to_string(tireCircumference));
 
     // Configure D0_PIN as input
@@ -37,7 +39,7 @@ void SpeedSensor::loop(EngineValues *engineValues)
         // Detect a transition from HIGH to LOW (object detection edge)
         if (lastState == HIGH && currentState == LOW)
         {
-            transitions++;
+            speedSensorTransitions++;
             // engineValues->distanceCovered.store(engineValues->distanceCovered.load() + kilometersPerTransition);
 
             // Get the current time in microseconds
@@ -47,7 +49,7 @@ void SpeedSensor::loop(EngineValues *engineValues)
             {
                 // If this isn't the first detection
                 // engineValues->speed = calculateSpeed(currentTime - lastTime);
-                std::cout << "Object detected! Count: " << transitions << std::endl;
+                std::cout << "Object detected! Count: " << speedSensorTransitions << std::endl;
             }
 
             // Update the last detection time

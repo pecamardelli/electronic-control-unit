@@ -4,6 +4,9 @@
 
 #include "BCM2835Manager.h"
 #include "Process.h"
+#include "../helpers/helpers.h"
+
+extern uint32_t *speedSensorTransitions;
 
 class SpeedSensor : public Process
 {
@@ -23,7 +26,6 @@ private:
     double wheelRevsPerSecond;
     double metersPerSecond;
 
-    uint32_t transitions = 0;
     uint8_t lastState = LOW; // Store the last state of the sensor
     uint64_t lastTime = 0;   // Time of the last detection in microseconds
     uint8_t currentState;

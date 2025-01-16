@@ -16,9 +16,7 @@ Button::~Button()
 
 void Button::check()
 {
-    uint8_t buttonState = bcm2835_gpio_lev(pin);
-
-    if (buttonState == LOW)
+    if (bcm2835_gpio_lev(pin) == LOW)
     {
         // std::cout << "Button is PRESSED." << std::endl;
         pressed = true;
