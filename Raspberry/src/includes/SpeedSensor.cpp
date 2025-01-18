@@ -11,12 +11,17 @@ SpeedSensor::SpeedSensor(/* args */)
     tireWidth = config->get<double>("tire_width");
     aspectRatio = config->get<double>("aspect_ratio");
     rimDiameter = config->get<double>("rim_diameter");
-    transitionsPerLap = config->get<double>("transitions_per_lap");
+    transitionsPerDriveshaftRev = config->get<double>("transitions_per_lap");
     demultiplication = config->get<double>("demultiplication");
+    carStoppedInterval = config->get<double>("car_stopped_interval");
     tireCircumference = calculateTireCircumference();
-    kilometersPerTransition = 1.0 / gearRatio / 4.0 * tireCircumference / 1000.0;
+    kilometersPerTransition = 1.0 * demultiplication / 4.0 / gearRatio * tireCircumference / 1000.0;
 
-    speedSensorTransitions = 0;
+    // Initialize the shared data
+    speedSensorData->transitions = 0;
+    speedSensorData->speed = 0.0;
+    speedSensorData->distanceCovered = 0.0;
+    speedSensorData->averageSpeed = 0.0;
 
     logger->info("Gear ratio: " + std::to_string(gearRatio) + " - Tire circumference: " + std::to_string(tireCircumference));
 
@@ -39,8 +44,7 @@ void SpeedSensor::loop(EngineValues *engineValues)
         // Detect a transition from HIGH to LOW (object detection edge)
         if (lastState == HIGH && currentState == LOW)
         {
-            speedSensorTransitions++;
-            // engineValues->distanceCovered.store(engineValues->distanceCovered.load() + kilometersPerTransition);
+            speedSensorData->transitions = speedSensorData->transitions + 1;
 
             // Get the current time in microseconds
             currentTime = bcm2835_st_read();
@@ -48,18 +52,22 @@ void SpeedSensor::loop(EngineValues *engineValues)
             if (lastTime != 0)
             {
                 // If this isn't the first detection
-                // engineValues->speed = calculateSpeed(currentTime - lastTime);
-                std::cout << "Object detected! Count: " << speedSensorTransitions << std::endl;
+                speedSensorData->speed = calculateSpeed(currentTime - lastTime);
             }
+
+            speedSensorData->distanceCovered = kilometersPerTransition * speedSensorData->transitions;
 
             // Update the last detection time
             lastTime = currentTime;
         }
 
+        // Consider the car is stopped after a predefined interval since the last transition.
+        if (lastTime + carStoppedInterval * 1e6 < bcm2835_st_read())
+            speedSensorData->speed = 0;
+
         // Update the last state
         lastState = currentState;
 
-        // Small delay to debounce the signal
         usleep(loopInterval);
     }
 }
@@ -77,7 +85,7 @@ double SpeedSensor::calculateSpeed(uint64_t elapsedTime)
         return 0.0; // Avoid division by zero
     }
 
-    driveshaftRevsPerSecond = 1e6 / elapsedTime / transitionsPerLap * demultiplication;
+    driveshaftRevsPerSecond = 1e6 / elapsedTime / transitionsPerDriveshaftRev * demultiplication;
 
     // Wheel laps per second
     wheelRevsPerSecond = driveshaftRevsPerSecond / gearRatio;

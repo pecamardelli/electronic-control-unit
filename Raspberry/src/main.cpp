@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
 	logger.info("Setting up shared memory for the engine readings.");
 	EngineValues *engineValues = createSharedMemory<EngineValues>("/engineValuesMemory", true);
-	speedSensorTransitions = createSharedMemory<uint32_t>("/speedSensorTransitions", true);
+	speedSensorData = createSharedMemory<SpeedSensorData>("/speedSensorTransitions", true);
 
 	engineValues->totalMileage.store(sys->getTotalMileage());
 
@@ -68,6 +68,9 @@ int main(int argc, char *argv[])
 		engineValues->temp.store(coolantTempSensor.readTemp());
 		engineValues->totalMileage.store(engineValues->totalMileage.load() + 1);
 		// engineValues->volts.store(analogConverter.getVolts());
+		std::cout << "Speed Sensor transitions: " << speedSensorData->transitions << std::endl;
+		std::cout << "Speed Sensor speed: " << speedSensorData->speed << std::endl;
+		std::cout << "Speed Sensor distance: " << speedSensorData->distanceCovered << std::endl;
 
 		// std::cout << "Volts: " << engineValues->volts.load() << std::endl;
 

@@ -40,7 +40,7 @@ struct Factory
 // Store factory functions
 std::vector<Factory> processFactories;
 
-uint32_t *speedSensorTransitions;
+volatile SpeedSensorData *speedSensorData = nullptr;
 
 System *sys;
 

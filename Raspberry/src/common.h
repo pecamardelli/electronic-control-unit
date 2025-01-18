@@ -27,6 +27,14 @@ struct alignas(64) EngineValues
     std::atomic<unsigned long> partialMileage;
 };
 
+typedef struct alignas(64) _speedSensorData
+{
+    uint64_t transitions;
+    double speed;
+    double distanceCovered;
+    double averageSpeed;
+} SpeedSensorData;
+
 enum Screen
 {
     TORINO_LOGO,
