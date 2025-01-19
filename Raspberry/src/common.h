@@ -6,6 +6,8 @@
 #endif
 
 #include <atomic>
+#include <chrono>
+#include <thread>
 
 // Struct to store child PID and description
 typedef struct _childProcess
@@ -16,15 +18,10 @@ typedef struct _childProcess
 
 struct alignas(64) EngineValues
 {
-    std::atomic<float> temp;
     std::atomic<float> kml;
     std::atomic<float> volts;
     std::atomic<float> fuelConsumption;
     std::atomic<bool> ignition;
-    std::atomic<double> speed;
-    std::atomic<double> distanceCovered;
-    std::atomic<unsigned long> totalMileage;
-    std::atomic<unsigned long> partialMileage;
 };
 
 typedef struct alignas(64) _speedSensorData
@@ -34,6 +31,11 @@ typedef struct alignas(64) _speedSensorData
     double distanceCovered;
     double averageSpeed;
 } SpeedSensorData;
+
+typedef struct alignas(64) _coolantTempSensorData
+{
+    float temp;
+} CoolantTempSensorData;
 
 enum Screen
 {

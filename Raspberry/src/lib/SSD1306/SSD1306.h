@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <cstring>
-#include <unistd.h> // For usleep
 
 #include <../LCD_display/Fonts/fonts.h>
 #include "../../includes/BCM2835Manager.h"

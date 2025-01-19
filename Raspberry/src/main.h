@@ -41,6 +41,7 @@ struct Factory
 std::vector<Factory> processFactories;
 
 volatile SpeedSensorData *speedSensorData = nullptr;
+volatile CoolantTempSensorData *coolantTempSensorData = nullptr;
 
 System *sys;
 

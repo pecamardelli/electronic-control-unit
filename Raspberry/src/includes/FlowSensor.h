@@ -30,5 +30,5 @@ public:
     ~FlowSensor();
     FlowSensorData data = {0};
 
-    void loop(EngineValues *) override;
+    void loop() override;
 };

@@ -34,7 +34,7 @@ SpeedSensor::~SpeedSensor()
 {
 }
 
-void SpeedSensor::loop(EngineValues *engineValues)
+void SpeedSensor::loop()
 {
     while (!terminateFlag.load())
     {
@@ -68,7 +68,7 @@ void SpeedSensor::loop(EngineValues *engineValues)
         // Update the last state
         lastState = currentState;
 
-        usleep(loopInterval);
+        std::this_thread::sleep_for(std::chrono::microseconds(loopInterval));
     }
 }
 

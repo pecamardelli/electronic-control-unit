@@ -12,6 +12,7 @@ Speedometer::Speedometer(/* args */)
 
     logger->info("Setting up...");
 
+    conversions.emplace_back(0, 0);
     conversions.emplace_back(20, config->get<int>("km_20_step"));
     conversions.emplace_back(30, config->get<int>("km_30_step"));
     conversions.emplace_back(40, config->get<int>("km_40_step"));
@@ -51,7 +52,7 @@ Speedometer::Speedometer(/* args */)
         calibrate();
     }
 
-    motor->setSpeed(4);
+    motor->setSpeed(1);
     logger->info("Ready!");
 }
 
@@ -59,27 +60,23 @@ Speedometer::~Speedometer()
 {
 }
 
-void Speedometer::loop(EngineValues *engineValues)
+void Speedometer::loop()
 {
-    uint64_t lastTotalMileage = 0;
-    float speed = 0;
-    float lastSpeed = 0;
-    int stepToGo;
-
     while (!terminateFlag.load())
     {
-        usleep(loopInterval);
+        std::this_thread::sleep_for(std::chrono::microseconds(loopInterval));
 
-        if (lastTotalMileage != engineValues->totalMileage.load())
+        if (lastTotalMileage != 0)
         {
-            lastTotalMileage = engineValues->totalMileage.load();
+            lastTotalMileage = 0;
             upperDisplay->drawString(SSD1306_ALIGN_RIGHT, std::to_string(lastTotalMileage).c_str(), LiberationSansNarrow_Bold28);
         }
 
-        speed = engineValues->speed.load();
+        speed = speedSensorData->speed;
 
         if (speed == lastSpeed)
         {
+            motor->stop();
             continue;
         }
 
@@ -92,8 +89,9 @@ void Speedometer::loop(EngineValues *engineValues)
 
         stepToGo = convertToStep(speed);
 
+        std::cout << "Speedometer speed: " << speed << " - Current step: " << currentStep << " - Step to go: " << stepToGo << std::endl;
+
         motor->step(stepToGo - currentStep);
-        motor->stop();
         currentStep = stepToGo;
     }
 }

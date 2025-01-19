@@ -35,3 +35,4 @@ T *createSharedMemory(const char *shmName, bool create)
 // Explicit instantiation for required types
 template EngineValues *createSharedMemory<EngineValues>(const char *, bool);
 template SpeedSensorData *createSharedMemory<SpeedSensorData>(const char *, bool);
+template CoolantTempSensorData *createSharedMemory<CoolantTempSensorData>(const char *, bool);

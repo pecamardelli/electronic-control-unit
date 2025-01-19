@@ -24,7 +24,7 @@ FlowSensor::~FlowSensor()
 {
 }
 
-void FlowSensor::loop(EngineValues *engineValues)
+void FlowSensor::loop()
 {
     // Read the current state of the pin
     currentState = bcm2835_gpio_lev(FLOW_SENSOR_PIN);
@@ -40,8 +40,8 @@ void FlowSensor::loop(EngineValues *engineValues)
     // Update the last state
     lastState = currentState;
 
-    engineValues->fuelConsumption.store(data.totalConsumption);
-    engineValues->kml.store(data.totalPulseCount);
+    // engineValues->fuelConsumption.store(data.totalConsumption);
+    // engineValues->kml.store(data.totalPulseCount);
 
-    usleep(loopInterval);
+    std::this_thread::sleep_for(std::chrono::microseconds(loopInterval));
 }

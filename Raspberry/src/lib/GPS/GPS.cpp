@@ -17,7 +17,7 @@ GPS::~GPS()
 {
 }
 
-void GPS::loop(EngineValues *engineValues)
+void GPS::loop()
 {
     std::ifstream gpsStream(GPS_UART, std::ios::in);
     std::string line;
@@ -36,5 +36,5 @@ void GPS::loop(EngineValues *engineValues)
         }
     }
 
-    usleep(loopInterval);
+    std::this_thread::sleep_for(std::chrono::microseconds(loopInterval));
 }

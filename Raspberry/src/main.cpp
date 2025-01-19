@@ -32,10 +32,9 @@ int main(int argc, char *argv[])
 	digitalGauge.setScreen(DIGITAL_GAUGE);
 
 	logger.info("Setting up shared memory for the engine readings.");
-	EngineValues *engineValues = createSharedMemory<EngineValues>("/engineValuesMemory", true);
-	speedSensorData = createSharedMemory<SpeedSensorData>("/speedSensorTransitions", true);
-
-	engineValues->totalMileage.store(sys->getTotalMileage());
+	EngineValues *engineValues = createSharedMemory<EngineValues>("/engineValues", true);
+	speedSensorData = createSharedMemory<SpeedSensorData>("/speedSensorData", true);
+	coolantTempSensorData = createSharedMemory<CoolantTempSensorData>("/coolantTempSensorData", true);
 
 	// Iterate and instantiate processes during iteration
 	for (const auto &factory : processFactories)
@@ -50,7 +49,7 @@ int main(int argc, char *argv[])
 		{
 			// Instantiate here
 			std::shared_ptr<Process> process = factory.create();
-			process->loop(engineValues);
+			process->loop();
 			exit(0);
 		}
 		else
@@ -65,16 +64,15 @@ int main(int argc, char *argv[])
 	// ### MAIN LOOP ###
 	while (!terminateProgram)
 	{
-		engineValues->temp.store(coolantTempSensor.readTemp());
-		engineValues->totalMileage.store(engineValues->totalMileage.load() + 1);
+		coolantTempSensorData->temp = coolantTempSensor.readTemp();
 		// engineValues->volts.store(analogConverter.getVolts());
-		std::cout << "Speed Sensor transitions: " << speedSensorData->transitions << std::endl;
-		std::cout << "Speed Sensor speed: " << speedSensorData->speed << std::endl;
-		std::cout << "Speed Sensor distance: " << speedSensorData->distanceCovered << std::endl;
+		// std::cout << "Speed Sensor transitions: " << speedSensorData->transitions << std::endl;
+		// std::cout << "Speed Sensor speed: " << speedSensorData->speed << std::endl;
+		// std::cout << "Speed Sensor distance: " << speedSensorData->distanceCovered << std::endl;
 
 		// std::cout << "Volts: " << engineValues->volts.load() << std::endl;
 
-		digitalGauge.draw(engineValues);
+		// digitalGauge.draw(engineValues);
 
 		if (engineValues->volts < 6)
 		{
@@ -89,14 +87,19 @@ int main(int argc, char *argv[])
 			engineValues->ignition = true;
 		}
 
-		usleep(mainLoopInterval);
+		std::this_thread::sleep_for(std::chrono::microseconds(mainLoopInterval));
+		// break;
 	}
 
 	logger.info("Exiting main loop. Cleaning up resources.");
 
-	// Cleanup
+	// Cleanup shared memory spaces.
 	munmap(engineValues, sizeof(EngineValues));
-	shm_unlink("/engineValuesMemory"); // Remove shared memory segment
+	shm_unlink("/engineValuesMemory");
+	munmap(const_cast<void *>(reinterpret_cast<const volatile void *>(speedSensorData)), sizeof(SpeedSensorData));
+	shm_unlink("/speedSensorData");
+	munmap(const_cast<void *>(reinterpret_cast<const volatile void *>(coolantTempSensorData)), sizeof(CoolantTempSensorData));
+	shm_unlink("/coolantTempSensorData");
 
 	digitalGauge.setScreen(TORINO_LOGO);
 	digitalGauge.showLogo();

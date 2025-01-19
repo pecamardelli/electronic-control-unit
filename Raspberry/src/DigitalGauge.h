@@ -78,7 +78,7 @@ public:
   const std::string description = "DigitalGauge";
 
   void setup();
-  void draw(EngineValues *);
+  void draw();
   void setScreen(Screen);
   void showLogo();
 

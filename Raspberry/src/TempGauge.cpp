@@ -40,21 +40,18 @@ TempGauge::~TempGauge()
 {
 }
 
-void TempGauge::loop(EngineValues *engineValues)
+void TempGauge::loop()
 {
-    int stepToGo;
-    float temp = 0;
-
     while (!terminateFlag.load())
     {
-        temp = engineValues->temp.load();
+        currentTemp = coolantTempSensorData->temp;
 
-        if (!temp || temp < 0)
-            temp = 0;
-        else if (temp > 130)
-            temp = 130;
+        if (!currentTemp || currentTemp < 0)
+            currentTemp = 0;
+        else if (currentTemp > 130)
+            currentTemp = 130;
 
-        stepToGo = convertToStep(temp);
+        stepToGo = convertToStep(currentTemp);
 
         if (currentStep < stepToGo)
         {
@@ -71,7 +68,7 @@ void TempGauge::loop(EngineValues *engineValues)
             motor->stop();
         }
 
-        usleep(loopInterval);
+        std::this_thread::sleep_for(std::chrono::microseconds(loopInterval));
     }
 
     logger->info("Terminating process...");

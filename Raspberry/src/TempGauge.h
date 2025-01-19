@@ -17,6 +17,7 @@
 
 #include "lib/Stepper/Stepper.h"
 
+extern volatile CoolantTempSensorData *coolantTempSensorData;
 class TempGauge : public Process, public Gauge
 {
 private:
@@ -26,10 +27,12 @@ private:
     const RPiGPIOPin IN3 = RPI_V2_GPIO_P1_15;         // GPIO 22
     const RPiGPIOPin IN4 = RPI_V2_GPIO_P1_21;         // GPIO 9
     const RPiGPIOPin INTERRUPTOR = RPI_V2_GPIO_P1_12; // GPIO 18
+    int stepToGo = 0;
+    float currentTemp = 0;
 
 public:
     TempGauge(/* args */);
     ~TempGauge();
 
-    void loop(EngineValues *) override;
+    void loop() override;
 };

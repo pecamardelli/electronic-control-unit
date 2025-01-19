@@ -24,7 +24,7 @@ public:
     std::string description;
 
     // Pure virtual function
-    virtual void loop(EngineValues *) = 0;
+    virtual void loop() = 0;
 
     static void handleSignal(int);
 

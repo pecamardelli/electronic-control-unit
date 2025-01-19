@@ -39,5 +39,5 @@ private:
 public:
     SpeedSensor(/* args */);
     ~SpeedSensor();
-    void loop(EngineValues *) override;
+    void loop() override;
 };

@@ -26,7 +26,6 @@ private:
     ~BCM2835Manager()
     {
         bcm2835_close();
-        logger.info("BCM2835 closed!");
     }
 
     Logger logger = Logger("BCM2835Manager");

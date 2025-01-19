@@ -21,5 +21,5 @@ public:
     GPS(/* args */);
     ~GPS();
 
-    void loop(EngineValues *) override;
+    void loop() override;
 };
