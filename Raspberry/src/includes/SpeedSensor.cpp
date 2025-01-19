@@ -41,18 +41,19 @@ void SpeedSensor::loop()
         // Read the current state of the digital output (D0)
         currentState = bcm2835_gpio_lev(D0_PIN);
 
+        // Get the current time in microseconds
+        currentTime = bcm2835_st_read();
+
         // Detect a transition from HIGH to LOW (object detection edge)
         if (lastState == HIGH && currentState == LOW)
         {
             speedSensorData->transitions = speedSensorData->transitions + 1;
 
-            // Get the current time in microseconds
-            currentTime = bcm2835_st_read();
-
             if (lastTime != 0)
             {
-                // If this isn't the first detection
-                speedSensorData->speed = calculateSpeed(currentTime - lastTime);
+                // Calculate speed based on the time difference since the last transition
+                lastTransitionDuration = currentTime - lastTime;
+                speedSensorData->speed = calculateSpeed(lastTransitionDuration);
             }
 
             speedSensorData->distanceCovered = kilometersPerTransition * speedSensorData->transitions;
@@ -61,9 +62,29 @@ void SpeedSensor::loop()
             lastTime = currentTime;
         }
 
-        // Consider the car is stopped after a predefined interval since the last transition.
-        if (lastTime + carStoppedInterval * 1e6 < bcm2835_st_read())
+        // If there's been at least one transition, estimate speed
+        if (lastTime != 0)
+        {
+            // Calculate the time elapsed since the last transition
+            elapsedTimeSinceLastTransition = currentTime - lastTime;
+
+            // If no transition has occurred for a while, gradually reduce the speed to zero
+            if (elapsedTimeSinceLastTransition > lastTransitionDuration)
+            {
+                speedSensorData->speed = calculateSpeed(elapsedTimeSinceLastTransition);
+            }
+
+            // If the car is considered stopped, set the speed to 0
+            if (elapsedTimeSinceLastTransition > carStoppedInterval * 1e6)
+            {
+                speedSensorData->speed = 0;
+            }
+        }
+        else
+        {
+            // No transitions detected yet, so set speed to 0
             speedSensorData->speed = 0;
+        }
 
         // Update the last state
         lastState = currentState;
