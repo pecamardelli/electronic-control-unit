@@ -89,6 +89,27 @@ void Speedometer::loop()
 
         stepToGo = convertToStep(speed);
 
+        // Calculate the difference between the target and current step
+        int stepDifference = std::abs(stepToGo - currentStep);
+
+        // Dynamically adjust the motor speed based on step difference
+        if (stepDifference > 100)
+        {
+            motor->setSpeed(4); // Fastest speed for large adjustments
+        }
+        else if (stepDifference > 50)
+        {
+            motor->setSpeed(3); // Medium-fast speed for moderate adjustments
+        }
+        else if (stepDifference > 10)
+        {
+            motor->setSpeed(2); // Medium speed for smaller adjustments
+        }
+        else
+        {
+            motor->setSpeed(1); // Slowest speed for fine adjustments
+        }
+
         std::cout << "Speedometer speed: " << speed << " - Current step: " << currentStep << " - Step to go: " << stepToGo << std::endl;
 
         motor->step(stepToGo - currentStep);

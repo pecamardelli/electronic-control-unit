@@ -17,9 +17,13 @@ SpeedSensor::SpeedSensor(/* args */)
     tireCircumference = calculateTireCircumference();
     kilometersPerTransition = 1.0 * demultiplication / 4.0 / gearRatio * tireCircumference / 1000.0;
 
+    testEnabled = config->get<bool>("test_enabled");
+    testInterval = config->get<uint64_t>("test_interval");
+    speedModifier = config->get<double>("speed_modifier");
+
     // Initialize the shared data
     speedSensorData->transitions = 0;
-    speedSensorData->speed = 0.0;
+    speedSensorData->speed = 120.0;
     speedSensorData->distanceCovered = 0.0;
     speedSensorData->averageSpeed = 0.0;
 
@@ -38,58 +42,71 @@ void SpeedSensor::loop()
 {
     while (!terminateFlag.load())
     {
-        // Read the current state of the digital output (D0)
-        currentState = bcm2835_gpio_lev(D0_PIN);
-
-        // Get the current time in microseconds
+        // Read the current time in microseconds
         currentTime = bcm2835_st_read();
 
-        // Detect a transition from HIGH to LOW (object detection edge)
-        if (lastState == HIGH && currentState == LOW)
+        // Simulation mode for testing
+        if (testEnabled)
         {
-            speedSensorData->transitions = speedSensorData->transitions + 1;
+            if (speedSensorData->speed < 0 || speedSensorData->speed > 240)
+                speedModifier *= -1;
 
-            if (lastTime != 0)
-            {
-                // Calculate speed based on the time difference since the last transition
-                lastTransitionDuration = currentTime - lastTime;
-                speedSensorData->speed = calculateSpeed(lastTransitionDuration);
-            }
-
-            speedSensorData->distanceCovered = kilometersPerTransition * speedSensorData->transitions;
-
-            // Update the last detection time
-            lastTime = currentTime;
-        }
-
-        // If there's been at least one transition, estimate speed
-        if (lastTime != 0)
-        {
-            // Calculate the time elapsed since the last transition
-            elapsedTimeSinceLastTransition = currentTime - lastTime;
-
-            // If no transition has occurred for a while, gradually reduce the speed to zero
-            if (elapsedTimeSinceLastTransition > lastTransitionDuration)
-            {
-                speedSensorData->speed = calculateSpeed(elapsedTimeSinceLastTransition);
-            }
-
-            // If the car is considered stopped, set the speed to 0
-            if (elapsedTimeSinceLastTransition > carStoppedInterval * 1e6)
-            {
-                speedSensorData->speed = 0;
-            }
+            speedSensorData->speed = speedSensorData->speed + speedModifier;
         }
         else
         {
-            // No transitions detected yet, so set speed to 0
-            speedSensorData->speed = 0;
+            // Real sensor mode
+            // Read the current state of the digital output (D0)
+            currentState = bcm2835_gpio_lev(D0_PIN);
+
+            // Detect a transition from HIGH to LOW (object detection edge)
+            if (lastState == HIGH && currentState == LOW)
+            {
+                speedSensorData->transitions = speedSensorData->transitions + 1;
+
+                if (lastTime != 0)
+                {
+                    // Calculate speed based on the time difference since the last transition
+                    lastTransitionDuration = currentTime - lastTime;
+                    speedSensorData->speed = calculateSpeed(lastTransitionDuration);
+                }
+
+                speedSensorData->distanceCovered = kilometersPerTransition * speedSensorData->transitions;
+
+                // Update the last detection time
+                lastTime = currentTime;
+            }
+
+            // If there's been at least one transition, estimate speed
+            if (lastTime != 0)
+            {
+                // Calculate the time elapsed since the last transition
+                elapsedTimeSinceLastTransition = currentTime - lastTime;
+
+                // If no transition has occurred for a while, gradually reduce the speed to zero
+                if (elapsedTimeSinceLastTransition > lastTransitionDuration)
+                {
+                    speedSensorData->speed = calculateSpeed(elapsedTimeSinceLastTransition);
+                }
+
+                // If the car is considered stopped, set the speed to 0
+                if (elapsedTimeSinceLastTransition > carStoppedInterval * 1e6)
+                {
+                    speedSensorData->speed = 0;
+                }
+            }
+            else
+            {
+                // No transitions detected yet, so set speed to 0
+                speedSensorData->speed = 0;
+            }
+
+            // Update the last state
+            lastState = currentState;
         }
 
-        // Update the last state
-        lastState = currentState;
-
-        std::this_thread::sleep_for(std::chrono::microseconds(loopInterval));
+        // Sleep to control loop execution frequency
+        std::this_thread::sleep_for(std::chrono::microseconds(testEnabled ? testInterval : loopInterval));
     }
 }
 

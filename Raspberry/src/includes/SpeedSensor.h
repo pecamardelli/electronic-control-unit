@@ -30,6 +30,10 @@ private:
     uint64_t lastTransitionDuration = 0;
     uint64_t elapsedTimeSinceLastTransition = 0;
 
+    bool testEnabled = false;
+    uint64_t testInterval = 0;
+    double speedModifier = 0;
+
     uint8_t lastState = LOW; // Store the last state of the sensor
     uint64_t lastTime = 0;   // Time of the last detection in microseconds
     uint8_t currentState;
