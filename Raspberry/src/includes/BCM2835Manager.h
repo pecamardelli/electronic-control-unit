@@ -11,7 +11,6 @@ public:
         static BCM2835Manager instance; // Guaranteed to be initialized once
         return instance;
     }
-    static bool ready = false;
 
 private:
     BCM2835Manager()
@@ -28,8 +27,7 @@ private:
             exit(1);
         }
 
-        bcm2835_i2c_set_baudrate(1000000); // Set I2C clock speed to 1mHz
-        static ready = true;
+        bcm2835_i2c_set_baudrate(1000000); // Set I2C clock speed to 1Mhz
         logger.info("BCM2835 initialized!");
     }
 
