@@ -8,10 +8,11 @@ int main(int argc, char *argv[])
 	Logger logger("Main");
 	logger.info("Program started.");
 	Config config("global");
-	TempSensor tempSensor;
 
 	useconds_t mainLoopInterval = config.get<useconds_t>("main_loop_interval");
 	// unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
+	I2CMultiplexer i2cMultiplexer;
+	i2cMultiplexer.selectChannel(1);
 
 	// Add smart pointer factories to the vector
 	processFactories.push_back({"TempGauge", []()
@@ -21,12 +22,10 @@ int main(int argc, char *argv[])
 	processFactories.push_back({"Speedometer", []()
 								{ return std::make_shared<Speedometer>(); }});
 
-	// I2CMultiplexer i2cMultiplexer;
-	// // Select a channel (example: channel 0)
-	// i2cMultiplexer.selectChannel(1);
 	DigitalGauge digitalGauge;
-	// AnalogConverter analogConverter;
+	AnalogConverter analogConverter;
 	CoolantTempSensor coolantTempSensor;
+	TempSensor tempSensor;
 
 	digitalGauge.showLogo();
 	digitalGauge.setScreen(DIGITAL_GAUGE);
@@ -70,22 +69,23 @@ int main(int argc, char *argv[])
 		// std::cout << "Speed Sensor speed: " << speedSensorData->speed << std::endl;
 		// std::cout << "Speed Sensor distance: " << speedSensorData->distanceCovered << std::endl;
 
-		// std::cout << "Volts: " << engineValues->volts.load() << std::endl;
+		std::cout << "Volts: " << engineValues->volts.load() << std::endl;
+		// i2cMultiplexer.selectChannel(1);
 
-		// digitalGauge.draw(engineValues);
+		digitalGauge.drawVolts(analogConverter.getVolts());
 
-		if (engineValues->volts < 6)
-		{
-			if (engineValues->ignition)
-			{
-				terminateProgram = true;
-			}
-			engineValues->ignition = false;
-		}
-		else
-		{
-			engineValues->ignition = true;
-		}
+		// if (engineValues->volts < 6)
+		// {
+		// 	if (engineValues->ignition)
+		// 	{
+		// 		terminateProgram = true;
+		// 	}
+		// 	engineValues->ignition = false;
+		// }
+		// else
+		// {
+		// 	engineValues->ignition = true;
+		// }
 
 		std::this_thread::sleep_for(std::chrono::microseconds(mainLoopInterval));
 		// break;

@@ -87,7 +87,11 @@
     "cinttypes": "c",
     "bcm2835.h": "c",
     "gui_bmp.h": "c",
-    "stepper.h": "c"
+    "stepper.h": "c",
+    "filesystem": "cpp",
+    "stdio.h": "c",
+    "gps.h": "c",
+    "i2cmultiplexer.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

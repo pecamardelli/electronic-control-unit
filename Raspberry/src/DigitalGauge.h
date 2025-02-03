@@ -69,7 +69,6 @@ private:
 
   void drawTemp(uint8_t);
   void drawKml(float);
-  void drawVolts(float);
   void drawFuelConsumption(float);
 
 public:
@@ -79,6 +78,7 @@ public:
 
   void setup();
   void draw();
+  void drawVolts(float);
   void setScreen(Screen);
   void showLogo();
 

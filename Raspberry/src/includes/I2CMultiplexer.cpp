@@ -12,7 +12,6 @@ I2CMultiplexer::I2CMultiplexer(/* args */)
 
     logger = std::make_unique<Logger>(description);
     bcm2835_i2c_setSlaveAddress(TCA9548A_ADDRESS);
-    bcm2835_i2c_set_baudrate(100000); // Set I2C clock speed to 100kHz
 }
 
 I2CMultiplexer::~I2CMultiplexer()
