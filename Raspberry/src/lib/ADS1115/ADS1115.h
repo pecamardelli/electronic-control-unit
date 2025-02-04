@@ -1,5 +1,14 @@
+/*
+ * ADS1115.h
+ *
+ *  Created on: 2025-03-02
+ *
+ *  Analog to Digital Converter
+ */
+
 #pragma once
 
+#include <memory>
 #include "Logger.h"
 #include "BCM2835Manager.h"
 
@@ -7,17 +16,16 @@
 #define CONVERSION_REG 0x00
 #define CONFIG_REG 0x01
 
-class AnalogConverter
+class ADS1115
 {
 private:
     /* data */
+    std::string description;
+    std::unique_ptr<Logger> logger;
     const unsigned char muxSettings[4] = {0x40, 0x50, 0x60, 0x70}; // A0, A1, A2, A3
-    const u_int8_t VOLT_SENSOR_CHANNEL = 0;
-    int getRawValue(const u_int8_t);
-    Logger logger = Logger("AnalogConverter");
 
 public:
-    AnalogConverter(/* args */);
-    ~AnalogConverter();
-    float getVolts();
+    ADS1115(/* args */);
+    ~ADS1115();
+    int getRawValue(const u_int8_t channel);
 };

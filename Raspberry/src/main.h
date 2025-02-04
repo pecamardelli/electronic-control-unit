@@ -11,7 +11,6 @@
 #include "Process.h"
 #include "Logger.h"
 #include "System.h"
-#include "AnalogConverter.h"
 #include "Relay.h"
 #include "CoolantTempSensor.h"
 #include "FlowSensor.h"
@@ -23,6 +22,8 @@
 #include "Speedometer.h"
 #include "I2CMultiplexer.h"
 #include "TempSensor.h"
+#include "ADS1115.h"
+#include "VoltSensor.h"
 
 // Initialize static member
 std::atomic<bool> Process::terminateFlag(false);
@@ -44,6 +45,7 @@ volatile SpeedSensorData *speedSensorData = nullptr;
 volatile CoolantTempSensorData *coolantTempSensorData = nullptr;
 
 System *sys;
+ADS1115 ads1115;
 
 bool terminateProgram = false;
 volatile bool terminateChildProcess = false;

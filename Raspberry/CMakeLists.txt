@@ -24,6 +24,7 @@ set(DIR_DISPLAY_GUI "${DIR_DISPLAY}/GUI")
 set(DIR_STEPPER "${DIR_LIB}/Stepper")
 set(DIR_GPS "${DIR_LIB}/GPS")
 set(DIR_SSD1306 "${DIR_LIB}/SSD1306")
+set(DIR_ADS1115 "${DIR_LIB}/ADS1115")
 
 # Output Directories
 set(BUILD_DIR "${CMAKE_BINARY_DIR}/build")
@@ -41,6 +42,7 @@ file(GLOB SRC_CPP
     "${DIR_STEPPER}/*.cpp"
     "${DIR_GPS}/*.cpp"
     "${DIR_SSD1306}/*.cpp"
+    "${DIR_ADS1115}/*.cpp"
     "${DIR_DISPLAY}/*.cpp"
     "${DIR_DISPLAY_EPD}/*.cpp"
     "${DIR_DISPLAY_FONTS}/*.cpp"
@@ -58,6 +60,7 @@ include_directories(
     ${DIR_STEPPER}
     ${DIR_GPS}
     ${DIR_SSD1306}
+    ${DIR_ADS1115}
     ${DIR_HELPERS}
     ${DIR_INCLUDES}
 )

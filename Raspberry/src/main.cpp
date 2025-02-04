@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 								{ return std::make_shared<Speedometer>(); }});
 
 	DigitalGauge digitalGauge;
-	AnalogConverter analogConverter;
+	VoltSensor voltSensor;
 	CoolantTempSensor coolantTempSensor;
 	TempSensor tempSensor;
 
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 	while (!terminateProgram)
 	{
 		coolantTempSensorData->temp = coolantTempSensor.readTemp();
-		// engineValues->volts.store(analogConverter.getVolts());
+		engineValues->volts.store(voltSensor.getValue());
 		// std::cout << "Speed Sensor transitions: " << speedSensorData->transitions << std::endl;
 		// std::cout << "Speed Sensor speed: " << speedSensorData->speed << std::endl;
 		// std::cout << "Speed Sensor distance: " << speedSensorData->distanceCovered << std::endl;
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 		std::cout << "Volts: " << engineValues->volts.load() << std::endl;
 		// i2cMultiplexer.selectChannel(1);
 
-		digitalGauge.drawVolts(analogConverter.getVolts());
+		// digitalGauge.drawVolts(voltSensor.getValue());
 
 		// if (engineValues->volts < 6)
 		// {
