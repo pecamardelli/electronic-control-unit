@@ -4,15 +4,27 @@ int main(int argc, char *argv[])
 {
 	std::string programName = getProgramName(argv[0]);
 
-	sys = new System(programName);
 	Logger logger("Main");
 	logger.info("Program started.");
+
+	if (!bcm2835_init())
+	{
+		logger.error("BCM2835 initialization failed!");
+		exit(1);
+	}
+
+	i2cBusFd = open(I2C_BUS, O_RDWR);
+
+	logger.info("BCM2835 initialized!");
+
+	sys = new System(programName);
 	Config config("global");
 
+	ads1115 = std::make_unique<ADS1115>(i2cBusFd);
 	useconds_t mainLoopInterval = config.get<useconds_t>("main_loop_interval");
 	// unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
-	I2CMultiplexer i2cMultiplexer;
-	i2cMultiplexer.selectChannel(1);
+	// I2CMultiplexer i2cMultiplexer;
+	// i2cMultiplexer.selectChannel(1);
 
 	// Add smart pointer factories to the vector
 	processFactories.push_back({"TempGauge", []()
@@ -23,7 +35,7 @@ int main(int argc, char *argv[])
 								{ return std::make_shared<Speedometer>(); }});
 
 	DigitalGauge digitalGauge;
-	VoltSensor voltSensor;
+	VoltSensor voltSensor(ads1115.get());
 	CoolantTempSensor coolantTempSensor;
 	TempSensor tempSensor;
 

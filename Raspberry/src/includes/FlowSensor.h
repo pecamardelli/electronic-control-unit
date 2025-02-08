@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "Logger.h"
-#include "BCM2835Manager.h"
 #include "Process.h"
 #include "../common.h"
 

@@ -2,8 +2,6 @@
 
 I2CMultiplexer::I2CMultiplexer(/* args */)
 {
-    BCM2835Manager::getInstance();
-
     // Start I2C and set the TCA9548A address
     if (!bcm2835_i2c_begin())
     {

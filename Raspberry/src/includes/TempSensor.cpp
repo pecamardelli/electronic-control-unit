@@ -2,8 +2,6 @@
 
 TempSensor::TempSensor(/* args */)
 {
-    BCM2835Manager::getInstance();
-
     uint8_t data[5] = {0};
     if (readDHT11(data))
     {

@@ -2,8 +2,6 @@
 
 Relay::Relay(/* args */)
 {
-    BCM2835Manager::getInstance();
-
     // Set the relay pin as an output
     bcm2835_gpio_fsel(RELAY_PIN, BCM2835_GPIO_FSEL_OUTP);
 }

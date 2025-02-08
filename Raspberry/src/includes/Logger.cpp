@@ -14,6 +14,19 @@ Logger::~Logger()
     }
 }
 
+std::shared_ptr<Logger> Logger::instance = nullptr;
+std::mutex Logger::logMutex;
+
+std::shared_ptr<Logger> Logger::getInstance()
+{
+    std::lock_guard<std::mutex> lock(logMutex);
+    if (!instance)
+    {
+        instance = std::shared_ptr<Logger>(new Logger());
+    }
+    return instance;
+}
+
 void Logger::setDescription(const std::string &_description)
 {
     description = _description;
@@ -78,16 +91,19 @@ void Logger::log(const std::string &level, const std::string &message)
 
 void Logger::info(const std::string &message)
 {
+    std::lock_guard<std::mutex> lock(logMutex);
     log("INFO", message);
 }
 
 void Logger::warning(const std::string &message)
 {
+    std::lock_guard<std::mutex> lock(logMutex);
     log("WARNING", message);
 }
 
 void Logger::error(const std::string &message)
 {
+    std::lock_guard<std::mutex> lock(logMutex);
     log("ERROR", message);
 }
 

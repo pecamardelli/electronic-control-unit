@@ -2,9 +2,9 @@
 
 #include <iostream>
 #include <cstring>
+#include <bcm2835.h>
 
 #include <../LCD_display/Fonts/fonts.h>
-#include "../../includes/BCM2835Manager.h"
 
 // Define I2C address of SSD1306 (change if needed)
 #define SSD1306_I2C_ADDR 0x3C

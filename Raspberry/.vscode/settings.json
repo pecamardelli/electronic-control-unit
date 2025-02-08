@@ -91,7 +91,10 @@
     "filesystem": "cpp",
     "stdio.h": "c",
     "gps.h": "c",
-    "i2cmultiplexer.h": "c"
+    "i2cmultiplexer.h": "c",
+    "condition_variable": "cpp",
+    "mutex": "cpp",
+    "ioctl.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

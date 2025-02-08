@@ -20,9 +20,16 @@
 #include <ctime>
 #endif
 
+#include <memory>
+#include <mutex>
+
 class Logger
 {
 private:
+    Logger() = default; // Private constructor for Singleton
+    static std::shared_ptr<Logger> instance;
+    static std::mutex logMutex;
+
     std::ofstream logFile;
     std::string logFilePath = "/var/log/";
     std::string description = "Main";
@@ -36,6 +43,7 @@ private:
 public:
     Logger(std::string);
     ~Logger();
+    static std::shared_ptr<Logger> getInstance();
 
     void info(const std::string &);
     void warning(const std::string &);

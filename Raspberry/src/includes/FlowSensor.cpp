@@ -2,7 +2,6 @@
 
 FlowSensor::FlowSensor(/* args */)
 {
-    BCM2835Manager::getInstance();
     description = "FlowSensor";
     logger = std::make_unique<Logger>(description);
     config = std::make_unique<Config>(description);

@@ -162,11 +162,11 @@ UBYTE DEV_ModuleInit(void)
 {
 
 #ifdef USE_BCM2835_LIB
-    if (!bcm2835_init())
-    {
-        printf("bcm2835 init failed  !!! \r\n");
-        exit(1);
-    }
+    // if (!bcm2835_init())
+    // {
+    //     printf("bcm2835 init failed  !!! \r\n");
+    //     exit(1);
+    // }
     DEV_GPIO_Init();
     bcm2835_spi_begin();                                       // Start spi interface, set spi pin for the reuse function
     bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);   // High first transmission

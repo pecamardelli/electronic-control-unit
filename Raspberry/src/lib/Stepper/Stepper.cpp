@@ -84,7 +84,6 @@
  */
 Stepper::Stepper(int steps, int pin_1, int pin_2)
 {
-  BCM2835Manager::getInstance();
   step_number = 0;         // which step the motor is on
   direction = 0;           // motor direction
   last_step_time = 0;      // time stamp in us of the last step taken
@@ -114,7 +113,6 @@ Stepper::Stepper(int steps, int pin_1, int pin_2)
 Stepper::Stepper(int steps, int pin_1, int pin_2,
                  int pin_3, int pin_4)
 {
-  BCM2835Manager::getInstance();
   step_number = 0;         // which step the motor is on
   direction = 0;           // motor direction
   last_step_time = 0;      // time stamp in us of the last step taken
@@ -146,7 +144,6 @@ Stepper::Stepper(int steps, int pin_1, int pin_2,
 Stepper::Stepper(int steps, int pin_1, int pin_2,
                  int pin_3, int pin_4, int pin_5)
 {
-  BCM2835Manager::getInstance();
   step_number = 0;         // which step the motor is on
   direction = 0;           // motor direction
   last_step_time = 0;      // time stamp in us of the last step taken

@@ -81,7 +81,7 @@
 #define STEPPER_H_
 
 #include "../../includes/System.h"
-#include "../../includes/BCM2835Manager.h"
+#include <bcm2835.h>
 
 // library interface description
 class Stepper

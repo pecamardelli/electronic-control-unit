@@ -3,8 +3,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
-
-#include "BCM2835Manager.h"
+#include <bcm2835.h>
 
 class TempSensor
 {

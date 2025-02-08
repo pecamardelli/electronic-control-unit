@@ -2,7 +2,6 @@
 
 DigitalGauge::DigitalGauge(/* args */)
 {
-    BCM2835Manager::getInstance();
     logger.info("Initializing Round Display.");
     /* Module Init */
     if (DEV_ModuleInit() != 0)

@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Directories
 set(DIR_SRC "${CMAKE_SOURCE_DIR}/src")
 set(DIR_LIB "${DIR_SRC}/lib")
+set(DIR_CORE "${DIR_SRC}/core")
 set(DIR_INCLUDES "${DIR_SRC}/includes")
 set(DIR_HELPERS "${DIR_SRC}/helpers")
 set(DIR_ASSETS "${DIR_SRC}/assets")
@@ -36,6 +37,7 @@ set(DATA_DIR "/var/${PROJECT_NAME}")
 # Collect Sources
 file(GLOB SRC_CPP
     "${DIR_SRC}/*.cpp"
+    "${DIR_CORE}/*.cpp"
     "${DIR_INCLUDES}/*.cpp"
     "${DIR_HELPERS}/*.cpp"
     "${DIR_IMAGES}/*.cpp"
@@ -63,6 +65,7 @@ include_directories(
     ${DIR_ADS1115}
     ${DIR_HELPERS}
     ${DIR_INCLUDES}
+    ${DIR_CORE}
 )
 
 # Library Options

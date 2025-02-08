@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BCM2835Manager.h"
+#include <bcm2835.h>
 
 class Button
 {

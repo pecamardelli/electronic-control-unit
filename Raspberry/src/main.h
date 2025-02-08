@@ -1,11 +1,14 @@
 #pragma once
 
+#define I2C_BUS "/dev/i2c-1"
+
 #include <sys/wait.h>
 #include <memory> // For smart pointers
 #include <iostream>
 #include <vector>
 #include <functional>
 #include <typeinfo>
+#include <bcm2835.h>
 
 #include "common.h"
 #include "Process.h"
@@ -45,7 +48,8 @@ volatile SpeedSensorData *speedSensorData = nullptr;
 volatile CoolantTempSensorData *coolantTempSensorData = nullptr;
 
 System *sys;
-ADS1115 ads1115;
+std::unique_ptr<ADS1115> ads1115;
+int i2cBusFd;
 
 bool terminateProgram = false;
 volatile bool terminateChildProcess = false;

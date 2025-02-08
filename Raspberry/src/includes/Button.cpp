@@ -2,7 +2,6 @@
 
 Button::Button(RPiGPIOPin _pin)
 {
-    BCM2835Manager::getInstance();
     pin = _pin;
 
     // Set the pin as input with a pull-up resistor

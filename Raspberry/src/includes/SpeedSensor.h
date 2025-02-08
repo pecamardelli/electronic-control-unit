@@ -1,8 +1,7 @@
 #pragma once
 
 #include <cmath>
-
-#include "BCM2835Manager.h"
+#include <bcm2835.h>
 #include "Process.h"
 #include "../helpers/helpers.h"
 

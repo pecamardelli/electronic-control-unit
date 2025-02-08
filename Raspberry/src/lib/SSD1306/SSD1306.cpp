@@ -2,7 +2,6 @@
 
 SSD1306::SSD1306(/* args */)
 {
-    BCM2835Manager::getInstance();
     init();
     clear();
 }

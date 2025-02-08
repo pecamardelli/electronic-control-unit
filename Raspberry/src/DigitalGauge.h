@@ -8,7 +8,6 @@
 
 #include "common.h"
 #include "Logger.h"
-#include "BCM2835Manager.h"
 
 extern std::string IMAGES_PATH;
 
