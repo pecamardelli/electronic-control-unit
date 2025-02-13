@@ -37,7 +37,7 @@ private:
         {"Speedometer", {{"loop_interval", "1000"}, {"step_offset", "0"}}},
     };
     std::string dataPath;
-    std::ifstream totalMileage;
+    std::string mileageFileName;
 
     ConfigMap
     loadConfig(const std::string &);
@@ -49,7 +49,8 @@ public:
     void setProgramName(const char *);
     void shutdown();
     SectionMap getConfig(const std::string &);
-    uint64_t getTotalMileage();
+    uint64_t getCurrentMileage();
+    void saveTotalMileage(uint64_t mileage);
 
     static uint64_t uptime();
 };

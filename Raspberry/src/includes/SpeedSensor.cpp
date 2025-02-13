@@ -21,9 +21,22 @@ SpeedSensor::SpeedSensor(/* args */)
     testInterval = config->get<uint64_t>("test_interval");
     speedModifier = config->get<double>("speed_modifier");
 
+    lowerSpeed = config->get<double>("lower_speed");
+    higherSpeed = config->get<double>("higher_speed");
+
+    if (lowerSpeed < 0)
+        lowerSpeed = 0;
+    if (higherSpeed > 240)
+        higherSpeed = 240;
+    if (lowerSpeed > higherSpeed)
+    {
+        lowerSpeed = 0;
+        higherSpeed = 240;
+    }
+
     // Initialize the shared data
     speedSensorData->transitions = 0;
-    speedSensorData->speed = 120.0;
+    speedSensorData->speed = testEnabled ? lowerSpeed : 0.0;
     speedSensorData->distanceCovered = 0.0;
     speedSensorData->averageSpeed = 0.0;
 
@@ -48,7 +61,7 @@ void SpeedSensor::loop()
         // Simulation mode for testing
         if (testEnabled)
         {
-            if (speedSensorData->speed < 0 || speedSensorData->speed > 240)
+            if (speedSensorData->speed < lowerSpeed || speedSensorData->speed > higherSpeed)
                 speedModifier *= -1;
 
             speedSensorData->speed = speedSensorData->speed + speedModifier;
@@ -104,7 +117,7 @@ void SpeedSensor::loop()
             // Update the last state
             lastState = currentState;
         }
-
+        speedSensorData->distanceCovered += 0.00001;
         // Sleep to control loop execution frequency
         std::this_thread::sleep_for(std::chrono::microseconds(testEnabled ? testInterval : loopInterval));
     }

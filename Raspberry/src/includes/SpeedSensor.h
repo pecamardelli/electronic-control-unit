@@ -32,6 +32,8 @@ private:
     bool testEnabled = false;
     uint64_t testInterval = 0;
     double speedModifier = 0;
+    double lowerSpeed = 0;
+    double higherSpeed = 240;
 
     uint8_t lastState = LOW; // Store the last state of the sensor
     uint64_t lastTime = 0;   // Time of the last detection in microseconds

@@ -44,12 +44,12 @@ struct Factory
 // Store factory functions
 std::vector<Factory> processFactories;
 
+volatile EngineValues *engineValues = nullptr;
 volatile SpeedSensorData *speedSensorData = nullptr;
 volatile CoolantTempSensorData *coolantTempSensorData = nullptr;
 
 System *sys;
 std::unique_ptr<ADS1115> ads1115;
-int i2cBusFd;
 
 bool terminateProgram = false;
 volatile bool terminateChildProcess = false;

@@ -81,10 +81,10 @@ void DigitalGauge::draw()
     switch (currentScreen)
     {
     case DIGITAL_GAUGE:
-        // drawKml(engineValues->kml);
-        // drawTemp(engineValues->temp);
-        // drawVolts(engineValues->volts);
-        // drawFuelConsumption(engineValues->fuelConsumption);
+        drawKml(engineValues->kml);
+        drawTemp(coolantTempSensorData->temp);
+        drawVolts(engineValues->volts);
+        drawFuelConsumption(engineValues->fuelConsumption);
         break;
     default:
         break;

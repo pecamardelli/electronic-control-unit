@@ -10,6 +10,8 @@
 #include "Logger.h"
 
 extern std::string IMAGES_PATH;
+extern volatile EngineValues *engineValues;
+extern volatile CoolantTempSensorData *coolantTempSensorData;
 
 class DigitalGauge
 {

@@ -8,7 +8,6 @@ Speedometer::Speedometer(/* args */)
     interruptor = std::make_unique<Button>(INTERRUPTOR);
     logger = std::make_unique<Logger>(description);
     config = std::make_unique<Config>(description);
-    upperDisplay = std::make_unique<SSD1306>();
 
     logger->info("Setting up...");
 
@@ -62,57 +61,52 @@ Speedometer::~Speedometer()
 
 void Speedometer::loop()
 {
-    while (!terminateFlag.load())
+    // std::this_thread::sleep_for(std::chrono::microseconds(loopInterval));
+
+    if (lastTotalMileage != 0)
     {
-        std::this_thread::sleep_for(std::chrono::microseconds(loopInterval));
-
-        if (lastTotalMileage != 0)
-        {
-            lastTotalMileage = 0;
-            upperDisplay->drawString(SSD1306_ALIGN_RIGHT, std::to_string(lastTotalMileage).c_str(), LiberationSansNarrow_Bold28);
-        }
-
-        speed = speedSensorData->speed;
-
-        if (speed == lastSpeed)
-        {
-            motor->stop();
-            continue;
-        }
-
-        lastSpeed = speed;
-
-        if (!speed || speed < 0)
-            speed = 0;
-        else if (speed > 240)
-            speed = 240;
-
-        stepToGo = convertToStep(speed);
-
-        // Calculate the difference between the target and current step
-        int stepDifference = std::abs(stepToGo - currentStep);
-
-        // Dynamically adjust the motor speed based on step difference
-        if (stepDifference > 100)
-        {
-            motor->setSpeed(4); // Fastest speed for large adjustments
-        }
-        else if (stepDifference > 50)
-        {
-            motor->setSpeed(3); // Medium-fast speed for moderate adjustments
-        }
-        else if (stepDifference > 10)
-        {
-            motor->setSpeed(2); // Medium speed for smaller adjustments
-        }
-        else
-        {
-            motor->setSpeed(1); // Slowest speed for fine adjustments
-        }
-
-        std::cout << "Speedometer speed: " << speed << " - Current step: " << currentStep << " - Step to go: " << stepToGo << std::endl;
-
-        motor->step(stepToGo - currentStep);
-        currentStep = stepToGo;
+        lastTotalMileage = 0;
+        upperDisplay.drawString(SSD1306_ALIGN_RIGHT, std::to_string(lastTotalMileage).c_str(), LiberationSansNarrow_Bold28);
     }
+
+    speed = speedSensorData->speed;
+
+    if (speed == lastSpeed)
+        return motor->stop();
+
+    lastSpeed = speed;
+
+    if (!speed || speed < 0)
+        speed = 0;
+    else if (speed > 240)
+        speed = 240;
+
+    stepToGo = convertToStep(speed);
+
+    // Calculate the difference between the target and current step
+    int stepDifference = std::abs(stepToGo - currentStep);
+
+    // Dynamically adjust the motor speed based on step difference
+    if (stepDifference > 100)
+    {
+        motor->setSpeed(4); // Fastest speed for large adjustments
+    }
+    else if (stepDifference > 50)
+    {
+        motor->setSpeed(3); // Medium-fast speed for moderate adjustments
+    }
+    else if (stepDifference > 10)
+    {
+        motor->setSpeed(2); // Medium speed for smaller adjustments
+    }
+    else
+    {
+        motor->setSpeed(1); // Slowest speed for fine adjustments
+    }
+
+    std::cout << "Speedometer speed: " << speed << " - Current step: " << currentStep << " - Step to go: " << stepToGo << std::endl;
+
+    int step = (stepToGo - currentStep) > 0 ? 1 : -1;
+    motor->step(step);
+    currentStep += step;
 }

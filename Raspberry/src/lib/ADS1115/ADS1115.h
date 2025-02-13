@@ -12,6 +12,7 @@
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
 #include <unistd.h>
+#include <bcm2835.h>
 
 #include "Logger.h"
 
@@ -29,7 +30,7 @@ private:
     const unsigned char muxSettings[4] = {0x40, 0x50, 0x60, 0x70}; // A0, A1, A2, A3
 
 public:
-    ADS1115(int);
+    ADS1115();
     ~ADS1115();
     int getRawValue(const u_int8_t channel);
 };

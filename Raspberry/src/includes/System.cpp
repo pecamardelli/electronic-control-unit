@@ -5,7 +5,7 @@ System::System(std::string programName)
     mainRelay.state(HIGH);
     config = loadConfig("/etc/" + programName + "/config.ini");
     dataPath = "/var/" + programName + "/";
-    totalMileage.open("/var/" + programName + "/total_mileage");
+    mileageFileName = "/var/" + programName + "/total_mileage";
 
     // Display parsed configuration
     // for (const auto &[section, values] : config)
@@ -129,16 +129,47 @@ SectionMap System::getConfig(const std::string &section)
     return sectionIt->second; // Dereference the iterator to get the section
 }
 
-uint64_t System::getTotalMileage()
+uint64_t System::getCurrentMileage()
 {
-    if (!totalMileage.is_open())
+    // Open the file for reading.
+    std::ifstream mileageFile(mileageFileName, std::ios::in);
+    if (!mileageFile.is_open())
     {
-        logger.error("Could not open total mileage file!");
+        logger.error("Could not open total mileage file for reading!");
         return 0;
     }
 
     std::string line;
-    std::getline(totalMileage, line);
+    std::getline(mileageFile, line);
+    mileageFile.close();
 
-    return std::stoul(line);
+    try
+    {
+        return std::stoul(line);
+    }
+    catch (const std::exception &e)
+    {
+        logger.error("Error converting mileage value: " + std::string(e.what()));
+        return 0;
+    }
+}
+
+void System::saveTotalMileage(uint64_t mileage)
+{
+    // Open the file for output; std::ios::trunc clears its current contents.
+    std::ofstream mileageFile(mileageFileName, std::ios::out | std::ios::trunc);
+    if (!mileageFile.is_open())
+    {
+        logger.error("Could not open total mileage file for writing!");
+        return;
+    }
+
+    mileageFile << mileage;
+
+    if (!mileageFile.good())
+    {
+        logger.error("Error occurred while writing total mileage to file!");
+    }
+
+    // The file will be closed automatically when outFile goes out of scope,
 }
