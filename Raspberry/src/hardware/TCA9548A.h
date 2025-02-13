@@ -8,15 +8,15 @@
 
 #define TCA9548A_ADDRESS 0x70 // Default I2C address for the TCA9548A
 
-class I2CMultiplexer
+class TCA9548A
 {
 private:
     /* data */
     std::unique_ptr<Logger> logger;
-    std::string description = "I2CMultiplexer";
+    std::string description = "TCA9548A";
 
 public:
-    I2CMultiplexer(/* args */);
-    ~I2CMultiplexer();
+    TCA9548A(/* args */);
+    ~TCA9548A();
     void selectChannel(uint8_t);
 };

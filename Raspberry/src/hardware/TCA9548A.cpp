@@ -1,16 +1,16 @@
-#include "I2CMultiplexer.h"
+#include "TCA9548A.h"
 
-I2CMultiplexer::I2CMultiplexer(/* args */)
+TCA9548A::TCA9548A(/* args */)
 {
     logger = std::make_unique<Logger>(description);
 }
 
-I2CMultiplexer::~I2CMultiplexer()
+TCA9548A::~TCA9548A()
 {
 }
 
 // Function to select a channel on the TCA9548A
-void I2CMultiplexer::selectChannel(uint8_t channel)
+void TCA9548A::selectChannel(uint8_t channel)
 {
     if (channel > 7)
     {

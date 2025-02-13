@@ -26,7 +26,7 @@
 #endif
 
 #include "../common.h"
-#include "../includes/Logger.h"
+#include "Logger.h"
 
 void signalHandler(int);
 void terminateChildProcesses(std::vector<ChildProcess>);

@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 	ads1115 = std::make_unique<ADS1115>();
 	useconds_t mainLoopInterval = config.get<useconds_t>("main_loop_interval");
 	// unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
-	I2CMultiplexer i2cMultiplexer;
+	TCA9548A i2cMultiplexer;
 	i2cMultiplexer.selectChannel(1);
 
 	// Add smart pointer factories to the vector
@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
 
 	DigitalGauge digitalGauge;
 	VoltSensor voltSensor(ads1115.get());
-	CoolantTempSensor coolantTempSensor;
-	TempSensor tempSensor;
+	DS18B20 coolantTempSensor;
+	DHT11 tempSensor;
 	Speedometer speedometer;
 
 	digitalGauge.showLogo();

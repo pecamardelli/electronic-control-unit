@@ -15,7 +15,7 @@
 #include "Button.h"
 #include "common.h"
 
-#include "lib/Stepper/Stepper.h"
+#include "STEPPER.h"
 
 extern volatile CoolantTempSensorData *coolantTempSensorData;
 class TempGauge : public Process, public Gauge

@@ -14,7 +14,7 @@
 #include <cmath>
 #include "Logger.h"
 
-class CoolantTempSensor
+class DS18B20
 {
 public:
     /**
@@ -22,17 +22,17 @@ public:
      * Sensor address is searched automatically
      * (Only ONE sensor must be connected to raspberry pi)
      */
-    CoolantTempSensor();
+    DS18B20();
 
     /**
      * Constructor with fix sensor address
      */
-    CoolantTempSensor(std::string address);
+    DS18B20(std::string address);
 
     /**
      * Empty destructor
      */
-    virtual ~CoolantTempSensor();
+    virtual ~DS18B20();
 
     /**
      * Read temperature in degrees celsius
@@ -45,7 +45,7 @@ public:
      */
     bool isValid(float temperature);
 
-    Logger logger = Logger("CoolantTempSensor");
+    Logger logger = Logger("DS18B20");
 
 private:
     // Root folder of all one-Wire devices
@@ -58,6 +58,6 @@ private:
     std::string address;
 
     // A DS18B20 cannot be copied
-    CoolantTempSensor(const CoolantTempSensor &) = delete;
-    CoolantTempSensor &operator=(const CoolantTempSensor &) = delete;
+    DS18B20(const DS18B20 &) = delete;
+    DS18B20 &operator=(const DS18B20 &) = delete;
 };

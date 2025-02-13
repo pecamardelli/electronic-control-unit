@@ -10,22 +10,23 @@
 #include <typeinfo>
 #include <bcm2835.h>
 
+#include "DS18B20.h"
+#include "ADS1115.h"
+#include "GPS.h"
+#include "TCA9548A.h"
+#include "DHT11.h"
+#include "RELAY.h"
+#include "OF05ZAT.h"
+
 #include "common.h"
 #include "Process.h"
 #include "Logger.h"
 #include "System.h"
-#include "Relay.h"
-#include "CoolantTempSensor.h"
-#include "FlowSensor.h"
 #include "TempGauge.h"
-#include "GPS.h"
 #include "helpers.h"
 #include "DigitalGauge.h"
 #include "SpeedSensor.h"
 #include "Speedometer.h"
-#include "I2CMultiplexer.h"
-#include "TempSensor.h"
-#include "ADS1115.h"
 #include "VoltSensor.h"
 
 // Initialize static member

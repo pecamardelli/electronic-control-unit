@@ -1,8 +1,8 @@
-#include "FlowSensor.h"
+#include "OF05ZAT.h"
 
-FlowSensor::FlowSensor(/* args */)
+OF05ZAT::OF05ZAT(/* args */)
 {
-    description = "FlowSensor";
+    description = "OF05ZAT";
     logger = std::make_unique<Logger>(description);
     config = std::make_unique<Config>(description);
 
@@ -19,11 +19,11 @@ FlowSensor::FlowSensor(/* args */)
     logger->info("Flow sensor inited...");
 }
 
-FlowSensor::~FlowSensor()
+OF05ZAT::~OF05ZAT()
 {
 }
 
-void FlowSensor::loop()
+void OF05ZAT::loop()
 {
     // Read the current state of the pin
     currentState = bcm2835_gpio_lev(FLOW_SENSOR_PIN);

@@ -1,6 +1,6 @@
-#include "TempSensor.h"
+#include "DHT11.h"
 
-TempSensor::TempSensor(/* args */)
+DHT11::DHT11(/* args */)
 {
     uint8_t data[5] = {0};
     if (readDHT11(data))
@@ -22,11 +22,11 @@ TempSensor::TempSensor(/* args */)
     }
 }
 
-TempSensor::~TempSensor()
+DHT11::~DHT11()
 {
 }
 
-void TempSensor::sendStartSignal()
+void DHT11::sendStartSignal()
 {
     bcm2835_gpio_fsel(DHT_PIN, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_write(DHT_PIN, LOW);
@@ -36,7 +36,7 @@ void TempSensor::sendStartSignal()
     bcm2835_gpio_fsel(DHT_PIN, BCM2835_GPIO_FSEL_INPT);
 }
 
-bool TempSensor::waitForState(int state, int timeout_us)
+bool DHT11::waitForState(int state, int timeout_us)
 {
     auto start = std::chrono::steady_clock::now();
     while (bcm2835_gpio_lev(DHT_PIN) != state)
@@ -50,7 +50,7 @@ bool TempSensor::waitForState(int state, int timeout_us)
     return true;
 }
 
-bool TempSensor::readDHT11(uint8_t *data)
+bool DHT11::readDHT11(uint8_t *data)
 {
     sendStartSignal();
 

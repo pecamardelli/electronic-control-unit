@@ -4,7 +4,7 @@
 #include <memory>
 #include <algorithm>
 
-#include "../lib/Stepper/Stepper.h"
+#include "STEPPER.h"
 #include "Button.h"
 #include "Logger.h"
 
@@ -25,7 +25,7 @@ public:
     void calibrate();
 
 protected:
-    std::unique_ptr<Stepper> motor;
+    std::unique_ptr<STEPPER> motor;
     std::unique_ptr<Button> interruptor;
     std::vector<Conversion> conversions;
     int currentStep = 0;

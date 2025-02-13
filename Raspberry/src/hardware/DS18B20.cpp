@@ -1,13 +1,13 @@
-#include "CoolantTempSensor.h"
+#include "DS18B20.h"
 
-CoolantTempSensor::CoolantTempSensor(std::string address) : address(oneWireRootFolder + address + oneWireFile)
+DS18B20::DS18B20(std::string address) : address(oneWireRootFolder + address + oneWireFile)
 {
     logger.info("Set address to " + address);
 }
 
-CoolantTempSensor::CoolantTempSensor()
+DS18B20::DS18B20()
 {
-    logger.info("Find CoolantTempSensor sensor ...");
+    logger.info("Find DS18B20 sensor ...");
 
     // Find first folder whose name starts with "28-"
     for (const std::filesystem::directory_entry &val : std::filesystem::directory_iterator(oneWireRootFolder))
@@ -27,16 +27,16 @@ CoolantTempSensor::CoolantTempSensor()
     }
 
     // If code gets here, no connected sensor was found
-    logger.error("No connected CoolantTempSensor sensor found!");
+    logger.error("No connected DS18B20 sensor found!");
 }
 
-CoolantTempSensor::~CoolantTempSensor() {}
+DS18B20::~DS18B20() {}
 
 // Set static constants
-const std::string CoolantTempSensor::oneWireRootFolder{"/sys/bus/w1/devices/"};
-const std::string CoolantTempSensor::oneWireFile{"/w1_slave"};
+const std::string DS18B20::oneWireRootFolder{"/sys/bus/w1/devices/"};
+const std::string DS18B20::oneWireFile{"/w1_slave"};
 
-float CoolantTempSensor::readTemp()
+float DS18B20::readTemp()
 {
     // Open one-Wire reader as file stream and read
     std::ifstream reader{address};
@@ -44,7 +44,7 @@ float CoolantTempSensor::readTemp()
     // Check if read was good
     if (!reader.good())
     {
-        // error("Read from CoolantTempSensor failed!");
+        // error("Read from DS18B20 failed!");
         return std::numeric_limits<float>::quiet_NaN();
     }
 
@@ -73,4 +73,4 @@ float CoolantTempSensor::readTemp()
     return tempRaw / 1000;
 }
 
-bool CoolantTempSensor::isValid(float temperature) { return !std::isnan(temperature); }
+bool DS18B20::isValid(float temperature) { return !std::isnan(temperature); }

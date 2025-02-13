@@ -5,14 +5,14 @@
 
 #define RELAY_PIN RPI_GPIO_P1_11 // Physical Pin 11, corresponds to GPIO17
 
-class Relay
+class RELAY
 {
 private:
     /* data */
-    Logger logger = Logger("Relay");
+    Logger logger = Logger("RELAY");
 
 public:
-    Relay(/* args */);
-    ~Relay();
+    RELAY(/* args */);
+    ~RELAY();
     void state(int);
 };

@@ -94,7 +94,8 @@
     "i2cmultiplexer.h": "c",
     "condition_variable": "cpp",
     "mutex": "cpp",
-    "ioctl.h": "c"
+    "ioctl.h": "c",
+    "speedometer.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

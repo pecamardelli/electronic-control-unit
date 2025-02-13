@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Logger.h"
-#include "Relay.h"
+#include "RELAY.h"
 #include "../helpers/helpers.h"
 
 #ifndef MAP_H_
@@ -24,13 +24,13 @@ class System
 {
 private:
     /* data */
-    Relay mainRelay;
+    RELAY mainRelay;
     Logger logger = Logger("System");
     ConfigMap config;
     ConfigMap defaultConfigValues = {
         {"global", {{"main_loop_interval", "50000"}, {"logo_screen_time", "2"}}},
         {"logging", {{"log_level", "INFO"}}},
-        {"FlowSensor", {{"loop_interval", "1000"}, {"pulses_per_liter", "287"}}},
+        {"OF05ZAT", {{"loop_interval", "1000"}, {"pulses_per_liter", "287"}}},
         {"TempGauge", {{"loop_interval", "1000"}, {"step_offset", "-115"}}},
         {"GPS", {{"loop_interval", "1000000"}, {"baud_rate", "9600"}}},
         {"SpeedSensor", {{"loop_interval", "10"}, {"differential_pinion", "13"}, {"differential_crown", "43"}, {"tire_width", "215"}, {"aspect_ratio", "60"}, {"rim_diameter", "15"}, {"transitions_per_lap", "4"}}},

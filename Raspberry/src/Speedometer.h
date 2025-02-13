@@ -6,7 +6,7 @@
 
 #include "Process.h"
 #include "Gauge.h"
-#include "lib/SSD1306/SSD1306.h"
+#include "SSD1306.h"
 
 extern volatile SpeedSensorData *speedSensorData;
 class Speedometer : public Process, public Gauge

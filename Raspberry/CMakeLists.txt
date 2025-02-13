@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(DIR_SRC "${CMAKE_SOURCE_DIR}/src")
 set(DIR_LIB "${DIR_SRC}/lib")
 set(DIR_CORE "${DIR_SRC}/core")
-set(DIR_INCLUDES "${DIR_SRC}/includes")
+set(DIR_HARDWARE "${DIR_SRC}/hardware")
 set(DIR_HELPERS "${DIR_SRC}/helpers")
 set(DIR_ASSETS "${DIR_SRC}/assets")
 set(DIR_IMAGES "${DIR_ASSETS}/images")
@@ -23,9 +23,6 @@ set(DIR_DISPLAY_FONTS "${DIR_DISPLAY}/Fonts")
 set(DIR_DISPLAY_GUI "${DIR_DISPLAY}/GUI")
 
 set(DIR_STEPPER "${DIR_LIB}/Stepper")
-set(DIR_GPS "${DIR_LIB}/GPS")
-set(DIR_SSD1306 "${DIR_LIB}/SSD1306")
-set(DIR_ADS1115 "${DIR_LIB}/ADS1115")
 
 # Output Directories
 set(BUILD_DIR "${CMAKE_BINARY_DIR}/build")
@@ -38,13 +35,10 @@ set(DATA_DIR "/var/${PROJECT_NAME}")
 file(GLOB SRC_CPP
     "${DIR_SRC}/*.cpp"
     "${DIR_CORE}/*.cpp"
-    "${DIR_INCLUDES}/*.cpp"
+    "${DIR_HARDWARE}/*.cpp"
     "${DIR_HELPERS}/*.cpp"
     "${DIR_IMAGES}/*.cpp"
     "${DIR_STEPPER}/*.cpp"
-    "${DIR_GPS}/*.cpp"
-    "${DIR_SSD1306}/*.cpp"
-    "${DIR_ADS1115}/*.cpp"
     "${DIR_DISPLAY}/*.cpp"
     "${DIR_DISPLAY_EPD}/*.cpp"
     "${DIR_DISPLAY_FONTS}/*.cpp"
@@ -60,11 +54,8 @@ include_directories(
     ${DIR_DISPLAY}
     ${DIR_IMAGES}
     ${DIR_STEPPER}
-    ${DIR_GPS}
-    ${DIR_SSD1306}
-    ${DIR_ADS1115}
     ${DIR_HELPERS}
-    ${DIR_INCLUDES}
+    ${DIR_HARDWARE}
     ${DIR_CORE}
 )
 

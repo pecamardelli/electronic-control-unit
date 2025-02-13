@@ -2,7 +2,7 @@
 
 #include <memory>
 #include "Logger.h"
-#include "../lib/ADS1115/ADS1115.h"
+#include "ADS1115.h"
 
 class VoltSensor
 {

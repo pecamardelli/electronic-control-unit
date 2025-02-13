@@ -16,7 +16,7 @@ typedef struct _flowSensorData
     float totalConsumption;
 } FlowSensorData;
 
-class FlowSensor : public Process
+class OF05ZAT : public Process
 {
 private:
     /* data */
@@ -25,8 +25,8 @@ private:
     uint8_t currentState;
 
 public:
-    FlowSensor(/* args */);
-    ~FlowSensor();
+    OF05ZAT(/* args */);
+    ~OF05ZAT();
     FlowSensorData data = {0};
 
     void loop() override;
