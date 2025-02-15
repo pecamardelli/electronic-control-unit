@@ -66,7 +66,7 @@ void Speedometer::loop()
     if (lastTotalMileage != 0)
     {
         lastTotalMileage = 0;
-        upperDisplay.drawString(SSD1306_ALIGN_RIGHT, std::to_string(lastTotalMileage).c_str(), LiberationSansNarrow_Bold28);
+        upperDisplay.drawString(SSD1306_ALIGN_RIGHT, std::to_string(lastTotalMileage).c_str(), LiberationSansNarrow_Bold16);
     }
 
     speed = speedSensorData->speed;

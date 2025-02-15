@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	useconds_t mainLoopInterval = config.get<useconds_t>("main_loop_interval");
 	// unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
 	TCA9548A i2cMultiplexer;
-	i2cMultiplexer.selectChannel(1);
+	i2cMultiplexer.selectChannel(0);
 
 	// Add smart pointer factories to the vector
 	// processFactories.push_back({"TempGauge", []()
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 		std::cout << "Volts: " << engineValues->volts.load() << std::endl;
 
 		speedometer.loop();
-		// i2cMultiplexer.selectChannel(1);
+		i2cMultiplexer.selectChannel(1);
 
 		digitalGauge.draw();
 

@@ -3,7 +3,7 @@
 #include <cmath>
 #include <bcm2835.h>
 #include "Process.h"
-#include "../helpers/helpers.h"
+#include "helpers.h"
 
 extern volatile SpeedSensorData *speedSensorData;
 

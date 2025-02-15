@@ -25,7 +25,7 @@
 #include <fcntl.h>
 #endif
 
-#include "../common.h"
+#include "common.h"
 #include "Logger.h"
 
 void signalHandler(int);

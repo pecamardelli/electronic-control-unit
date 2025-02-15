@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include "Logger.h"
 #include "Process.h"
-#include "../common.h"
+#include "common.h"
 
 #define FLOW_SENSOR_PIN RPI_GPIO_P1_12 // GPIO18 (Pin 12)
 

@@ -12,7 +12,7 @@
 
 #include "Logger.h"
 #include "Config.h"
-#include "../common.h"
+#include "common.h"
 
 class Process
 {

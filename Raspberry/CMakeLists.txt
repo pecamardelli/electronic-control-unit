@@ -51,6 +51,7 @@ include_directories(
     ${DIR_DISPLAY_CONFIG}
     ${DIR_DISPLAY_GUI}
     ${DIR_DISPLAY_EPD}
+    ${DIR_DISPLAY_FONTS}
     ${DIR_DISPLAY}
     ${DIR_IMAGES}
     ${DIR_STEPPER}

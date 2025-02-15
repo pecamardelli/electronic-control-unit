@@ -2,7 +2,7 @@
 
 #include "Logger.h"
 #include "Process.h"
-#include "../../common.h"
+#include "common.h"
 
 #include <iostream>
 #include <fstream>
