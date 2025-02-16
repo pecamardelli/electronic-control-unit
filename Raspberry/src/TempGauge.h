@@ -9,11 +9,13 @@
 
 #pragma once
 
+#include <chrono>
+#include <thread>
+
 #include "Process.h"
 #include "Gauge.h"
 #include "Logger.h"
 #include "Button.h"
-#include "common.h"
 
 #include "STEPPER.h"
 

@@ -84,7 +84,7 @@ void DigitalGauge::draw()
         drawKml(engineValues->kml);
         drawTemp(coolantTempSensorData->temp);
         drawVolts(engineValues->volts);
-        drawFuelConsumption(engineValues->fuelConsumption);
+        drawFuelConsumption(fuelConsumptionData->fuelConsumption);
         break;
     default:
         break;

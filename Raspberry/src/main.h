@@ -9,6 +9,9 @@
 #include <functional>
 #include <typeinfo>
 #include <bcm2835.h>
+#include <atomic>
+#include <chrono>
+#include <thread>
 
 #include "DS18B20.h"
 #include "ADS1115.h"
@@ -16,7 +19,6 @@
 #include "TCA9548A.h"
 #include "DHT11.h"
 #include "RELAY.h"
-#include "OF05ZAT.h"
 
 #include "common.h"
 #include "Process.h"
@@ -28,6 +30,7 @@
 #include "SpeedSensor.h"
 #include "Speedometer.h"
 #include "VoltSensor.h"
+#include "FuelConsumption.h"
 
 // Initialize static member
 std::atomic<bool> Process::terminateFlag(false);
@@ -48,6 +51,7 @@ std::vector<Factory> processFactories;
 volatile EngineValues *engineValues = nullptr;
 volatile SpeedSensorData *speedSensorData = nullptr;
 volatile CoolantTempSensorData *coolantTempSensorData = nullptr;
+volatile FuelConsumptionData *fuelConsumptionData = nullptr;
 
 System *sys;
 std::unique_ptr<ADS1115> ads1115;

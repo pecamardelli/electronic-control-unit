@@ -1,33 +1,23 @@
 #pragma once
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "Logger.h"
-#include "Process.h"
-#include "common.h"
+#include "Base.h"
 
-#define FLOW_SENSOR_PIN RPI_GPIO_P1_12 // GPIO18 (Pin 12)
-
-typedef struct _flowSensorData
-{
-    unsigned long partialPulseCount;
-    unsigned long totalPulseCount;
-    float totalConsumption;
-} FlowSensorData;
-
-class OF05ZAT : public Process
+class OF05ZAT : public Base
 {
 private:
     /* data */
-    u_int16_t pulsesPerLiter;
+    RPiGPIOPin pin;
+    uint16_t pulsesPerLiter;
     uint8_t lastState;
     uint8_t currentState;
+    uint64_t pulseCounter;
+
+    void checkPulse();
 
 public:
-    OF05ZAT(/* args */);
+    OF05ZAT(RPiGPIOPin);
     ~OF05ZAT();
-    FlowSensorData data = {0};
 
-    void loop() override;
+    uint64_t getPulseCount();
+    uint16_t getPulsesPerLiter();
 };

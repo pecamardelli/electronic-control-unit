@@ -4,6 +4,7 @@
 #include <bcm2835.h>
 #include "Process.h"
 #include "helpers.h"
+#include "common.h"
 
 extern volatile SpeedSensorData *speedSensorData;
 

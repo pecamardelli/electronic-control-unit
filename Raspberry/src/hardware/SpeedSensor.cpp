@@ -117,7 +117,7 @@ void SpeedSensor::loop()
             // Update the last state
             lastState = currentState;
         }
-        speedSensorData->distanceCovered += 0.00001;
+
         // Sleep to control loop execution frequency
         std::this_thread::sleep_for(std::chrono::microseconds(testEnabled ? testInterval : loopInterval));
     }

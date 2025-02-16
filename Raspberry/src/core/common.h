@@ -1,29 +1,28 @@
 #pragma once
 
-#ifndef STRING_H_
-#define STRING_H_
 #include <string>
-#endif
 
-#include <atomic>
-#include <chrono>
-#include <thread>
-
-// Struct to store child PID and description
+#ifndef CHILD_PROCESS_H_
+#define CHILD_PROCESS_H_
 typedef struct _childProcess
 {
     pid_t pid;
     std::string description;
 } ChildProcess;
+#endif
 
-struct alignas(64) EngineValues
+#ifndef ENGINE_VALUES_H_
+#define ENGINE_VALUES_H_
+typedef struct alignas(64) _engineValues
 {
-    std::atomic<float> kml;
-    std::atomic<float> volts;
-    std::atomic<float> fuelConsumption;
-    std::atomic<bool> ignition;
-};
+    double kml;
+    double volts;
+    bool ignition;
+} EngineValues;
+#endif
 
+#ifndef SPEED_SENSOR_DATA_H_
+#define SPEED_SENSOR_DATA_H_
 typedef struct alignas(64) _speedSensorData
 {
     uint64_t transitions;
@@ -31,11 +30,23 @@ typedef struct alignas(64) _speedSensorData
     double distanceCovered;
     double averageSpeed;
 } SpeedSensorData;
+#endif
 
+#ifndef COOLANT_TEMP_SENSOR_DATA_H_
+#define COOLANT_TEMP_SENSOR_DATA_H_
 typedef struct alignas(64) _coolantTempSensorData
 {
     float temp;
 } CoolantTempSensorData;
+#endif
+
+#ifndef FUEL_CONSUMPTION_DATA_H_
+#define FUEL_CONSUMPTION_DATA_H_
+typedef struct alignas(64) _fuelConsumptionData
+{
+    double fuelConsumption;
+} FuelConsumptionData;
+#endif
 
 enum Screen
 {

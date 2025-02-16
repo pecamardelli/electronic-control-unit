@@ -9,6 +9,8 @@
 #include <csignal>
 #include <atomic>
 #include <memory>
+#include <chrono>
+#include <thread>
 
 #include "Logger.h"
 #include "Config.h"

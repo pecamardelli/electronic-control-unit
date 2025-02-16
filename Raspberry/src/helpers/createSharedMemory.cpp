@@ -36,3 +36,4 @@ T *createSharedMemory(const char *shmName, bool create)
 template EngineValues *createSharedMemory<EngineValues>(const char *, bool);
 template SpeedSensorData *createSharedMemory<SpeedSensorData>(const char *, bool);
 template CoolantTempSensorData *createSharedMemory<CoolantTempSensorData>(const char *, bool);
+template FuelConsumptionData *createSharedMemory<FuelConsumptionData>(const char *, bool);

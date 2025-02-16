@@ -95,7 +95,8 @@
     "condition_variable": "cpp",
     "mutex": "cpp",
     "ioctl.h": "c",
-    "speedometer.h": "c"
+    "speedometer.h": "c",
+    "fuelconsumption.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

@@ -20,6 +20,8 @@ int main(int argc, char *argv[])
 
 	sys = new System(programName);
 	Config config("global");
+	double lastDistanceCovered = 0;
+	double lastFuelConsumption = 0;
 
 	uint64_t mileage = sys->getCurrentMileage();
 	uint64_t lastSavedMileage = 0, currentMileage = 0;
@@ -35,6 +37,8 @@ int main(int argc, char *argv[])
 	// 							{ return std::make_shared<TempGauge>(); }});
 	processFactories.push_back({"SpeedSensor", []()
 								{ return std::make_shared<SpeedSensor>(); }});
+	processFactories.push_back({"FuelConsumption", []()
+								{ return std::make_shared<FuelConsumption>(); }});
 
 	DigitalGauge digitalGauge;
 	VoltSensor voltSensor(ads1115.get());
@@ -49,6 +53,7 @@ int main(int argc, char *argv[])
 	engineValues = createSharedMemory<EngineValues>("/engineValues", true);
 	speedSensorData = createSharedMemory<SpeedSensorData>("/speedSensorData", true);
 	coolantTempSensorData = createSharedMemory<CoolantTempSensorData>("/coolantTempSensorData", true);
+	fuelConsumptionData = createSharedMemory<FuelConsumptionData>("/fuelConsumptionData", true);
 
 	// Iterate and instantiate processes during iteration
 	for (const auto &factory : processFactories)
@@ -79,7 +84,7 @@ int main(int argc, char *argv[])
 	while (!terminateProgram)
 	{
 		coolantTempSensorData->temp = coolantTempSensor.readTemp();
-		engineValues->volts.store(voltSensor.getValue());
+		engineValues->volts = voltSensor.getValue();
 		currentMileage = mileage + floor(speedSensorData->distanceCovered);
 
 		if (currentMileage - lastSavedMileage >= 1)
@@ -89,11 +94,14 @@ int main(int argc, char *argv[])
 			std::cout << "Mileage: " << lastSavedMileage << std::endl;
 		}
 
+		engineValues->kml = lastFuelConsumption > 0 ? lastDistanceCovered / lastFuelConsumption : 0;
+		lastDistanceCovered = speedSensorData->distanceCovered;
+		lastFuelConsumption = fuelConsumptionData->fuelConsumption;
+
 		// std::cout << "Speed Sensor transitions: " << speedSensorData->transitions << std::endl;
 		// std::cout << "Speed Sensor speed: " << speedSensorData->speed << std::endl;
 		// std::cout << "Speed Sensor distance: " << speedSensorData->distanceCovered << std::endl;
-
-		std::cout << "Volts: " << engineValues->volts.load() << std::endl;
+		// std::cout << "Volts: " << engineValues->volts << std::endl;
 
 		speedometer.loop();
 		i2cMultiplexer.selectChannel(1);
