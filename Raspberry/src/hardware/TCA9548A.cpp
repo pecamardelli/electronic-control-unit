@@ -3,6 +3,7 @@
 TCA9548A::TCA9548A(/* args */)
 {
     logger = std::make_unique<Logger>(description);
+    selectChannel(0);
 }
 
 TCA9548A::~TCA9548A()

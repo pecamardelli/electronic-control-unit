@@ -9,9 +9,6 @@
 
 #pragma once
 
-#include <chrono>
-#include <thread>
-
 #include "Process.h"
 #include "Gauge.h"
 #include "Logger.h"

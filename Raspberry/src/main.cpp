@@ -36,8 +36,8 @@ int main(int argc, char *argv[])
 	VoltSensor voltSensor(ads1115.get());
 	DS18B20 coolantTempSensor;
 	// DHT11 tempSensor;
-
-	i2cMultiplexer.selectChannel(0);
+	SSD1306 speedometerUpperDisplay;
+	// SSD1306 speedometerLowerDisplay;
 
 	// Add smart pointer factories to the vector
 	processFactories.push_back({"TempGauge", []()
@@ -97,11 +97,15 @@ int main(int argc, char *argv[])
 			sys->saveTotalMileage(currentMileage);
 			lastSavedMileage = currentMileage;
 			std::cout << "Mileage: " << lastSavedMileage << std::endl;
+			speedometerUpperDisplay.drawString(SSD1306_ALIGN_RIGHT, std::to_string(currentMileage).c_str(), LiberationSansNarrow_Bold28);
 		}
 
 		engineValues->kml = lastFuelConsumption > 0 ? lastDistanceCovered / lastFuelConsumption : 0;
 		lastDistanceCovered = speedSensorData->distanceCovered;
 		lastFuelConsumption = fuelConsumptionData->fuelConsumption;
+
+		// Upper Display
+		// i2cMultiplexer.selectChannel(0);
 
 		if (debugEnabled)
 		{

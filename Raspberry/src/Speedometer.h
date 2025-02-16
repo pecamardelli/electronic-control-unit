@@ -1,8 +1,6 @@
 #pragma once
 
 #include <cstring>
-#include <chrono>
-#include <thread>
 
 #include "Process.h"
 #include "Gauge.h"

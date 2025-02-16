@@ -12,6 +12,7 @@ ADS1115::~ADS1115()
 int ADS1115::getRawValue(const uint8_t channel)
 {
     logger->debug("Reading raw value from channel " + std::to_string(channel) + ".");
+
     bcm2835_i2c_setSlaveAddress(ADS1115_ADDR);
 
     unsigned char config[3];

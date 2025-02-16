@@ -60,6 +60,7 @@ void SSD1306::clear()
 void SSD1306::display()
 {
     bcm2835_i2c_setSlaveAddress(SSD1306_I2C_ADDR);
+
     sendCommand(0x21); // Set column address
     sendCommand(0x00);
     sendCommand(SSD1306_WIDTH - 1);

@@ -65,6 +65,7 @@ void SpeedSensor::loop()
                 speedModifier *= -1;
 
             speedSensorData->speed = speedSensorData->speed + speedModifier;
+            speedSensorData->distanceCovered = speedSensorData->distanceCovered + 0.1;
         }
         else
         {

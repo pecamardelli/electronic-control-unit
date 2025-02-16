@@ -31,6 +31,7 @@
 #include "Speedometer.h"
 #include "VoltSensor.h"
 #include "FuelConsumption.h"
+#include "SSD1306.h"
 
 // Initialize static member
 std::atomic<bool> Process::terminateFlag(false);
