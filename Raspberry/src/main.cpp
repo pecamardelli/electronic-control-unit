@@ -20,6 +20,10 @@ int main(int argc, char *argv[])
 
 	sys = new System(programName);
 	Config config("global");
+	useconds_t mainLoopInterval = config.get<useconds_t>("main_loop_interval");
+	// unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
+	bool debugEnabled = config.get<bool>("debug_enabled");
+
 	double lastDistanceCovered = 0;
 	double lastFuelConsumption = 0;
 
@@ -27,29 +31,28 @@ int main(int argc, char *argv[])
 	uint64_t lastSavedMileage = 0, currentMileage = 0;
 
 	ads1115 = std::make_unique<ADS1115>();
-	useconds_t mainLoopInterval = config.get<useconds_t>("main_loop_interval");
-	// unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
 	TCA9548A i2cMultiplexer;
+	DigitalGauge digitalGauge;
+	VoltSensor voltSensor(ads1115.get());
+	DS18B20 coolantTempSensor;
+	// DHT11 tempSensor;
+	Speedometer speedometer;
+
 	i2cMultiplexer.selectChannel(0);
 
 	// Add smart pointer factories to the vector
-	// processFactories.push_back({"TempGauge", []()
-	// 							{ return std::make_shared<TempGauge>(); }});
+	processFactories.push_back({"TempGauge", []()
+								{ return std::make_shared<TempGauge>(); }});
 	processFactories.push_back({"SpeedSensor", []()
 								{ return std::make_shared<SpeedSensor>(); }});
 	processFactories.push_back({"FuelConsumption", []()
 								{ return std::make_shared<FuelConsumption>(); }});
 
-	DigitalGauge digitalGauge;
-	VoltSensor voltSensor(ads1115.get());
-	DS18B20 coolantTempSensor;
-	DHT11 tempSensor;
-	Speedometer speedometer;
-
 	digitalGauge.showLogo();
 	digitalGauge.setScreen(DIGITAL_GAUGE);
 
-	logger.info("Setting up shared memory for sensor readings.");
+	// Setting up shared memory
+	logger.info("Setting up shared memory for child processes.");
 	engineValues = createSharedMemory<EngineValues>("/engineValues", true);
 	speedSensorData = createSharedMemory<SpeedSensorData>("/speedSensorData", true);
 	coolantTempSensorData = createSharedMemory<CoolantTempSensorData>("/coolantTempSensorData", true);
@@ -79,8 +82,9 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	logger.info("Entering main loop.");
 	// ### MAIN LOOP ###
+	logger.info("Entering main loop.");
+
 	while (!terminateProgram)
 	{
 		coolantTempSensorData->temp = coolantTempSensor.readTemp();
@@ -98,13 +102,17 @@ int main(int argc, char *argv[])
 		lastDistanceCovered = speedSensorData->distanceCovered;
 		lastFuelConsumption = fuelConsumptionData->fuelConsumption;
 
-		// std::cout << "Speed Sensor transitions: " << speedSensorData->transitions << std::endl;
-		// std::cout << "Speed Sensor speed: " << speedSensorData->speed << std::endl;
-		// std::cout << "Speed Sensor distance: " << speedSensorData->distanceCovered << std::endl;
-		// std::cout << "Volts: " << engineValues->volts << std::endl;
+		if (debugEnabled)
+		{
+
+			std::cout << "Transitions: " << speedSensorData->transitions;
+			std::cout << " | Speed: " << speedSensorData->speed;
+			std::cout << " | Distance covered: " << speedSensorData->distanceCovered;
+			std::cout << " | Volts: " << engineValues->volts << std::endl;
+		}
 
 		speedometer.loop();
-		i2cMultiplexer.selectChannel(1);
+		// i2cMultiplexer.selectChannel(1);
 
 		digitalGauge.draw();
 
@@ -134,6 +142,8 @@ int main(int argc, char *argv[])
 	shm_unlink("/speedSensorData");
 	munmap(const_cast<void *>(reinterpret_cast<const volatile void *>(coolantTempSensorData)), sizeof(CoolantTempSensorData));
 	shm_unlink("/coolantTempSensorData");
+	munmap(const_cast<void *>(reinterpret_cast<const volatile void *>(fuelConsumptionData)), sizeof(FuelConsumptionData));
+	shm_unlink("/fuelConsumptionData");
 
 	digitalGauge.setScreen(TORINO_LOGO);
 	digitalGauge.showLogo();

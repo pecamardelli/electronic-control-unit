@@ -12,27 +12,23 @@
 #include <chrono>
 #include <thread>
 
+#include "Base.h"
 #include "Logger.h"
 #include "Config.h"
 #include "common.h"
 
-class Process
+class Process : public Base
 {
 private:
     /* data */
 public:
     Process();
     virtual ~Process();
-    std::string description;
-
     // Pure virtual function
     virtual void loop() = 0;
-
     static void handleSignal(int);
 
 protected:
     static std::atomic<bool> terminateFlag; // Shared termination flag
-    std::unique_ptr<Logger> logger;
-    std::unique_ptr<Config> config;
     useconds_t loopInterval;
 };
