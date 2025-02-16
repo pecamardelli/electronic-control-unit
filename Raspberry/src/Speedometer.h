@@ -6,7 +6,6 @@
 
 #include "Process.h"
 #include "Gauge.h"
-#include "SSD1306.h"
 
 extern volatile SpeedSensorData *speedSensorData;
 class Speedometer : public Process, public Gauge
@@ -18,8 +17,6 @@ private:
     const RPiGPIOPin IN3 = RPI_V2_GPIO_P1_33;         // GPIO 13
     const RPiGPIOPin IN4 = RPI_V2_GPIO_P1_37;         // GPIO 26
     const RPiGPIOPin INTERRUPTOR = RPI_V2_GPIO_P1_07; // GPIO 18
-
-    SSD1306 upperDisplay;
 
     uint64_t lastTotalMileage = 0;
     double speed = 0;

@@ -10,7 +10,7 @@ Gauge::~Gauge()
 
 void Gauge::init()
 {
-    motor->setSpeed(3);
+    motor->setSpeed(5);
     interruptor->check();
 
     // Step forward until button is released.

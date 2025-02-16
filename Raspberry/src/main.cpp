@@ -36,13 +36,14 @@ int main(int argc, char *argv[])
 	VoltSensor voltSensor(ads1115.get());
 	DS18B20 coolantTempSensor;
 	// DHT11 tempSensor;
-	Speedometer speedometer;
 
 	i2cMultiplexer.selectChannel(0);
 
 	// Add smart pointer factories to the vector
 	processFactories.push_back({"TempGauge", []()
 								{ return std::make_shared<TempGauge>(); }});
+	processFactories.push_back({"Speedometer", []()
+								{ return std::make_shared<Speedometer>(); }});
 	processFactories.push_back({"SpeedSensor", []()
 								{ return std::make_shared<SpeedSensor>(); }});
 	processFactories.push_back({"FuelConsumption", []()
@@ -111,7 +112,11 @@ int main(int argc, char *argv[])
 			std::cout << " | Volts: " << engineValues->volts << std::endl;
 		}
 
-		speedometer.loop();
+		// if (lastTotalMileage != 0)
+		// {
+		// 	lastTotalMileage = 0;
+		// 	upperDisplay.drawString(SSD1306_ALIGN_RIGHT, std::to_string(lastTotalMileage).c_str(), LiberationSansNarrow_Bold16);
+		// }
 		// i2cMultiplexer.selectChannel(1);
 
 		digitalGauge.draw();
