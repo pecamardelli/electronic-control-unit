@@ -40,14 +40,14 @@ int main(int argc, char *argv[])
 	// Add smart pointer factories to the vector
 	processFactories.push_back({"TempGauge", []()
 								{ return std::make_shared<TempGauge>(); }});
+	processFactories.push_back({"DigitalGauge", []()
+								{ return std::make_shared<DigitalGauge>(); }});
 	processFactories.push_back({"Speedometer", []()
 								{ return std::make_shared<Speedometer>(); }});
 	processFactories.push_back({"SpeedSensor", []()
 								{ return std::make_shared<SpeedSensor>(); }});
 	processFactories.push_back({"FuelConsumption", []()
 								{ return std::make_shared<FuelConsumption>(); }});
-	processFactories.push_back({"DigitalGauge", []()
-								{ return std::make_shared<DigitalGauge>(); }});
 
 	// Setting up shared memory
 	logger.info("Setting up shared memory for child processes.");
@@ -93,20 +93,16 @@ int main(int argc, char *argv[])
 
 		if (mileage.currentTotal - mileage.lastTotalSaved >= 1)
 		{
-			mileage.total = mileage.currentTotal;
 			sys->saveMileage(mileage);
 			mileage.lastTotalSaved = mileage.currentTotal;
-			std::cout << "Mileage: " << mileage.lastTotalSaved << std::endl;
-			speedometerUpperDisplay.drawString(SSD1306_ALIGN_RIGHT, std::to_string(mileage.currentTotal).c_str(), LiberationSansNarrow_Bold28);
+			speedometerUpperDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(mileage.currentTotal).c_str(), LiberationSansNarrow_Bold28);
 		}
 
 		if (mileage.currentPartial - mileage.lastPartialSaved >= 1)
 		{
-			mileage.partial = mileage.currentPartial;
 			sys->saveMileage(mileage);
 			mileage.lastPartialSaved = mileage.currentPartial;
-			std::cout << "Partial: " << mileage.lastPartialSaved << std::endl;
-			// speedometerLowerDisplay.drawString(SSD1306_ALIGN_RIGHT, std::to_string(mileage.currentPartial).c_str(), LiberationSansNarrow_Bold28);
+			// speedometerLowerDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(mileage.currentPartial).c_str(), LiberationSansNarrow_Bold16);
 		}
 
 		engineValues->kml = lastFuelConsumption > 0 ? lastDistanceCovered / lastFuelConsumption : 0;

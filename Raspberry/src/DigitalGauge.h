@@ -74,18 +74,16 @@ private:
   void drawTemp(uint8_t);
   void drawKml(float);
   void drawFuelConsumption(float);
+  void clear();
 
 public:
   DigitalGauge(/* args */);
   ~DigitalGauge();
   void loop() override;
 
-  void setup();
-  void draw();
   void drawVolts(float);
   void setScreen(Screen);
   void showLogo();
 
   void drawBmpFile(const char *);
-  void clear();
 };

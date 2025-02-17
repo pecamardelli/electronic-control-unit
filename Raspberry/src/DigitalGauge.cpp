@@ -13,6 +13,7 @@ DigitalGauge::DigitalGauge(/* args */)
     /* Module Init */
     if (DEV_ModuleInit() != 0)
     {
+        logger->error("Failed to initialize module...");
         DEV_ModuleExit();
         exit(0);
     }
@@ -24,7 +25,7 @@ DigitalGauge::DigitalGauge(/* args */)
 
     if ((BlackImage = (UWORD *)malloc(Imagesize)) == NULL)
     {
-        logger->error("Failed to apply for black memory...\r\n");
+        logger->error("Failed to apply for black memory...");
         BlackImage = NULL;
     }
 
@@ -41,10 +42,6 @@ DigitalGauge::~DigitalGauge()
     free(BlackImage);
     BlackImage = NULL;
     DEV_ModuleExit();
-}
-
-void DigitalGauge::setup()
-{
 }
 
 void DigitalGauge::drawBmpFile(const char *pathToImageFile)
