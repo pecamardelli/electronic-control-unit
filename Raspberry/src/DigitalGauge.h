@@ -6,6 +6,7 @@
 #include <string>
 #include <cmath>
 
+#include "Process.h"
 #include "common.h"
 #include "Logger.h"
 
@@ -14,10 +15,9 @@ extern volatile EngineValues *engineValues;
 extern volatile CoolantTempSensorData *coolantTempSensorData;
 extern volatile FuelConsumptionData *fuelConsumptionData;
 
-class DigitalGauge
+class DigitalGauge : public Process
 {
 private:
-  Logger logger = Logger("DigitalGauge");
   UWORD *BlackImage;
   UDOUBLE Imagesize = LCD_1IN28_HEIGHT * LCD_1IN28_WIDTH * 2;
   uint8_t lowerCaseOffset = 97;
@@ -27,6 +27,8 @@ private:
 
   std::string TORINO_LOGO_PATH = IMAGES_PATH + "/torino_logo.bmp";
   std::string BACKGROUND = IMAGES_PATH + "/digital_gauge.bmp";
+
+  uint16_t logoTime;
 
   sFONT LABELS_FONT = LiberationSansNarrow_Bold16;
 
@@ -76,7 +78,7 @@ private:
 public:
   DigitalGauge(/* args */);
   ~DigitalGauge();
-  const std::string description = "DigitalGauge";
+  void loop() override;
 
   void setup();
   void draw();

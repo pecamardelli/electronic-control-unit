@@ -12,7 +12,7 @@
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
 #include <unistd.h>
-#include <bcm2835.h>
+#include "BCM_2835.h"
 
 #include "Logger.h"
 

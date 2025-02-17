@@ -2,7 +2,14 @@
 
 DigitalGauge::DigitalGauge(/* args */)
 {
-    logger.info("Initializing Round Display.");
+    description = "DigitalGauge";
+    logger = std::make_unique<Logger>(description);
+    config = std::make_unique<Config>(description);
+
+    loopInterval = config->get<useconds_t>("loop_interval");
+    logoTime = config->get<uint16_t>("logo_time");
+
+    logger->info("Initializing Round Display.");
     /* Module Init */
     if (DEV_ModuleInit() != 0)
     {
@@ -17,11 +24,16 @@ DigitalGauge::DigitalGauge(/* args */)
 
     if ((BlackImage = (UWORD *)malloc(Imagesize)) == NULL)
     {
-        logger.error("Failed to apply for black memory...\r\n");
+        logger->error("Failed to apply for black memory...\r\n");
         BlackImage = NULL;
     }
 
-    logger.info("Done!");
+    setScreen(TORINO_LOGO);
+    showLogo();
+    std::this_thread::sleep_for(std::chrono::milliseconds(logoTime));
+
+    setScreen(DIGITAL_GAUGE);
+    logger->info("Done!");
 }
 
 DigitalGauge::~DigitalGauge()
@@ -76,21 +88,26 @@ void DigitalGauge::clear()
     LCD_1IN28_Display(BlackImage);
 }
 
-void DigitalGauge::draw()
+void DigitalGauge::loop()
 {
-    switch (currentScreen)
+    while (!terminateFlag.load())
     {
-    case DIGITAL_GAUGE:
-        drawKml(engineValues->kml);
-        drawTemp(coolantTempSensorData->temp);
-        drawVolts(engineValues->volts);
-        drawFuelConsumption(fuelConsumptionData->fuelConsumption);
-        break;
-    default:
-        break;
-    }
+        switch (currentScreen)
+        {
+        case DIGITAL_GAUGE:
+            drawKml(engineValues->kml);
+            drawTemp(coolantTempSensorData->temp);
+            drawVolts(engineValues->volts);
+            drawFuelConsumption(fuelConsumptionData->fuelConsumption);
+            break;
+        default:
+            break;
+        }
 
-    LCD_1IN28_Display(BlackImage);
+        LCD_1IN28_Display(BlackImage);
+
+        std::this_thread::sleep_for(std::chrono::microseconds(loopInterval));
+    }
 }
 
 void DigitalGauge::drawTemp(uint8_t temp)

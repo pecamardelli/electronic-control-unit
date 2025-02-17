@@ -2,10 +2,8 @@
 
 #include <iostream>
 #include <cstring>
-#include <bcm2835.h>
-#include <chrono>
-#include <thread>
 
+#include "BCM_2835.h"
 #include <../LCD_display/Fonts/fonts.h>
 #include "TCA9548A.h"
 
@@ -32,7 +30,7 @@ class SSD1306
 private:
     /* data */
     uint8_t buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
-    TCA9548A *i2cMultiplexer;
+    TCA9548A &i2cMultiplexer;
     uint8_t i2cMultiplexerChannel;
 
     const int paddingInline = 4;
@@ -47,7 +45,7 @@ private:
     void setPixel(int x, int y, bool on);
 
 public:
-    SSD1306(TCA9548A *, uint8_t);
+    SSD1306(TCA9548A &, uint8_t);
     ~SSD1306();
 
     void drawString(int, int, const char *, const sFONT &);

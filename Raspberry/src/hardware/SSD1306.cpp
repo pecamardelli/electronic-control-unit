@@ -1,9 +1,10 @@
 #include "SSD1306.h"
 
-SSD1306::SSD1306(TCA9548A *_i2cMultiplexer, uint8_t _i2cMultiplexerChannel) : i2cMultiplexer(_i2cMultiplexer), i2cMultiplexerChannel(_i2cMultiplexerChannel)
+SSD1306::SSD1306(TCA9548A &_i2cMultiplexer, uint8_t _i2cMultiplexerChannel) : i2cMultiplexer(_i2cMultiplexer), i2cMultiplexerChannel(_i2cMultiplexerChannel)
 {
+    std::cout << "Channel: " << i2cMultiplexerChannel << std::endl;
     init();
-    clear();
+    // clear();
 }
 
 SSD1306::~SSD1306()
@@ -13,8 +14,8 @@ SSD1306::~SSD1306()
 // Initialize the SSD1306 display
 void SSD1306::init()
 {
-    i2cMultiplexer->selectChannel(i2cMultiplexerChannel);
-    bcm2835_i2c_setSlaveAddress(SSD1306_I2C_ADDR);
+    i2cMultiplexer.selectChannel(i2cMultiplexerChannel);
+    i2c_setSlaveAddress(SSD1306_I2C_ADDR);
 
     sendCommand(0xAE); // Display OFF
     sendCommand(0xD5); // Set Display Clock Divide Ratio
@@ -48,7 +49,7 @@ void SSD1306::init()
 void SSD1306::sendCommand(uint8_t cmd)
 {
     char data[2] = {SSD1306_COMMAND, cmd};
-    bcm2835_i2c_write(data, 2);
+    i2c_write(data, 2);
 }
 
 // Clear the display buffer
@@ -60,8 +61,8 @@ void SSD1306::clear()
 // Update the display with buffer content
 void SSD1306::display()
 {
-    i2cMultiplexer->selectChannel(i2cMultiplexerChannel);
-    bcm2835_i2c_setSlaveAddress(SSD1306_I2C_ADDR);
+    i2cMultiplexer.selectChannel(i2cMultiplexerChannel);
+    i2c_setSlaveAddress(SSD1306_I2C_ADDR);
 
     sendCommand(0x21); // Set column address
     sendCommand(0x00);
@@ -72,9 +73,8 @@ void SSD1306::display()
 
     for (uint16_t i = 0; i < sizeof(buffer); i++)
     {
-        std::this_thread::sleep_for(std::chrono::microseconds(10));
         char data[2] = {SSD1306_DATA, buffer[i]};
-        bcm2835_i2c_write(data, 2);
+        i2c_write(data, 2);
     }
 }
 

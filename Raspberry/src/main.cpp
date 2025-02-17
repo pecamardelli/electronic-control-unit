@@ -31,12 +31,11 @@ int main(int argc, char *argv[])
 
 	ads1115 = std::make_unique<ADS1115>();
 	i2cMultiplexer = std::make_unique<TCA9548A>();
-	DigitalGauge digitalGauge;
 	VoltSensor voltSensor(ads1115.get());
 	DS18B20 coolantTempSensor;
 	// DHT11 tempSensor;
-	SSD1306 speedometerUpperDisplay(i2cMultiplexer.get(), 0);
-	SSD1306 speedometerLowerDisplay(i2cMultiplexer.get(), 1);
+	SSD1306 speedometerUpperDisplay(*i2cMultiplexer, 0);
+	SSD1306 speedometerLowerDisplay(*i2cMultiplexer, 1);
 
 	// Add smart pointer factories to the vector
 	processFactories.push_back({"TempGauge", []()
@@ -47,9 +46,8 @@ int main(int argc, char *argv[])
 								{ return std::make_shared<SpeedSensor>(); }});
 	processFactories.push_back({"FuelConsumption", []()
 								{ return std::make_shared<FuelConsumption>(); }});
-
-	digitalGauge.showLogo();
-	digitalGauge.setScreen(DIGITAL_GAUGE);
+	processFactories.push_back({"DigitalGauge", []()
+								{ return std::make_shared<DigitalGauge>(); }});
 
 	// Setting up shared memory
 	logger.info("Setting up shared memory for child processes.");
@@ -115,26 +113,13 @@ int main(int argc, char *argv[])
 		lastDistanceCovered = speedSensorData->distanceCovered;
 		lastFuelConsumption = fuelConsumptionData->fuelConsumption;
 
-		// Upper Display
-		// i2cMultiplexer.selectChannel(0);
-
 		if (debugEnabled)
 		{
-
 			std::cout << "Transitions: " << speedSensorData->transitions;
 			std::cout << " | Speed: " << speedSensorData->speed;
 			std::cout << " | Distance covered: " << speedSensorData->distanceCovered;
 			std::cout << " | Volts: " << engineValues->volts << std::endl;
 		}
-
-		// if (lastTotalMileage != 0)
-		// {
-		// 	lastTotalMileage = 0;
-		// 	upperDisplay.drawString(SSD1306_ALIGN_RIGHT, std::to_string(lastTotalMileage).c_str(), LiberationSansNarrow_Bold16);
-		// }
-		// i2cMultiplexer.selectChannel(1);
-
-		digitalGauge.draw();
 
 		// if (engineValues->volts < 6)
 		// {
@@ -165,8 +150,8 @@ int main(int argc, char *argv[])
 	munmap(const_cast<void *>(reinterpret_cast<const volatile void *>(fuelConsumptionData)), sizeof(FuelConsumptionData));
 	shm_unlink("/fuelConsumptionData");
 
-	digitalGauge.setScreen(TORINO_LOGO);
-	digitalGauge.showLogo();
+	// digitalGauge.setScreen(TORINO_LOGO);
+	// digitalGauge.showLogo();
 
 	terminateChildProcesses(childProcesses);
 
