@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Logger.h"
+#include "helpers.h"
+#include "common.h"
 #include "RELAY.h"
-#include "../helpers/helpers.h"
 
 #ifndef MAP_H_
 #define MAP_H_
@@ -37,7 +38,8 @@ private:
         {"Speedometer", {{"loop_interval", "1000"}, {"step_offset", "0"}}},
     };
     std::string dataPath;
-    std::string mileageFileName;
+    std::string totalMileageFileName;
+    std::string partialMileageFileName;
 
     ConfigMap
     loadConfig(const std::string &);
@@ -49,8 +51,10 @@ public:
     void setProgramName(const char *);
     void shutdown();
     SectionMap getConfig(const std::string &);
-    uint64_t getCurrentMileage();
-    void saveTotalMileage(uint64_t mileage);
+    std::string readFile(const std::string &);
+    void writeFile(const std::string &, const std::string &);
+    MileageData getMileage();
+    void saveMileage(MileageData);
 
     static uint64_t uptime();
 };

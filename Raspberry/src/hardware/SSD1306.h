@@ -3,8 +3,11 @@
 #include <iostream>
 #include <cstring>
 #include <bcm2835.h>
+#include <chrono>
+#include <thread>
 
 #include <../LCD_display/Fonts/fonts.h>
+#include "TCA9548A.h"
 
 // Define I2C address of SSD1306 (change if needed)
 #define SSD1306_I2C_ADDR 0x3C
@@ -29,6 +32,9 @@ class SSD1306
 private:
     /* data */
     uint8_t buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
+    TCA9548A *i2cMultiplexer;
+    uint8_t i2cMultiplexerChannel;
+
     const int paddingInline = 4;
     const int paddingBlock = 1;
     std::string currentString = "";
@@ -41,7 +47,7 @@ private:
     void setPixel(int x, int y, bool on);
 
 public:
-    SSD1306(/* args */);
+    SSD1306(TCA9548A *, uint8_t);
     ~SSD1306();
 
     void drawString(int, int, const char *, const sFONT &);

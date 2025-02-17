@@ -56,6 +56,7 @@ volatile FuelConsumptionData *fuelConsumptionData = nullptr;
 
 System *sys;
 std::unique_ptr<ADS1115> ads1115;
+std::unique_ptr<TCA9548A> i2cMultiplexer;
 
 bool terminateProgram = false;
 volatile bool terminateChildProcess = false;

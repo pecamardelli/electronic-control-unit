@@ -48,6 +48,21 @@ typedef struct alignas(64) _fuelConsumptionData
 } FuelConsumptionData;
 #endif
 
+#ifndef MILEAGE_DATA_H_
+#define MILEAGE_DATA_H_
+typedef struct alignas(64) _mileageData
+{
+    uint64_t total = 0;
+    uint64_t lastTotal = 0;
+    uint64_t lastTotalSaved = 0;
+    uint64_t currentTotal = 0;
+    float partial = 0;
+    float lastPartial = 0;
+    float lastPartialSaved = 0;
+    float currentPartial = 0;
+} MileageData;
+#endif
+
 enum Screen
 {
     TORINO_LOGO,

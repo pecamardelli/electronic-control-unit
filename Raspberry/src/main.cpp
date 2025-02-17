@@ -27,17 +27,16 @@ int main(int argc, char *argv[])
 	double lastDistanceCovered = 0;
 	double lastFuelConsumption = 0;
 
-	uint64_t mileage = sys->getCurrentMileage();
-	uint64_t lastSavedMileage = 0, currentMileage = 0;
+	MileageData mileage = sys->getMileage();
 
 	ads1115 = std::make_unique<ADS1115>();
-	TCA9548A i2cMultiplexer;
+	i2cMultiplexer = std::make_unique<TCA9548A>();
 	DigitalGauge digitalGauge;
 	VoltSensor voltSensor(ads1115.get());
 	DS18B20 coolantTempSensor;
 	// DHT11 tempSensor;
-	SSD1306 speedometerUpperDisplay;
-	// SSD1306 speedometerLowerDisplay;
+	SSD1306 speedometerUpperDisplay(i2cMultiplexer.get(), 0);
+	SSD1306 speedometerLowerDisplay(i2cMultiplexer.get(), 1);
 
 	// Add smart pointer factories to the vector
 	processFactories.push_back({"TempGauge", []()
@@ -90,14 +89,26 @@ int main(int argc, char *argv[])
 	{
 		coolantTempSensorData->temp = coolantTempSensor.readTemp();
 		engineValues->volts = voltSensor.getValue();
-		currentMileage = mileage + floor(speedSensorData->distanceCovered);
 
-		if (currentMileage - lastSavedMileage >= 1)
+		mileage.currentTotal = mileage.total + floor(speedSensorData->distanceCovered);
+		mileage.currentPartial = mileage.partial + floor(speedSensorData->distanceCovered);
+
+		if (mileage.currentTotal - mileage.lastTotalSaved >= 1)
 		{
-			sys->saveTotalMileage(currentMileage);
-			lastSavedMileage = currentMileage;
-			std::cout << "Mileage: " << lastSavedMileage << std::endl;
-			speedometerUpperDisplay.drawString(SSD1306_ALIGN_RIGHT, std::to_string(currentMileage).c_str(), LiberationSansNarrow_Bold28);
+			mileage.total = mileage.currentTotal;
+			sys->saveMileage(mileage);
+			mileage.lastTotalSaved = mileage.currentTotal;
+			std::cout << "Mileage: " << mileage.lastTotalSaved << std::endl;
+			speedometerUpperDisplay.drawString(SSD1306_ALIGN_RIGHT, std::to_string(mileage.currentTotal).c_str(), LiberationSansNarrow_Bold28);
+		}
+
+		if (mileage.currentPartial - mileage.lastPartialSaved >= 1)
+		{
+			mileage.partial = mileage.currentPartial;
+			sys->saveMileage(mileage);
+			mileage.lastPartialSaved = mileage.currentPartial;
+			std::cout << "Partial: " << mileage.lastPartialSaved << std::endl;
+			// speedometerLowerDisplay.drawString(SSD1306_ALIGN_RIGHT, std::to_string(mileage.currentPartial).c_str(), LiberationSansNarrow_Bold28);
 		}
 
 		engineValues->kml = lastFuelConsumption > 0 ? lastDistanceCovered / lastFuelConsumption : 0;
