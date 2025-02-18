@@ -30,12 +30,15 @@ int main(int argc, char *argv[])
 	MileageData mileage = sys->getMileage();
 
 	ads1115 = std::make_unique<ADS1115>();
-	i2cMultiplexer = std::make_unique<TCA9548A>();
+	// TCA9548A i2cMultiplexer;
 	VoltSensor voltSensor(ads1115.get());
 	DS18B20 coolantTempSensor;
 	// DHT11 tempSensor;
-	SSD1306 speedometerUpperDisplay(*i2cMultiplexer, 0);
-	SSD1306 speedometerLowerDisplay(*i2cMultiplexer, 1);
+
+	// i2cMultiplexer.selectChannel(0);
+	// SSD1306 speedometerUpperDisplay;
+	// i2cMultiplexer.selectChannel(2);
+	SSD1306 speedometerLowerDisplay;
 
 	// Add smart pointer factories to the vector
 	processFactories.push_back({"TempGauge", []()
@@ -95,14 +98,16 @@ int main(int argc, char *argv[])
 		{
 			sys->saveMileage(mileage);
 			mileage.lastTotalSaved = mileage.currentTotal;
-			speedometerUpperDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(mileage.currentTotal).c_str(), LiberationSansNarrow_Bold28);
+			// i2cMultiplexer.selectChannel(0);
+			speedometerLowerDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(mileage.currentTotal).c_str(), LiberationSansNarrow_Bold28);
 		}
 
 		if (mileage.currentPartial - mileage.lastPartialSaved >= 1)
 		{
 			sys->saveMileage(mileage);
 			mileage.lastPartialSaved = mileage.currentPartial;
-			// speedometerLowerDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(mileage.currentPartial).c_str(), LiberationSansNarrow_Bold16);
+			// i2cMultiplexer.selectChannel(2);
+			// speedometerLowerDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(mileage.currentPartial).c_str(), LiberationSansNarrow_Bold28);
 		}
 
 		engineValues->kml = lastFuelConsumption > 0 ? lastDistanceCovered / lastFuelConsumption : 0;

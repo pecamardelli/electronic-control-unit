@@ -1,8 +1,7 @@
 #include "SSD1306.h"
 
-SSD1306::SSD1306(TCA9548A &_i2cMultiplexer, uint8_t _i2cMultiplexerChannel) : i2cMultiplexer(_i2cMultiplexer), i2cMultiplexerChannel(_i2cMultiplexerChannel)
+SSD1306::SSD1306()
 {
-    std::cout << "Channel: " << i2cMultiplexerChannel << std::endl;
     init();
     // clear();
 }
@@ -14,7 +13,6 @@ SSD1306::~SSD1306()
 // Initialize the SSD1306 display
 void SSD1306::init()
 {
-    i2cMultiplexer.selectChannel(i2cMultiplexerChannel);
     i2c_setSlaveAddress(SSD1306_I2C_ADDR);
 
     sendCommand(0xAE); // Display OFF
@@ -61,7 +59,6 @@ void SSD1306::clear()
 // Update the display with buffer content
 void SSD1306::display()
 {
-    i2cMultiplexer.selectChannel(i2cMultiplexerChannel);
     i2c_setSlaveAddress(SSD1306_I2C_ADDR);
 
     sendCommand(0x21); // Set column address
