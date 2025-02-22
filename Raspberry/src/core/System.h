@@ -20,6 +20,7 @@
 using SectionMap = std::map<std::string, std::string>;
 using ConfigMap = std::map<std::string, SectionMap>;
 extern char *programName;
+extern volatile MileageData *mileage;
 
 class System
 {
@@ -53,8 +54,8 @@ public:
     SectionMap getConfig(const std::string &);
     std::string readFile(const std::string &);
     void writeFile(const std::string &, const std::string &);
-    MileageData getMileage();
-    void saveMileage(MileageData);
+    void loadMileage();
+    void saveMileage();
 
     static uint64_t uptime();
 };

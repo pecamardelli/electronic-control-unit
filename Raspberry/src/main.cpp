@@ -18,6 +18,14 @@ int main(int argc, char *argv[])
 
 	logger.info("BCM2835 initialized!");
 
+	// Setting up shared memory
+	engineValues = createSharedMemory<EngineValues>("/engineValues", true);
+	speedSensorData = createSharedMemory<SpeedSensorData>("/speedSensorData", true);
+	coolantTempSensorData = createSharedMemory<CoolantTempSensorData>("/coolantTempSensorData", true);
+	mileage = createSharedMemory<MileageData>("/mileageData", true);
+
+	logger.info("Shared memorysuccessfully created!");
+
 	sys = new System(programName);
 	Config config("global");
 	useconds_t mainLoopInterval = config.get<useconds_t>("main_loop_interval");
@@ -26,19 +34,14 @@ int main(int argc, char *argv[])
 
 	double lastDistanceCovered = 0;
 	double lastFuelConsumption = 0;
-
-	MileageData mileage = sys->getMileage();
+	std::ostringstream roundedPartialMileage;
 
 	ads1115 = std::make_unique<ADS1115>();
-	// TCA9548A i2cMultiplexer;
 	VoltSensor voltSensor(ads1115.get());
 	DS18B20 coolantTempSensor;
 	// DHT11 tempSensor;
 
-	// i2cMultiplexer.selectChannel(0);
-	// SSD1306 speedometerUpperDisplay;
-	// i2cMultiplexer.selectChannel(2);
-	SSD1306 speedometerLowerDisplay;
+	SSD1306Hardware speedometerUpperDisplay;
 
 	// Add smart pointer factories to the vector
 	processFactories.push_back({"TempGauge", []()
@@ -49,15 +52,8 @@ int main(int argc, char *argv[])
 								{ return std::make_shared<Speedometer>(); }});
 	processFactories.push_back({"SpeedSensor", []()
 								{ return std::make_shared<SpeedSensor>(); }});
-	processFactories.push_back({"FuelConsumption", []()
-								{ return std::make_shared<FuelConsumption>(); }});
-
-	// Setting up shared memory
-	logger.info("Setting up shared memory for child processes.");
-	engineValues = createSharedMemory<EngineValues>("/engineValues", true);
-	speedSensorData = createSharedMemory<SpeedSensorData>("/speedSensorData", true);
-	coolantTempSensorData = createSharedMemory<CoolantTempSensorData>("/coolantTempSensorData", true);
-	fuelConsumptionData = createSharedMemory<FuelConsumptionData>("/fuelConsumptionData", true);
+	processFactories.push_back({"SSD1306Software", []()
+								{ return std::make_shared<SSD1306Software>(); }});
 
 	// Iterate and instantiate processes during iteration
 	for (const auto &factory : processFactories)
@@ -91,28 +87,28 @@ int main(int argc, char *argv[])
 		coolantTempSensorData->temp = coolantTempSensor.readTemp();
 		engineValues->volts = voltSensor.getValue();
 
-		mileage.currentTotal = mileage.total + floor(speedSensorData->distanceCovered);
-		mileage.currentPartial = mileage.partial + floor(speedSensorData->distanceCovered);
+		mileage->currentTotal = mileage->total + floor(speedSensorData->distanceCovered);
+		mileage->currentPartial = mileage->partial + speedSensorData->distanceCovered;
 
-		if (mileage.currentTotal - mileage.lastTotalSaved >= 1)
+		if (mileage->currentTotal - mileage->lastTotalSaved >= 1)
 		{
-			sys->saveMileage(mileage);
-			mileage.lastTotalSaved = mileage.currentTotal;
-			// i2cMultiplexer.selectChannel(0);
-			speedometerLowerDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(mileage.currentTotal).c_str(), LiberationSansNarrow_Bold28);
+			sys->saveMileage();
+			mileage->lastTotalSaved = mileage->currentTotal;
 		}
 
-		if (mileage.currentPartial - mileage.lastPartialSaved >= 1)
+		if (mileage->currentPartial - mileage->lastPartialSaved >= 0.1)
 		{
-			sys->saveMileage(mileage);
-			mileage.lastPartialSaved = mileage.currentPartial;
-			// i2cMultiplexer.selectChannel(2);
-			// speedometerLowerDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(mileage.currentPartial).c_str(), LiberationSansNarrow_Bold28);
+			roundedPartialMileage.str(""); // Clear the content
+			roundedPartialMileage.clear(); // Reset error flags
+			roundedPartialMileage << std::fixed << std::setprecision(1) << mileage->currentPartial;
+			speedometerUpperDisplay.drawString(SSD1306_ALIGN_CENTER, roundedPartialMileage.str().c_str(), LiberationSansNarrow_Bold28);
+
+			sys->saveMileage();
+			mileage->lastPartialSaved = mileage->currentPartial;
 		}
 
 		engineValues->kml = lastFuelConsumption > 0 ? lastDistanceCovered / lastFuelConsumption : 0;
 		lastDistanceCovered = speedSensorData->distanceCovered;
-		lastFuelConsumption = fuelConsumptionData->fuelConsumption;
 
 		if (debugEnabled)
 		{
@@ -148,8 +144,8 @@ int main(int argc, char *argv[])
 	shm_unlink("/speedSensorData");
 	munmap(const_cast<void *>(reinterpret_cast<const volatile void *>(coolantTempSensorData)), sizeof(CoolantTempSensorData));
 	shm_unlink("/coolantTempSensorData");
-	munmap(const_cast<void *>(reinterpret_cast<const volatile void *>(fuelConsumptionData)), sizeof(FuelConsumptionData));
-	shm_unlink("/fuelConsumptionData");
+	munmap(const_cast<void *>(reinterpret_cast<const volatile void *>(mileage)), sizeof(MileageData));
+	shm_unlink("/mileageData");
 
 	// digitalGauge.setScreen(TORINO_LOGO);
 	// digitalGauge.showLogo();

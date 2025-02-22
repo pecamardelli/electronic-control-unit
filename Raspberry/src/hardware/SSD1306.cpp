@@ -2,8 +2,6 @@
 
 SSD1306::SSD1306()
 {
-    init();
-    // clear();
 }
 
 SSD1306::~SSD1306()
@@ -11,10 +9,8 @@ SSD1306::~SSD1306()
 }
 
 // Initialize the SSD1306 display
-void SSD1306::init()
+void SSD1306::sendInitCommands()
 {
-    i2c_setSlaveAddress(SSD1306_I2C_ADDR);
-
     sendCommand(0xAE); // Display OFF
     sendCommand(0xD5); // Set Display Clock Divide Ratio
     sendCommand(0x80); // Suggested ratio
@@ -42,37 +38,10 @@ void SSD1306::init()
     sendCommand(0x2E); // Deactivate Scroll
     sendCommand(0xAF); // Display ON
 }
-
-// Send command to SSD1306
-void SSD1306::sendCommand(uint8_t cmd)
-{
-    char data[2] = {SSD1306_COMMAND, cmd};
-    i2c_write(data, 2);
-}
-
 // Clear the display buffer
 void SSD1306::clear()
 {
     std::memset(buffer, 0, sizeof(buffer));
-}
-
-// Update the display with buffer content
-void SSD1306::display()
-{
-    i2c_setSlaveAddress(SSD1306_I2C_ADDR);
-
-    sendCommand(0x21); // Set column address
-    sendCommand(0x00);
-    sendCommand(SSD1306_WIDTH - 1);
-    sendCommand(0x22); // Set page address
-    sendCommand(0x00);
-    sendCommand((SSD1306_HEIGHT / 8) - 1);
-
-    for (uint16_t i = 0; i < sizeof(buffer); i++)
-    {
-        char data[2] = {SSD1306_DATA, buffer[i]};
-        i2c_write(data, 2);
-    }
 }
 
 void SSD1306::drawChar(int x, int y, char c, const sFONT &font)
@@ -132,13 +101,6 @@ void SSD1306::drawString(int x, int y, const char *str, const sFONT &font)
         else
         {
             x += font.Width + 1; // Standard spacing
-        }
-
-        // Wrap to the next line if the current line is full
-        if (x + font.Width > SSD1306_WIDTH)
-        {
-            x = 0;
-            y += font.Height;
         }
 
         str++;

@@ -30,8 +30,8 @@
 #include "SpeedSensor.h"
 #include "Speedometer.h"
 #include "VoltSensor.h"
-#include "FuelConsumption.h"
-#include "SSD1306.h"
+#include "SSD1306Software.h"
+#include "SSD1306Hardware.h"
 
 // Initialize static member
 std::atomic<bool> Process::terminateFlag(false);
@@ -52,7 +52,7 @@ std::vector<Factory> processFactories;
 volatile EngineValues *engineValues = nullptr;
 volatile SpeedSensorData *speedSensorData = nullptr;
 volatile CoolantTempSensorData *coolantTempSensorData = nullptr;
-volatile FuelConsumptionData *fuelConsumptionData = nullptr;
+volatile MileageData *mileage = nullptr;
 
 System *sys;
 std::unique_ptr<ADS1115> ads1115;

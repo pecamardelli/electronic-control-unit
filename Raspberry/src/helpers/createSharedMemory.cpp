@@ -29,6 +29,12 @@ T *createSharedMemory(const char *shmName, bool create)
         exit(EXIT_FAILURE);
     }
 
+    // Initialize memory to zero only if creating new shared memory
+    if (create)
+    {
+        memset(ptr, 0, sizeof(T));
+    }
+
     return static_cast<T *>(ptr); // Return the mapped memory as a pointer to T
 }
 
@@ -37,3 +43,4 @@ template EngineValues *createSharedMemory<EngineValues>(const char *, bool);
 template SpeedSensorData *createSharedMemory<SpeedSensorData>(const char *, bool);
 template CoolantTempSensorData *createSharedMemory<CoolantTempSensorData>(const char *, bool);
 template FuelConsumptionData *createSharedMemory<FuelConsumptionData>(const char *, bool);
+template MileageData *createSharedMemory<MileageData>(const char *, bool);

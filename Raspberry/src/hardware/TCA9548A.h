@@ -1,7 +1,5 @@
 #pragma once
 
-// #define RESET_PIN RPI_V2_GPIO_P1_35 // GPIO19
-
 #include <iostream>
 #include <memory>
 

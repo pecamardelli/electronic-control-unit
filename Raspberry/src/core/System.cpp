@@ -8,6 +8,8 @@ System::System(std::string programName)
     totalMileageFileName = dataPath + "/total_mileage";
     partialMileageFileName = dataPath + "/partial_mileage";
 
+    loadMileage();
+
     // Display parsed configuration
     // for (const auto &[section, values] : config)
     // {
@@ -160,29 +162,25 @@ void System::writeFile(const std::string &filename, const std::string &data)
     }
 }
 
-MileageData System::getMileage()
+void System::loadMileage()
 {
-    MileageData mileage;
     std::string fileContent;
 
     try
     {
         fileContent = readFile(totalMileageFileName);
-        mileage.total = std::stoul(fileContent);
+        mileage->total = std::stoul(fileContent);
         fileContent = readFile(partialMileageFileName);
-        mileage.partial = std::stof(fileContent);
-
-        return mileage;
+        mileage->partial = std::stof(fileContent);
     }
     catch (const std::exception &e)
     {
         logger.error("Error converting mileage value: " + std::string(e.what()));
-        return mileage;
     }
 }
 
-void System::saveMileage(MileageData mileage)
+void System::saveMileage()
 {
-    writeFile(totalMileageFileName, std::to_string(mileage.total));
-    writeFile(partialMileageFileName, std::to_string(mileage.partial));
+    writeFile(totalMileageFileName, std::to_string(mileage->total));
+    writeFile(partialMileageFileName, std::to_string(mileage->partial));
 }

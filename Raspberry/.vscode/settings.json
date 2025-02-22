@@ -96,7 +96,9 @@
     "mutex": "cpp",
     "ioctl.h": "c",
     "speedometer.h": "c",
-    "fuelconsumption.h": "c"
+    "fuelconsumption.h": "c",
+    "ssd1306software.h": "c",
+    "ssd1306.h": "c"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

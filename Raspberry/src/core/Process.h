@@ -1,10 +1,5 @@
 #pragma once
 
-#ifndef STRING_H_
-#define STRING_H_
-#include <string>
-#endif
-
 #include <iostream>
 #include <csignal>
 #include <atomic>

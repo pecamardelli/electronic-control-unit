@@ -28,18 +28,8 @@ class SSD1306
 {
 private:
     /* data */
-    uint8_t buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
-
     const int paddingInline = 4;
     const int paddingBlock = 1;
-    std::string currentString = "";
-    char currentScreen[SSD1306_HEIGHT / 31][SSD1306_WIDTH / (15 + 1)]; // Adjust fontWidth and fontHeight as needed
-    void init();
-    void sendCommand(uint8_t);
-    void clear();
-    void display();
-    void drawChar(int, int, char, const sFONT &);
-    void setPixel(int x, int y, bool on);
 
 public:
     SSD1306();
@@ -50,4 +40,15 @@ public:
     void drawRectangle(int x, int y, int width, int height, int thickness);
     void drawHorizontalLine(int x, int y, int length);
     void drawVerticalLine(int x, int y, int length);
+
+protected:
+    uint8_t buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
+    virtual void init() = 0;
+    virtual void sendCommand(uint8_t) = 0;
+    virtual void display() = 0;
+
+    void clear();
+    void sendInitCommands();
+    void drawChar(int, int, char, const sFONT &);
+    void setPixel(int x, int y, bool on);
 };

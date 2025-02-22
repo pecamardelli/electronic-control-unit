@@ -13,7 +13,6 @@
 extern std::string IMAGES_PATH;
 extern volatile EngineValues *engineValues;
 extern volatile CoolantTempSensorData *coolantTempSensorData;
-extern volatile FuelConsumptionData *fuelConsumptionData;
 
 class DigitalGauge : public Process
 {
