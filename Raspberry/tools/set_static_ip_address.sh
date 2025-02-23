@@ -36,3 +36,16 @@ for connection in $connections; do
 done
 
 echo "All Wi-Fi connections have been configured with a static IP."
+
+
+# -------------------------------
+# Set static IP for eth0 (Ethernet)
+# -------------------------------
+ETH_IP="192.168.100.1/24"
+
+echo "Configuring static IP for eth0..."
+nmcli con modify eth0 ipv4.addresses "$ETH_IP"
+nmcli con modify eth0 ipv4.method manual
+nmcli con up eth0
+
+echo "Static IP $ETH_IP has been set for eth0."

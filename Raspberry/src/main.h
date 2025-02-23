@@ -15,10 +15,8 @@
 
 #include "DS18B20.h"
 #include "ADS1115.h"
-#include "GPS.h"
-#include "TCA9548A.h"
 #include "DHT11.h"
-#include "RELAY.h"
+#include "DS3231.h"
 
 #include "common.h"
 #include "Process.h"
@@ -56,6 +54,8 @@ volatile MileageData *mileage = nullptr;
 
 System *sys;
 std::unique_ptr<ADS1115> ads1115;
+
+struct tm dateTime;
 
 bool terminateProgram = false;
 volatile bool terminateChildProcess = false;

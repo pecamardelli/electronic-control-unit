@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 	}
 
 	bcm2835_i2c_begin();
-	bcm2835_i2c_set_baudrate(1000000);
+	bcm2835_i2c_set_baudrate(100000);
 
 	logger.info("BCM2835 initialized!");
 
@@ -24,12 +24,11 @@ int main(int argc, char *argv[])
 	coolantTempSensorData = createSharedMemory<CoolantTempSensorData>("/coolantTempSensorData", true);
 	mileage = createSharedMemory<MileageData>("/mileageData", true);
 
-	logger.info("Shared memorysuccessfully created!");
+	logger.info("Shared memory successfully created!");
 
 	sys = new System(programName);
 	Config config("global");
 	useconds_t mainLoopInterval = config.get<useconds_t>("main_loop_interval");
-	// unsigned int logoTime = config.get<unsigned int>("logo_screen_time");
 	bool debugEnabled = config.get<bool>("debug_enabled");
 
 	double lastDistanceCovered = 0;
@@ -39,6 +38,8 @@ int main(int argc, char *argv[])
 	ads1115 = std::make_unique<ADS1115>();
 	VoltSensor voltSensor(ads1115.get());
 	DS18B20 coolantTempSensor;
+	DS3231 clock;
+
 	// DHT11 tempSensor;
 
 	SSD1306Hardware speedometerUpperDisplay;
@@ -130,6 +131,9 @@ int main(int argc, char *argv[])
 		// {
 		// 	engineValues->ignition = true;
 		// }
+
+		// Check if system time and clock time are the same.
+		clock.compareTime();
 
 		std::this_thread::sleep_for(std::chrono::microseconds(mainLoopInterval));
 		// break;
