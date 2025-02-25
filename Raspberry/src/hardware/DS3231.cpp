@@ -77,7 +77,6 @@ void DS3231::compareTime()
     // Compare only if the specified amount of seconds has passed.
     auto now = std::chrono::steady_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - lastCompareTime).count();
-    std::cout << "Elapsed: " << elapsed << " - CompareInterval: " << compareInterval << std::endl;
 
     if (elapsed < compareInterval)
         return;
@@ -88,10 +87,6 @@ void DS3231::compareTime()
     auto systemNow = std::chrono::system_clock::now();
     std::time_t systemTime = std::chrono::system_clock::to_time_t(systemNow);
     struct tm *systemTm = std::localtime(&systemTime);
-
-    // Convert system time to tm structure
-    std::cout << "System Date: " << tmToString(*systemTm) << std::endl;
-    std::cout << "DS3231 Date: " << getTime() << std::endl;
 
     // Compare the system time and RTC time
     if (std::mktime(systemTm) > std::mktime(&timeStruct))

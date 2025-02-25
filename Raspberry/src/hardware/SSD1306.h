@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstring>
 
-#include "BCM_2835.h"
+#include <bcm2835.h>
 #include <../LCD_display/Fonts/fonts.h>
 
 // Define I2C address of SSD1306 (change if needed)

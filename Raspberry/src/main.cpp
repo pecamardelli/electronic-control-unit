@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
 
 	ads1115 = std::make_unique<ADS1115>();
 	VoltSensor voltSensor(ads1115.get());
-	DS18B20 coolantTempSensor;
 	DS3231 clock;
 
 	// DHT11 tempSensor;
@@ -85,7 +84,6 @@ int main(int argc, char *argv[])
 
 	while (!terminateProgram)
 	{
-		coolantTempSensorData->temp = coolantTempSensor.readTemp();
 		engineValues->volts = voltSensor.getValue();
 
 		mileage->currentTotal = mileage->total + floor(speedSensorData->distanceCovered);

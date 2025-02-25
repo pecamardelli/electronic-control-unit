@@ -28,7 +28,7 @@ void SSD1306::sendInitCommands()
     sendCommand(0xDA); // Set COM Pins Hardware Configuration
     sendCommand(0x02);
     sendCommand(0x81); // Set Contrast
-    sendCommand(0x8F);
+    sendCommand(0x4F);
     sendCommand(0xD9); // Set Pre-charge Period
     sendCommand(0xF1);
     sendCommand(0xDB); // Set VCOMH Deselect Level
@@ -94,9 +94,9 @@ void SSD1306::drawString(int x, int y, const char *str, const sFONT &font)
         drawChar(x, y, *str, font);
 
         // Advance to the next character (accounting for spacing)
-        if (strcmp(str, ".") == 0)
+        if (*str == '.')
         {
-            x += font.Width - 7; // Adjust for smaller spacing after a period
+            x += font.Width - 5; // Adjust for smaller spacing after a period
         }
         else
         {

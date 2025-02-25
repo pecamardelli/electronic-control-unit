@@ -2,18 +2,8 @@
 
 #define I2C_BUS "/dev/i2c-1"
 
-#include <sys/wait.h>
-#include <memory> // For smart pointers
-#include <iostream>
-#include <vector>
 #include <functional>
-#include <typeinfo>
-#include <bcm2835.h>
-#include <atomic>
-#include <chrono>
-#include <thread>
 
-#include "DS18B20.h"
 #include "ADS1115.h"
 #include "DHT11.h"
 #include "DS3231.h"

@@ -13,14 +13,14 @@ int ADS1115::getRawValue(const uint8_t channel)
 {
     logger->debug("Reading raw value from channel " + std::to_string(channel) + ".");
 
-    i2c_setSlaveAddress(ADS1115_ADDR);
+    bcm2835_i2c_setSlaveAddress(ADS1115_ADDR);
 
     unsigned char config[3];
     config[0] = CONFIG_REG;
     config[1] = 0xC2 | muxSettings[channel]; // MSB: Single-ended, gain ±4.096V, 128 SPS
     config[2] = 0x83;                        // LSB: Continuous conversion mode
 
-    if (i2c_write(reinterpret_cast<char *>(config), 3) != BCM2835_I2C_REASON_OK)
+    if (bcm2835_i2c_write(reinterpret_cast<char *>(config), 3) != BCM2835_I2C_REASON_OK)
     {
         logger->error("Failed to write configuration to ADS1115.");
         return 0;
@@ -28,14 +28,14 @@ int ADS1115::getRawValue(const uint8_t channel)
 
     // Read conversion result
     unsigned char reg = CONVERSION_REG;
-    if (i2c_write(reinterpret_cast<char *>(&reg), 1) != BCM2835_I2C_REASON_OK)
+    if (bcm2835_i2c_write(reinterpret_cast<char *>(&reg), 1) != BCM2835_I2C_REASON_OK)
     {
         logger->error("Failed to set conversion register.");
         return 0;
     }
 
     unsigned char data[2] = {0};
-    if (i2c_read(reinterpret_cast<char *>(data), 2) != BCM2835_I2C_REASON_OK)
+    if (bcm2835_i2c_read(reinterpret_cast<char *>(data), 2) != BCM2835_I2C_REASON_OK)
     {
         logger->error("Failed to read data from ADS1115.");
         return 0;

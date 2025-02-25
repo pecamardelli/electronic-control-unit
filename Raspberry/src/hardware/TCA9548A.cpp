@@ -21,10 +21,10 @@ void TCA9548A::selectChannel(uint8_t channel)
     if (channel == currentChannel)
         return;
 
-    i2c_setSlaveAddress(TCA9548A_ADDRESS);
+    bcm2835_i2c_setSlaveAddress(TCA9548A_ADDRESS);
 
     char data = 1 << channel; // Bitmask for the selected channel
-    if (i2c_write(&data, 1))
+    if (bcm2835_i2c_write(&data, 1))
     {
         logger->error("Failed to select channel.");
     }

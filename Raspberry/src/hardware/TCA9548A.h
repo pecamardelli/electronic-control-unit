@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "Logger.h"
-#include "BCM_2835.h"
+#include <bcm2835.h>
 
 #define TCA9548A_ADDRESS 0x70 // Default I2C address for the TCA9548A
 
