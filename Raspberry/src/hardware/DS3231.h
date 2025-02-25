@@ -4,11 +4,6 @@
 #include <iostream>
 #include <chrono>
 #include <iomanip>
-#include <ctime>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 #include <sys/time.h>
 
 #include "Base.h"
@@ -23,15 +18,12 @@ public:
     std::string getTime();
     void printTime();
     void compareTime();
-    bool updateTimeFromNTP();
     std::string tmToString(const std::tm &);
 
 private:
     uint8_t i2cAddress;
     struct tm timeStruct;
-    const char *ntpServers[4] = {"1.ar.pool.ntp.org", "2.south-america.pool.ntp.org", "1.south-america.pool.ntp.org", "pool.ntp.org"};
     char command = 0x00;
-    time_t serverTimeout = 3;
     const std::string &format = "%d/%m/%Y %H:%M:%S";
     std::chrono::steady_clock::time_point lastCompareTime;
     int64_t compareInterval = 60;

@@ -5,7 +5,6 @@ DS3231::DS3231(uint8_t address) : i2cAddress(address), lastCompareTime(std::chro
     description = "DS3231";
     logger = std::make_unique<Logger>(description);
     config = std::make_unique<Config>(description);
-    serverTimeout = config->get<time_t>("ntp_server_timeout");
     compareInterval = config->get<int64_t>("compare_interval");
 
     compareTime();
@@ -73,67 +72,6 @@ void DS3231::printTime()
     std::cout << getTime() << std::endl;
 }
 
-bool DS3231::updateTimeFromNTP()
-{
-    const int NTP_PORT = 123;
-    int sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (sockfd < 0)
-        return false;
-
-    struct timeval timeout;
-    timeout.tv_sec = serverTimeout;
-    timeout.tv_usec = 0;
-    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
-
-    struct sockaddr_in serverAddr = {};
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(NTP_PORT);
-
-    uint8_t ntpPacket[48] = {0};
-    ntpPacket[0] = 0b11100011; // LI, Version, Mode
-
-    for (const char *server : ntpServers)
-    {
-        std::cout << "Trying NTP server: " << server << std::endl;
-        inet_pton(AF_INET, server, &serverAddr.sin_addr);
-        sendto(sockfd, ntpPacket, sizeof(ntpPacket), 0, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
-        struct sockaddr_in responseAddr;
-        socklen_t addrLen = sizeof(responseAddr);
-        if (recvfrom(sockfd, ntpPacket, sizeof(ntpPacket), 0, (struct sockaddr *)&responseAddr, &addrLen) > 0)
-        {
-            close(sockfd);
-            uint32_t timestamp = ntohl(*(uint32_t *)&ntpPacket[40]);
-            timestamp -= 2208988800U; // Convert NTP to Unix time
-
-            // Convert NTP timestamp to chrono time_point (system_clock)
-            std::chrono::system_clock::time_point tp = std::chrono::system_clock::from_time_t(timestamp);
-
-            // Adjust for GMT-3 (subtract 3 hours from the time_point)
-            tp -= std::chrono::hours(3);
-
-            // Convert time_point to a time_t for printing
-            std::time_t adjustedTime = std::chrono::system_clock::to_time_t(tp);
-
-            // Print the adjusted time
-            std::cout << "NTP Time Received (GMT-3): "
-                      << std::put_time(std::localtime(&adjustedTime), "%d/%m/%Y %H:%M:%S") << std::endl;
-
-            // Set the time (using the adjusted time, if needed)
-            struct tm *ntpTime = std::localtime(&adjustedTime);
-            setTime(ntpTime->tm_hour, ntpTime->tm_min, ntpTime->tm_sec,
-                    ntpTime->tm_wday, ntpTime->tm_mday, ntpTime->tm_mon + 1, ntpTime->tm_year % 100);
-            return true;
-        }
-        else
-        {
-            std::cout << "Failed to receive response from: " << server << std::endl;
-        }
-    }
-
-    close(sockfd);
-    return false;
-}
-
 void DS3231::compareTime()
 {
     // Compare only if the specified amount of seconds has passed.
@@ -166,8 +104,6 @@ void DS3231::compareTime()
     {
         logger->info("Updating system time with DS3231 time.");
         setSystemTime(timeStruct);
-        // std::chrono::system_clock::time_point tp = std::chrono::system_clock::from_time_t(std::mktime(&rtcTm));
-        // std::this_thread::sleep_until(tp); // Wait until the RTC time is reached
     }
     else
     {
