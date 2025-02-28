@@ -1,7 +1,5 @@
 #pragma once
 
-#define I2C_BUS "/dev/i2c-1"
-
 #include <functional>
 
 #include "ADS1115.h"
@@ -24,8 +22,6 @@
 // Initialize static member
 std::atomic<bool> Process::terminateFlag(false);
 
-const char *ASSETS_PATH = "./src/assets";
-std::string IMAGES_PATH = std::string(ASSETS_PATH) + "/images";
 std::vector<ChildProcess> childProcesses; // Vector to store child processes
 
 struct Factory
@@ -44,8 +40,6 @@ volatile MileageData *mileage = nullptr;
 
 System *sys;
 std::unique_ptr<ADS1115> ads1115;
-
-struct tm dateTime;
 
 bool terminateProgram = false;
 volatile bool terminateChildProcess = false;

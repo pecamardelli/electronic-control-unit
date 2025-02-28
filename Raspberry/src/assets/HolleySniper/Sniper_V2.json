@@ -1,0 +1,3466 @@
+{
+    "messages": [
+        {
+            "id": 503320576,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "RTC",
+            "signals": [
+                {
+                    "bit_length": 64,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "RTC",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503336960,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "RPM",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "RPM",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503353344,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Inj_PW",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Inj_PW",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503369728,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Duty_Cycle",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Duty_Cycle",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503386112,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "CL_Comp",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "CL_Comp",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503402496,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Target_AFR",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Target_AFR",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503418880,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "AirFuel_Ratio",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "AirFuel_Ratio",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503435264,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Air_Temp_Enr",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Air_Temp_Enr",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503451648,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Coolant_Enr",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Coolant_Enr",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503468032,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Coolant_AFR_Offset",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Coolant_AFR_Offset",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503484416,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Afterstart_Enr",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Afterstart_Enr",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503500800,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Current_Learn",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Current_Learn",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503517184,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "CL_Status",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "CL_Status",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503533568,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Learn_Status",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Learn_Status",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503549952,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Fuel_Flow",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Fuel_Flow",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503566336,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "MAP_RoC",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "MAP_RoC",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503582720,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "TPS_RoC",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "TPS_RoC",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503599104,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Estimated_VE",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Estimated_VE",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503615488,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Ignition_Timing",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Ignition_Timing",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503631872,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Main_Rev_Limit",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Main_Rev_Limit",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503648256,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Rev_Limit_1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Rev_Limit_1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503664640,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Launch_Retard",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Launch_Retard",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503681024,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "IAC_Position",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "IAC_Position",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503697408,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "MAP",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "MAP",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503713792,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "TPS",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "TPS",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503730176,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "MAT",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "MAT",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503746560,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "CTS",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "CTS",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503762944,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Battery",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Battery",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503779328,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Custom1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Custom1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503795712,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Custom2",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Custom2",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503812096,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Custom3",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Custom3",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503828480,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "AC_Kick",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "AC_Kick",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503844864,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Fan_1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Fan_1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503861248,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Fan_2",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Fan_2",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503877632,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Fuel_Pump_Status",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Fuel_Pump_Status",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503894016,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "2_Fuel_Pump",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "2_Fuel_Pump",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503910400,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Fuel_Pressure_Status",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Fuel_Pressure_Status",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503926784,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "AC_Shutdown",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "AC_Shutdown",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503943168,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Sensor_Warning",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Sensor_Warning",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503959552,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Sensor_Caution",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Sensor_Caution",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503975936,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Base_Fuel_lbhr",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Base_Fuel_lbhr",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 503992320,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Base_Fuel_VE",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Base_Fuel_VE",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504008704,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Base_Timing",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Base_Timing",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504025088,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Base_Target_AFR",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Base_Target_AFR",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504041472,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Base_Ign_Dwell",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Base_Ign_Dwell",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504057856,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Vol_Comp_Ign_Dwell",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Vol_Comp_Ign_Dwell",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504074240,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Timing_vs_Air",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Timing_vs_Air",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504090624,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Timing_vs_Cool",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Timing_vs_Cool",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504107008,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Status_1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Status_1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504123392,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Status_2",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Status_2",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504139776,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Status_3",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Status_3",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504156160,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Status_4",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Status_4",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504172544,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Status_5",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Status_5",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504188928,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Status_6",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Status_6",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504205312,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Status_7",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Status_7",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504221696,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Status_8",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Status_8",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504238080,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Injector_Set_1_PPH",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Injector_Set_1_PPH",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504254464,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Injector_Set_2_PPH",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Injector_Set_2_PPH",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504270848,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Injector_Set_1_PW",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Injector_Set_1_PW",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504287232,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Injector_Set_2_PW",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Injector_Set_2_PW",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504303616,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Injector_1_Status",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Injector_1_Status",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504320000,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Injector_2_Status",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Injector_2_Status",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504336384,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Injector_3_Status",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Injector_3_Status",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504352768,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Injector_4_Status",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Injector_4_Status",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504369152,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Boost_PSIG",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Boost_PSIG",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504385536,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Boost_Time",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Boost_Time",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504401920,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Target_Boost",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Target_Boost",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504418304,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Trans_Brake",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Trans_Brake",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504434688,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Boost_Solenoid_Duty",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Boost_Solenoid_Duty",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504451072,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Boost_Safety",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Boost_Safety",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504467456,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Boost_Master_Enbl",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Boost_Master_Enbl",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504483840,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Boost_Fill_Sol_DC",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Boost_Fill_Sol_DC",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504500224,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Boost_Vent_Sol_DC",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Boost_Vent_Sol_DC",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504516608,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "N2O_Stage_1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "N2O_Stage_1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504532992,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "N2O_Enabled",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "N2O_Enabled",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504549376,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "N2O_Input_1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "N2O_Input_1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504565760,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "N2O_Lean_Cutoff",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "N2O_Lean_Cutoff",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504582144,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "N2O_Rich_Cutoff",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "N2O_Rich_Cutoff",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504598528,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "N2O_RPM_Cutoff",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "N2O_RPM_Cutoff",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504614912,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "N2O_MAP_Cutoff",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "N2O_MAP_Cutoff",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504631296,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "N2O_Dry_Fuel_1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "N2O_Dry_Fuel_1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504647680,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "N2O_Tmg_Mod_1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "N2O_Tmg_Mod_1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504664064,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "N2O_Timer_1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "N2O_Timer_1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504680448,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504696832,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_2",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_2",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504713216,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_3",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_3",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504729600,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_4",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_4",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504745984,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_5",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_5",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504762368,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_6",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_6",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504778752,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_7",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_7",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504795136,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_8",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_8",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504811520,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_9",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_9",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504827904,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_10",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_10",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504844288,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_11",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_11",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504860672,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_12",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_12",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504877056,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_13",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_13",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504893440,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_14",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_14",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504909824,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_15",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_15",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504926208,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_16",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_16",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504942592,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_17",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_17",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504958976,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_18",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_18",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504975360,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_19",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_19",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 504991744,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Diag_20",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Diag_20",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505008128,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "AT_Launch_Input",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "AT_Launch_Input",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505024512,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "AT_1D_1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "AT_1D_1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505040896,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "AT_1D_2",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "AT_1D_2",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505057280,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "AT_1D_3",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "AT_1D_3",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505073664,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "AT_1D_4",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "AT_1D_4",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505090048,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "AT_2D_1",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "AT_2D_1",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505106432,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "AT_2D_2",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "AT_2D_2",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505122816,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "TCC_Lockup",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "TCC_Lockup",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505139200,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Gear",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Gear",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505155584,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Speed",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Speed",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505171968,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Line_Pressure",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Line_Pressure",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505188352,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Input_Shaft_Speed",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Input_Shaft_Speed",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505204736,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Accum_Pressure",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Accum_Pressure",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505221120,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "TCC_Duty_Cycle",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "TCC_Duty_Cycle",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505237504,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Line_Temp",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Line_Temp",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505253888,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Trans_Man_US_Input",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Trans_Man_US_Input",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505270272,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Trans_Man_DS_Input",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Trans_Man_DS_Input",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505286656,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Trans_AutoMan_In",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Trans_AutoMan_In",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505303040,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Trans_Switch_Position",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Trans_Switch_Position",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505319424,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Line_Pressure_PSI",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Line_Pressure_PSI",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        },
+        {
+            "id": 505335808,
+            "is_extended_frame": true,
+            "is_fd": false,
+            "name": "Trans_Fan_Status",
+            "signals": [
+                {
+                    "bit_length": 32,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": true,
+                    "is_signed": true,
+                    "name": "Trans_Fan_Status",
+                    "offset": "0",
+                    "start_bit": 24
+                },
+                {
+                    "bit_length": 8,
+                    "factor": "1",
+                    "is_big_endian": true,
+                    "is_float": false,
+                    "is_signed": false,
+                    "name": "Status",
+                    "offset": "0",
+                    "start_bit": 56
+                }
+            ]
+        }
+    ]
+}

@@ -3,8 +3,8 @@
 // Function to terminate all child processes
 void terminateChildProcesses(std::vector<ChildProcess> childProcesses)
 {
-    Logger logger("ChildProcessTerminator");
-    logger.info("Terminating child processes...");
+    Logger logger("terminateChildProcesses");
+    logger.info("Terminating processes...");
 
     for (const auto &child : childProcesses)
     {

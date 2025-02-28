@@ -98,7 +98,13 @@
     "speedometer.h": "c",
     "fuelconsumption.h": "c",
     "ssd1306software.h": "c",
-    "ssd1306.h": "c"
+    "ssd1306.h": "c",
+    "any": "cpp",
+    "forward_list": "cpp",
+    "optional": "cpp",
+    "ranges": "cpp",
+    "span": "cpp",
+    "valarray": "cpp"
   },
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,

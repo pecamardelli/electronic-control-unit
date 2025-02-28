@@ -2,6 +2,14 @@
 
 #include <string>
 
+#define I2C_BUS "/dev/i2c-1"
+#define SPI1_DEVICE "/dev/spidev1.0"
+
+#define ASSETS_PATH "./src/assets"
+#define IMAGES_PATH ASSETS_PATH "/images"
+#define HOLLEY_SNIPER_PATH ASSETS_PATH "/HolleySniper"
+#define HOLLEY_SNIPER_DBC_FILE HOLLEY_SNIPER_PATH "/Sniper_V2.json"
+
 #ifndef CHILD_PROCESS_H_
 #define CHILD_PROCESS_H_
 typedef struct _childProcess

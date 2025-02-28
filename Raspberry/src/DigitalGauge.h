@@ -10,7 +10,6 @@
 #include "common.h"
 #include "Logger.h"
 
-extern std::string IMAGES_PATH;
 extern volatile EngineValues *engineValues;
 extern volatile CoolantTempSensorData *coolantTempSensorData;
 
@@ -24,8 +23,8 @@ private:
 
   Screen currentScreen = TORINO_LOGO;
 
-  std::string TORINO_LOGO_PATH = IMAGES_PATH + "/torino_logo.bmp";
-  std::string BACKGROUND = IMAGES_PATH + "/digital_gauge.bmp";
+  std::string TORINO_LOGO_PATH = IMAGES_PATH "/torino_logo.bmp";
+  std::string BACKGROUND = IMAGES_PATH "/digital_gauge.bmp";
 
   uint16_t logoTime;
 
