@@ -13,23 +13,24 @@
 #include <iostream>
 #include <arpa/inet.h> // For byte order conversion
 
-#include "Base.h"
+#include "Process.h"
 #include "DBCParser.h"
+#include "common.h"
 
-class MCP2515 : public Base
+class MCP2515 : public Process
 {
 private:
-    int spi_fd;            // File descriptor for SPI
-    const char *spiDevice; // SPI device path
-    uint8_t mode;          // SPI Mode (Mode 0 for MCP2515)
-    uint8_t bits;          // Bits per word (8-bit)
-    uint32_t speed;        // SPI Speed (4 MHz)
+    int spi_fd = -1;                 // File descriptor for SPI
+    const char *spiDevice;           // SPI device path
+    const uint8_t mode = SPI_MODE_0; // SPI Mode (Mode 0 for MCP2515)
+    const uint8_t bits = 8;          // Bits per word (8-bit)
+    const uint32_t speed = 4000000;  // SPI Speed (4 MHz)
 
     bool initialized = false;
     DBCParser dbc;
 
 public:
-    MCP2515(const char *, uint32_t);
+    MCP2515();
     ~MCP2515();
 
     bool begin();
@@ -40,5 +41,5 @@ public:
     void closeSPI();
 
     void parseCANMessage(struct can_frame &);
-    void receiveLiveData();
+    void loop() override;
 };

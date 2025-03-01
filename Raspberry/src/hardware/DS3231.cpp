@@ -16,8 +16,6 @@ DS3231::~DS3231()
 
 void DS3231::setTime(uint8_t hour, uint8_t minute, uint8_t second, uint8_t day, uint8_t date, uint8_t month, uint8_t year)
 {
-    logger->info("Setting the DS3231 date and time...");
-
     bcm2835_i2c_setSlaveAddress(i2cAddress);
 
     char buffer[8] = {0};
@@ -88,21 +86,22 @@ void DS3231::compareTime()
     std::time_t systemTime = std::chrono::system_clock::to_time_t(systemNow);
     struct tm *systemTm = std::localtime(&systemTime);
 
-    // Compare the system time and RTC time
-    if (std::mktime(systemTm) > std::mktime(&timeStruct))
+    std::time_t rtcTime = std::mktime(&timeStruct);
+
+    if (systemTime > rtcTime + 1) // System time is ahead by more than 1 second
     {
         logger->info("Updating DS3231 with system time.");
         setTime(systemTm->tm_hour, systemTm->tm_min, systemTm->tm_sec,
                 systemTm->tm_wday, systemTm->tm_mday, systemTm->tm_mon + 1, systemTm->tm_year % 100);
     }
-    else if (std::mktime(systemTm) < std::mktime(&timeStruct))
+    else if (systemTime < rtcTime - 1) // System time is behind by more than 1 second
     {
         logger->info("Updating system time with DS3231 time.");
         setSystemTime(timeStruct);
     }
     else
     {
-        std::cout << "System time and RTC time are the same." << std::endl;
+        std::cout << "System time and RTC time are synchronized within 1 second." << std::endl;
     }
 }
 

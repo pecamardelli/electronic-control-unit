@@ -27,7 +27,6 @@ bool DBCParser::loadDBC(const std::string &filename)
         messageMap[canID] = name;
     }
 
-    std::cout << "DBC File Loaded Successfully!" << std::endl;
     return true;
 }
 

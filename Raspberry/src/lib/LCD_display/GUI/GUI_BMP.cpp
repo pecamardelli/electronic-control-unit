@@ -30,7 +30,7 @@ UBYTE GUI_ReadBmp(const char *path)
 	//  Binary file open
 	if ((fp = fopen(path, "rb")) == NULL)
 	{ // fp = 0x00426aa0
-		DEBUG("Cann't open the file!\n");
+		DEBUG("Can't open the file!\n");
 		printf("Can't open the file!");
 		return 0;
 	}

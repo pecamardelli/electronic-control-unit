@@ -1,16 +1,16 @@
-#include "MCP2525.h"
+#include "MCP2515.h"
 
-MCP2515::MCP2515(const char *device = SPI1_DEVICE, uint32_t speedHz = 4000000)
-    : spiDevice(device), mode(SPI_MODE_0), bits(8), speed(speedHz), spi_fd(-1)
+MCP2515::MCP2515() : spiDevice(SPI1_DEVICE)
 {
     description = "MCP2515";
     logger = std::make_unique<Logger>(description);
     config = std::make_unique<Config>(description);
 
+    loopInterval = config->get<useconds_t>("loop_interval");
+
     initialized = begin();
 }
 
-// Destructor
 MCP2515::~MCP2515()
 {
     closeSPI();
@@ -125,7 +125,7 @@ void MCP2515::parseCANMessage(struct can_frame &frame)
 {
     if (frame.can_dlc != 8)
     {
-        std::cerr << "Invalid CAN frame length: " << (int)frame.can_dlc << std::endl;
+        logger->error("Invalid CAN frame length:  " + std::to_string(frame.can_dlc));
         return;
     }
 
@@ -164,20 +164,22 @@ void MCP2515::parseCANMessage(struct can_frame &frame)
     std::cout << "  Value 2: " << value2 << " | Status 2: 0x" << std::hex << status2 << std::dec << std::endl;
 }
 
-void MCP2515::receiveLiveData()
+void MCP2515::loop()
 {
-    if (!dbc.loadDBC("Sniper.json"))
+    if (!dbc.loadDBC(HOLLEY_SNIPER_DBC_FILE))
     {
-        std::cerr << "Error: Failed to load DBC file!" << std::endl;
+        logger->error("Failed to load DBC file!");
         return;
     }
+    logger->info("DBC file successfully loaded!");
 
     int sock = socket(PF_CAN, SOCK_RAW, CAN_RAW);
     if (sock < 0)
     {
-        std::cerr << "Error: Unable to create CAN socket" << std::endl;
+        logger->error("Unable to create CAN socket!");
         return;
     }
+    logger->info("CAN socket created!");
 
     struct ifreq ifr;
     strcpy(ifr.ifr_name, "can0");
@@ -190,19 +192,23 @@ void MCP2515::receiveLiveData()
 
     if (bind(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
     {
-        std::cerr << "Error: Unable to bind CAN socket" << std::endl;
+        logger->error("Unable to bind CAN socket!");
         close(sock);
         return;
     }
+    logger->info("CAN socket binded!");
 
     struct can_frame frame;
-    while (true)
+    while (!terminateFlag.load())
     {
         int nbytes = read(sock, &frame, sizeof(struct can_frame));
         if (nbytes > 0)
         {
             dbc.parseCANData(frame.can_id, frame.data, frame.can_dlc);
         }
+
+        std::this_thread::sleep_for(std::chrono::microseconds(loopInterval));
     }
+
     close(sock);
 }

@@ -18,6 +18,7 @@
 #include "VoltSensor.h"
 #include "SSD1306Software.h"
 #include "SSD1306Hardware.h"
+#include "MCP2515.h"
 
 // Initialize static member
 std::atomic<bool> Process::terminateFlag(false);

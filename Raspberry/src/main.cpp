@@ -44,6 +44,8 @@ int main(int argc, char *argv[])
 	SSD1306Hardware speedometerUpperDisplay;
 
 	// Add smart pointer factories to the vector
+	processFactories.push_back({"MCP2515", []()
+								{ return std::make_shared<MCP2515>(); }});
 	processFactories.push_back({"TempGauge", []()
 								{ return std::make_shared<TempGauge>(); }});
 	processFactories.push_back({"DigitalGauge", []()
@@ -95,7 +97,7 @@ int main(int argc, char *argv[])
 			mileage->lastTotalSaved = mileage->currentTotal;
 		}
 
-		if (mileage->currentPartial - mileage->lastPartialSaved >= 0.1)
+		if (mileage->currentPartial - mileage->lastPartialSaved >= 0)
 		{
 			roundedPartialMileage.str(""); // Clear the content
 			roundedPartialMileage.clear(); // Reset error flags
