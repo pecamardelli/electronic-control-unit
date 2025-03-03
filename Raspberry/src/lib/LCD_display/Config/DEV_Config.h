@@ -31,7 +31,7 @@
 #define LCD_RST RPI_V2_GPIO_P1_16
 #define LCD_CS RPI_V2_GPIO_P1_24
 #define LCD_DC RPI_V2_GPIO_P1_22
-#define LCD_BL RPI_V2_GPIO_P1_08
+#define LCD_BL 0
 
 // LCD
 #define LCD_CS_0 DEV_Digital_Write(LCD_CS, 0)
