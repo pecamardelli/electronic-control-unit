@@ -9,7 +9,7 @@ class DHT11
 {
 private:
     /* data */
-    const RPiGPIOPin DHT_PIN = RPI_V2_GPIO_P1_32;
+    const int DHT_PIN = 0;
 
 public:
     DHT11(/* args */);

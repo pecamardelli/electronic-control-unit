@@ -44,18 +44,18 @@ int main(int argc, char *argv[])
 	SSD1306Hardware speedometerUpperDisplay;
 
 	// Add smart pointer factories to the vector
-	processFactories.push_back({"MCP2515", []()
-								{ return std::make_shared<MCP2515>(); }});
-	processFactories.push_back({"TempGauge", []()
-								{ return std::make_shared<TempGauge>(); }});
-	processFactories.push_back({"DigitalGauge", []()
-								{ return std::make_shared<DigitalGauge>(); }});
+	// processFactories.push_back({"MCP2515", []()
+	// 							{ return std::make_shared<MCP2515>(); }});
+	// processFactories.push_back({"TempGauge", []()
+	// 							{ return std::make_shared<TempGauge>(); }});
+	// processFactories.push_back({"DigitalGauge", []()
+	// 							{ return std::make_shared<DigitalGauge>(); }});
 	processFactories.push_back({"Speedometer", []()
 								{ return std::make_shared<Speedometer>(); }});
 	processFactories.push_back({"SpeedSensor", []()
 								{ return std::make_shared<SpeedSensor>(); }});
-	processFactories.push_back({"SSD1306Software", []()
-								{ return std::make_shared<SSD1306Software>(); }});
+	// processFactories.push_back({"SSD1306Software", []()
+	// 							{ return std::make_shared<SSD1306Software>(); }});
 
 	// Iterate and instantiate processes during iteration
 	for (const auto &factory : processFactories)
@@ -102,12 +102,12 @@ int main(int argc, char *argv[])
 			roundedPartialMileage.str(""); // Clear the content
 			roundedPartialMileage.clear(); // Reset error flags
 			roundedPartialMileage << std::fixed << std::setprecision(1) << mileage->currentPartial;
-			speedometerUpperDisplay.drawString(SSD1306_ALIGN_CENTER, roundedPartialMileage.str().c_str(), LiberationSansNarrow_Bold28);
 
 			sys->saveMileage();
 			mileage->lastPartialSaved = mileage->currentPartial;
 		}
 
+		speedometerUpperDisplay.drawString(SSD1306_ALIGN_CENTER, roundedPartialMileage.str().c_str(), LiberationSansNarrow_Bold28);
 		engineValues->kml = lastFuelConsumption > 0 ? lastDistanceCovered / lastFuelConsumption : 0;
 		lastDistanceCovered = speedSensorData->distanceCovered;
 
