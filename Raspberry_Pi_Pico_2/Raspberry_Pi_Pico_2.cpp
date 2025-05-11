@@ -1,12 +1,14 @@
 #include <stdio.h>
+#include <iomanip>
+#include <cmath>
 #include "pico/stdlib.h"
+
 #include "Common.h"
+#include "FlashStorage.h"
 #include "Stepper.h"
 #include "Speedometer.h"
 #include "SpeedSensor.h"
 #include "SSD1306.h"
-#include <iomanip>
-#include <cmath>
 
 #include "Common.h"
 
@@ -20,15 +22,25 @@ int main()
 {
     stdio_init_all();
 
-    int totalKm = 920;
+    double totalKm = 1;
     int lastTotalKm = 0;
-    float partialKm = 145.3;
-    float lastPartialKm = partialKm;
-    int lastSpeed = 0;
+    double partialKm = 0;
+    double lastPartialKm = partialKm;
+    double lastSpeed = 0;
     double roundedSpeed;
     double speedModifier = 0.1;
 
     unsigned long lastCheck = 0;
+
+    FlashStorage storage(1024 * 1024, 16);
+
+    // Try to read existing data
+    if (!storage.readData(&totalKm, &partialKm))
+    {
+        totalKm = 999;
+        partialKm = 0;
+    }
+    // storage.saveData(totalKm, partialKm);
 
     Speedometer speedometer;
     SpeedSensor speedSensor;
@@ -52,16 +64,17 @@ int main()
 
         if (lastPartialKm != partialKm)
         {
-            lowerDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(totalKm).c_str(), LiberationSansNarrow_Bold28);
+            lowerDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(round(totalKm)).c_str(), LiberationSansNarrow_Bold28);
             lowerDisplay.display();
             lastPartialKm = partialKm;
         }
 
         if (lastTotalKm != totalKm)
         {
-            upperDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(totalKm).c_str(), LiberationSansNarrow_Bold28);
+
+            upperDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(lastTotalKm).c_str(), LiberationSansNarrow_Bold28);
             upperDisplay.display();
-            lastTotalKm = totalKm;
+            lastTotalKm = round(totalKm);
         }
 
         speedometer.loop(round(speedSensorData.speed));

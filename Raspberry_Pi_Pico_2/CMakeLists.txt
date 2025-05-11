@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(Raspberry_Pi_Pico_2 Raspberry_Pi_Pico_2.cpp Stepper.cpp Speedometer.cpp SpeedSensor.cpp Gauge.cpp Button.cpp SSD1306.cpp fonts.h LiberationSansNarrow_Bold28.cpp)
+add_executable(Raspberry_Pi_Pico_2 Raspberry_Pi_Pico_2.cpp FlashStorage.cpp Stepper.cpp Speedometer.cpp SpeedSensor.cpp Gauge.cpp Button.cpp SSD1306.cpp fonts.h LiberationSansNarrow_Bold28.cpp)
 
 pico_set_program_name(Raspberry_Pi_Pico_2 "Raspberry_Pi_Pico_2")
 pico_set_program_version(Raspberry_Pi_Pico_2 "0.1")
