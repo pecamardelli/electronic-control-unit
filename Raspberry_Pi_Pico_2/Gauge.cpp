@@ -43,7 +43,7 @@ void Gauge::goToStartPosition()
     currentStep = 0;
 }
 
-int Gauge::convertToStep(float value)
+int Gauge::convertToStep(double value)
 {
     // Find the proper map object.
     auto conversion = std::find_if(conversions.begin(), conversions.end(), [value](const Conversion &c)

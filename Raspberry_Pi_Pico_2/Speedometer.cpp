@@ -41,18 +41,8 @@ Speedometer::~Speedometer()
 {
 }
 
-void Speedometer::loop()
+void Speedometer::loop(double speed)
 {
-    speed = 0;
-
-    if (speed == lastSpeed)
-    {
-        motor->stop();
-        return;
-    }
-
-    lastSpeed = speed;
-
     if (!speed || speed < 0)
         speed = 0;
     else if (speed > 240)
@@ -81,8 +71,14 @@ void Speedometer::loop()
         motor->setSpeed(1); // Slowest speed for fine adjustments
     }
 
-    motor->step(stepToGo - currentStep);
-    currentStep = stepToGo;
-
-    motor->step(-currentStep);
+    if (currentStep < stepToGo)
+    {
+        currentStep++;
+        motor->step(1);
+    }
+    else if (currentStep > stepToGo)
+    {
+        currentStep--;
+        motor->step(-1);
+    }
 }

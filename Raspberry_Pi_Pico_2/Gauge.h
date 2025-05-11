@@ -6,7 +6,6 @@
 #include <sys/unistd.h>
 #include <iostream>
 
-
 #include "Stepper.h"
 #include "Button.h"
 
@@ -35,6 +34,6 @@ protected:
 
     void init();
     void goToStartPosition();
-    int convertToStep(float);
+    int convertToStep(double);
     void test(long, unsigned int);
 };

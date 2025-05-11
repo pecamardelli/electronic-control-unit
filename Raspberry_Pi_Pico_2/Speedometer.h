@@ -16,12 +16,13 @@ private:
 
     uint64_t lastTotalMileage = 0;
     double speed = 0;
-    double lastSpeed = 0;
+    // double lastSpeed = 0;
+    uint64_t lastStepTime = 0; // Keeps track of the last time we stepped
     int stepToGo = 0;
     int currentStep = 0;
 
 public:
     Speedometer(/* args */);
     ~Speedometer();
-    void loop();
+    void loop(double);
 };

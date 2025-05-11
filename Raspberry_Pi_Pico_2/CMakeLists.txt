@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Initialise pico_sdk from installed location
@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(Raspberry_Pi_Pico_2 Raspberry_Pi_Pico_2.cpp Stepper.cpp Speedometer.cpp Gauge.cpp Button.cpp SSD1306.cpp fonts.h LiberationSansNarrow_Bold28.cpp)
+add_executable(Raspberry_Pi_Pico_2 Raspberry_Pi_Pico_2.cpp Stepper.cpp Speedometer.cpp SpeedSensor.cpp Gauge.cpp Button.cpp SSD1306.cpp fonts.h LiberationSansNarrow_Bold28.cpp)
 
 pico_set_program_name(Raspberry_Pi_Pico_2 "Raspberry_Pi_Pico_2")
 pico_set_program_version(Raspberry_Pi_Pico_2 "0.1")
