@@ -8,11 +8,11 @@ class Speedometer : public Gauge
 {
 private:
     /* data */
-    const uint IN1 = 18;
-    const uint IN2 = 19;
-    const uint IN3 = 20;
-    const uint IN4 = 21;
-    const uint INTERRUPTOR = 0;
+    const uint IN1 = 21;
+    const uint IN2 = 20;
+    const uint IN3 = 19;
+    const uint IN4 = 18;
+    const uint INTERRUPTOR = 27;
 
     uint64_t lastTotalMileage = 0;
     double speed = 0;

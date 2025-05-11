@@ -75,7 +75,7 @@ void Gauge::test(long motorSpeed, unsigned int testInterval)
     {
         motor->step(conversion.step - previousStep);
         previousStep = conversion.step;
-        sleep(testInterval);
+        sleep_ms(testInterval * 1000);
     }
 
     goToStartPosition();

@@ -7,30 +7,32 @@ Speedometer::Speedometer(/* args */)
     interruptor = std::make_unique<Button>(INTERRUPTOR);
 
     conversions.push_back({0, 0});
-    conversions.push_back({20, 80});
-    conversions.push_back({30, 155});
-    conversions.push_back({40, 225});
-    conversions.push_back({50, 297});
-    conversions.push_back({60, 365});
-    conversions.push_back({70, 435});
-    conversions.push_back({80, 506});
-    conversions.push_back({90, 577});
-    conversions.push_back({100, 652});
-    conversions.push_back({110, 722});
-    conversions.push_back({120, 795});
-    conversions.push_back({130, 870});
-    conversions.push_back({140, 942});
-    conversions.push_back({150, 1014});
-    conversions.push_back({160, 1088});
-    conversions.push_back({170, 1162});
-    conversions.push_back({180, 1230});
-    conversions.push_back({190, 1303});
-    conversions.push_back({200, 1371});
-    conversions.push_back({210, 1444});
-    conversions.push_back({220, 1520});
-    conversions.push_back({230, 1593});
-    conversions.push_back({240, 1666});
+    conversions.push_back({20, 101});
+    conversions.push_back({30, 176});
+    conversions.push_back({40, 246});
+    conversions.push_back({50, 315});
+    conversions.push_back({60, 382});
+    conversions.push_back({70, 452});
+    conversions.push_back({80, 522});
+    conversions.push_back({90, 599});
+    conversions.push_back({100, 673});
+    conversions.push_back({110, 744});
+    conversions.push_back({120, 800});
+    conversions.push_back({130, 877});
+    conversions.push_back({140, 957});
+    conversions.push_back({150, 1033});
+    conversions.push_back({160, 1108});
+    conversions.push_back({170, 1181});
+    conversions.push_back({180, 1255});
+    conversions.push_back({190, 1326});
+    conversions.push_back({200, 1398});
+    conversions.push_back({210, 1464});
+    conversions.push_back({220, 1539});
+    conversions.push_back({230, 1610});
+    conversions.push_back({240, 1687});
     init();
+
+    // test(3, 5);
 
     motor->setSpeed(1);
 }

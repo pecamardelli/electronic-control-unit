@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 	}
 
 	bcm2835_i2c_begin();
-	bcm2835_i2c_set_baudrate(100000);
+	bcm2835_i2c_set_baudrate(1000000);
 
 	logger.info("BCM2835 initialized!");
 
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 
 	ads1115 = std::make_unique<ADS1115>();
 	VoltSensor voltSensor(ads1115.get());
-	DS3231 clock;
+	// DS3231 clock;
 
 	// DHT11 tempSensor;
 
@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
 								{ return std::make_shared<Speedometer>(); }});
 	processFactories.push_back({"SpeedSensor", []()
 								{ return std::make_shared<SpeedSensor>(); }});
-	// processFactories.push_back({"SSD1306Software", []()
-	// 							{ return std::make_shared<SSD1306Software>(); }});
+	processFactories.push_back({"SSD1306Software", []()
+								{ return std::make_shared<SSD1306Software>(); }});
 
 	// Iterate and instantiate processes during iteration
 	for (const auto &factory : processFactories)
@@ -88,8 +88,10 @@ int main(int argc, char *argv[])
 	{
 		engineValues->volts = voltSensor.getValue();
 
-		mileage->currentTotal = mileage->total + floor(speedSensorData->distanceCovered);
-		mileage->currentPartial = mileage->partial + speedSensorData->distanceCovered;
+		// mileage->currentTotal = mileage->total + floor(speedSensorData->distanceCovered);
+		// mileage->currentPartial = mileage->partial + speedSensorData->distanceCovered;
+		mileage->currentTotal = mileage->currentTotal + 1;
+		mileage->currentPartial = mileage->currentPartial + 0.1;
 
 		if (mileage->currentTotal - mileage->lastTotalSaved >= 1)
 		{
@@ -133,7 +135,7 @@ int main(int argc, char *argv[])
 		// }
 
 		// Check if system time and clock time are the same.
-		clock.compareTime();
+		// clock.compareTime();
 
 		std::this_thread::sleep_for(std::chrono::microseconds(mainLoopInterval));
 		// break;

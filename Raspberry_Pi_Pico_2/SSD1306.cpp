@@ -13,13 +13,11 @@ SSD1306::SSD1306(i2c_inst_t *i2c_instance, uint8_t sda_pin, uint8_t scl_pin) : i
         return;
     }
 
-    gpio_set_function(sda_pin, GPIO_FUNC_I2C);
-    gpio_set_function(scl_pin, GPIO_FUNC_I2C);
     gpio_pull_up(sda_pin);
     gpio_pull_up(scl_pin);
 
     // Add program information for picotool
-    bi_decl(bi_2pins_with_func(sda_pin, scl_pin, GPIO_FUNC_I2C));
+    // bi_decl(bi_2pins_with_func(sda_pin, scl_pin, GPIO_FUNC_I2C));
 
     // Initialize the display
     init();
