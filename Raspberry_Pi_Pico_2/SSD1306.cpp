@@ -215,24 +215,73 @@ void SSD1306::drawString(SSD1306_Align_t align, const char *str, const sFONT &fo
     switch (align)
     {
     case SSD1306_ALIGN_CENTER:
-        drawString((SSD1306_WIDTH - (strlen(str) * font.Width)) / 2 - paddingInline, -paddingBlock, str, font);
+        drawString((SSD1306_WIDTH - (strlen(str) * font.Width)) / 2 - paddingInline, -paddingBlock, str, font, 1);
         break;
     case SSD1306_ALIGN_RIGHT:
-        drawString(SSD1306_WIDTH - (strlen(str) * font.Width) - paddingInline, -paddingBlock, str, font);
+        drawString(SSD1306_WIDTH - (strlen(str) * font.Width) - paddingInline, -paddingBlock, str, font, 1);
         break;
     default:
-        drawString(0, 0, str, font);
+        drawString(0, 0, str, font, 1);
         break;
     }
 }
 
-void SSD1306::drawString(int x, int y, const char *str, const sFONT &font)
+void SSD1306::drawString(int x, int y, const char *str, const sFONT &font, int decimalPlaces = 1)
 {
     // Clear the entire buffer
     clearBuffer();
 
+    const char *originalStr = str;
+    int decimalCount = 0;
+    bool foundDecimal = false;
+
+    // First pass: check if we need to apply decimal limiting
+    if (decimalPlaces >= 0)
+    {
+        while (*str)
+        {
+            if (foundDecimal)
+            {
+                decimalCount++;
+                // If we've reached our limit of decimal places, break
+                if (decimalCount > decimalPlaces)
+                {
+                    break;
+                }
+            }
+            if (*str == '.')
+            {
+                foundDecimal = true;
+            }
+            str++;
+        }
+    }
+
+    // Reset to the beginning of the string
+    str = originalStr;
+    decimalCount = 0;
+    foundDecimal = false;
+
+    // Second pass: actually draw the characters
     while (*str)
     {
+        // Check if we've reached our decimal limit
+        if (foundDecimal)
+        {
+            decimalCount++;
+            if (decimalPlaces >= 0 && decimalCount > decimalPlaces)
+            {
+                break; // Stop drawing characters
+            }
+        }
+
+        // Mark if we found a decimal point
+        if (*str == '.')
+        {
+            foundDecimal = true;
+        }
+
+        // Draw the current character
         drawChar(x, y, *str, font);
 
         // Advance to the next character (accounting for spacing)

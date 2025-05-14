@@ -55,7 +55,7 @@ public:
     void drawRect(int16_t x, int16_t y, int16_t w, int16_t h, bool white, bool fill = false);
 
     void drawChar(int, int, char, const sFONT &);
-    void drawString(int, int, const char *, const sFONT &);
+    void drawString(int, int, const char *, const sFONT &, int);
     void drawString(SSD1306_Align_t, const char *, const sFONT &);
 
     // Update the display

@@ -22,13 +22,13 @@ int main()
 {
     stdio_init_all();
 
-    double totalKm = 1;
-    int lastTotalKm = 0;
+    double totalKm = 0;
+    double currentTotalKm = 0;
+    int lastTotalKm = NULL;
     double partialKm = 0;
-    double lastPartialKm = partialKm;
-    double lastSpeed = 0;
-    double roundedSpeed;
-    double speedModifier = 0.1;
+    double currentPartialKm = 0;
+    double lastPartialKm = NULL;
+    bool saveOdo = false;
 
     unsigned long lastCheck = 0;
 
@@ -37,10 +37,9 @@ int main()
     // Try to read existing data
     if (!storage.readData(&totalKm, &partialKm))
     {
-        totalKm = 999;
+        totalKm = 0;
         partialKm = 0;
     }
-    // storage.saveData(totalKm, partialKm);
 
     Speedometer speedometer;
     SpeedSensor speedSensor;
@@ -61,39 +60,32 @@ int main()
     while (true)
     {
         speedSensorData = speedSensor.loop();
+        currentTotalKm = totalKm + speedSensorData.distanceCovered;
+        currentPartialKm = partialKm + speedSensorData.distanceCovered;
 
-        if (lastPartialKm != partialKm)
+        if (lastPartialKm == NULL || currentPartialKm >= lastPartialKm + 0.1)
         {
-            lowerDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(round(totalKm)).c_str(), LiberationSansNarrow_Bold28);
+            lastPartialKm = currentPartialKm;
+            lowerDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(lastPartialKm).c_str(), LiberationSansNarrow_Bold28);
             lowerDisplay.display();
-            lastPartialKm = partialKm;
+            saveOdo = true;
         }
 
-        if (lastTotalKm != totalKm)
+        if (lastTotalKm == NULL || currentTotalKm >= lastTotalKm + 1)
         {
-
+            lastTotalKm = round(currentTotalKm);
             upperDisplay.drawString(SSD1306_ALIGN_CENTER, std::to_string(lastTotalKm).c_str(), LiberationSansNarrow_Bold28);
             upperDisplay.display();
-            lastTotalKm = round(totalKm);
+            saveOdo = true;
         }
 
         speedometer.loop(round(speedSensorData.speed));
 
-        // if (lastCheck + 10000 < time_us_64())
-        // {
-        //     lastCheck = time_us_64();
-        //     // partialKm = partialKm + 1; // Simulate speed increase
-        //     // totalKm = totalKm + 1;     // Simulate total km increase
-        //     speed += speedModifier; // Simulate speed increase
-        //     if (speed >= 240)
-        //     {
-        //         speedModifier = -0.1;
-        //     }
-        //     else if (speed <= 0)
-        //     {
-        //         speedModifier = 0.1;
-        //     }
-        // }
+        if (saveOdo)
+        {
+            storage.saveData(currentTotalKm, currentPartialKm);
+            saveOdo = false;
+        }
     }
 
     return 0;
