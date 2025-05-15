@@ -108,10 +108,21 @@ void Speedometer::loop(double speed)
                        static_cast<double>(SpeedometerConfig::MAX_SPEED));
 
     // Calculate target step position
-    stepToGo = convertToStep(speed);
+    int newStepToGo = convertToStep(speed);
+
+    // Add mechanical play compensation when changing direction
+    static int lastDirection = 0; // 0: no movement, 1: increasing, -1: decreasing
+    int currentDirection = newStepToGo > currentStep ? 1 : (newStepToGo < currentStep ? -1 : 0);
+
+    if (currentDirection != 0 && currentDirection != lastDirection)
+    {
+        // Add 4 steps of compensation when changing direction
+        newStepToGo += currentDirection * 15;
+    }
+    lastDirection = currentDirection;
 
     // Calculate step difference for speed adjustment
-    int stepDifference = std::abs(stepToGo - currentStep);
+    int stepDifference = std::abs(newStepToGo - currentStep);
 
     // Adjust motor speed based on distance to target
     if (stepDifference > SpeedometerConfig::SPEED_THRESHOLD_FAST)
@@ -132,14 +143,17 @@ void Speedometer::loop(double speed)
     }
 
     // Move motor one step in the appropriate direction
-    if (currentStep < stepToGo)
+    if (currentStep < newStepToGo)
     {
-        currentStep++;
         motor->step(1);
+        currentStep++;
     }
-    else if (currentStep > stepToGo)
+    else if (currentStep > newStepToGo)
     {
-        currentStep--;
         motor->step(-1);
+        currentStep--;
     }
+
+    // Update stepToGo for next iteration
+    stepToGo = newStepToGo;
 }

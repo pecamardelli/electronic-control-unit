@@ -156,7 +156,7 @@ int main()
                     testMode = true;
                     testModeStartTime = currentTime;
                     printf("Entering test mode...\n");
-                    speedometer.test(Config::TEST_MOTOR_SPEED, Config::TEST_INTERVAL_SEC);
+                    speedSensor.setTestMode(true, 0.0); // Start test mode with 0 km/h
                     testMode = false;
                     printf("Test mode completed.\n");
                 }
@@ -186,24 +186,44 @@ int main()
             buttonPressStartTime = 0;
         }
 
-        // Only process normal operation if not in test mode
-        if (!testMode)
+        // Process speed sensor and update gauge
+        speedSensorData = speedSensor.loop();
+
+        // Update speedometer gauge with current speed
+        speedometer.loop(round(speedSensorData.speed));
+
+        // Update state based on new sensor data
+        checkForDataChanges(state, speedSensorData, partialKmNeedsUpdate, totalKmNeedsUpdate);
+
+        // Update displays
+        if (currentTime - lastDisplayUpdateTime > Config::DISPLAY_UPDATE_INTERVAL_MS)
         {
-            // Poll the speed sensor without delays to avoid missing pulses
-            speedSensorData = speedSensor.loop();
+            char buffer[16];
 
-            // Update state based on new sensor data
-            checkForDataChanges(state, speedSensorData, partialKmNeedsUpdate, totalKmNeedsUpdate);
+            // In test mode, show speed in lower display
+            if (speedSensor.isTestMode())
+            {
+                snprintf(buffer, sizeof(buffer), "%d", (int)speedSensorData.speed);
+                lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+            }
+            else if (partialKmNeedsUpdate)
+            {
+                snprintf(buffer, sizeof(buffer), "%.1f", state.lastPartialKm);
+                lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                partialKmNeedsUpdate = false;
+            }
 
-            // Update speedometer gauge
-            speedometer.loop(round(speedSensorData.speed));
+            if (totalKmNeedsUpdate)
+            {
+                snprintf(buffer, sizeof(buffer), "%d", (int)state.lastTotalKm);
+                upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                totalKmNeedsUpdate = false;
+            }
 
-            updateDisplaysIfNeeded(lowerDisplay, upperDisplay, state,
-                                   partialKmNeedsUpdate, totalKmNeedsUpdate,
-                                   currentTime, lastDisplayUpdateTime);
-
-            saveDataIfNeeded(storage, state, currentTime, lastSaveTime);
+            lastDisplayUpdateTime = currentTime;
         }
+
+        saveDataIfNeeded(storage, state, currentTime, lastSaveTime);
     }
 
     return 0;

@@ -3,7 +3,7 @@
 #include <stdio.h>   // for printf
 
 SpeedSensor::SpeedSensor(uint pin, const TireSpecs &specs, double gearRatio, double demultiplication)
-    : sensorPin(pin), tireSpecs(specs), gearRatio(gearRatio), demultiplication(demultiplication), transitionsPerDriveshaftRev(SpeedSensorConfig::TRANSITIONS_PER_DRIVESHAFT_REV), lastTransitionDuration(0), elapsedTimeSinceLastTransition(0), lastDebounceTime(0), currentState(false), lastState(false), debouncedState(false), lastTime(0), currentTime(0), testEnabled(false), speedModifier(1.0), testSpeed(0.0)
+    : sensorPin(pin), tireSpecs(specs), gearRatio(gearRatio), demultiplication(demultiplication), transitionsPerDriveshaftRev(SpeedSensorConfig::TRANSITIONS_PER_DRIVESHAFT_REV), lastTransitionDuration(0), elapsedTimeSinceLastTransition(0), lastDebounceTime(0), currentState(false), lastState(false), debouncedState(false), lastTime(0), currentTime(0), testEnabled(false), speedModifier(0.01), testSpeed(0.0)
 {
     // Calculate derived values
     tireCircumference = calculateTireCircumference();
@@ -79,9 +79,8 @@ void SpeedSensor::updateTestMode()
         speedModifier *= -1;
     }
 
-    // Update sensor data
+    // Update sensor data with speed only, no distance
     speedSensorData.speed = testSpeed;
-    speedSensorData.distanceCovered += 0.01; // Simulate distance covered
 }
 
 void SpeedSensor::updateRealMode()

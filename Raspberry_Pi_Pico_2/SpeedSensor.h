@@ -127,6 +127,12 @@ public:
     void setTestMode(bool enable, double initialSpeed = 0.0);
 
     /**
+     * @brief Check if test mode is enabled
+     * @return bool True if test mode is enabled, false otherwise
+     */
+    bool isTestMode() const { return testEnabled; }
+
+    /**
      * @brief Reset the sensor data
      */
     void reset();
