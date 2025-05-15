@@ -46,29 +46,29 @@ Speedometer::Speedometer()
     // Format: {speed (km/h), steps}
     conversions = {
         {0, 0},      // 0 km/h = 0 steps
-        {20, 101},   // 20 km/h = 101 steps
-        {30, 176},   // 30 km/h = 176 steps
+        {20, 97},    // 20 km/h = 97 steps
+        {30, 174},   // 30 km/h = 174 steps
         {40, 246},   // 40 km/h = 246 steps
         {50, 315},   // 50 km/h = 315 steps
-        {60, 382},   // 60 km/h = 382 steps
-        {70, 452},   // 70 km/h = 452 steps
-        {80, 522},   // 80 km/h = 522 steps
-        {90, 599},   // 90 km/h = 599 steps
-        {100, 673},  // 100 km/h = 673 steps
+        {60, 392},   // 60 km/h = 392 steps
+        {70, 458},   // 70 km/h = 458 steps
+        {80, 528},   // 80 km/h = 528 steps
+        {90, 605},   // 90 km/h = 605 steps
+        {100, 676},  // 100 km/h = 676 steps
         {110, 744},  // 110 km/h = 744 steps
-        {120, 800},  // 120 km/h = 800 steps
-        {130, 877},  // 130 km/h = 877 steps
-        {140, 957},  // 140 km/h = 957 steps
+        {120, 820},  // 120 km/h = 820 steps
+        {130, 893},  // 130 km/h = 893 steps
+        {140, 962},  // 140 km/h = 962 steps
         {150, 1033}, // 150 km/h = 1033 steps
         {160, 1108}, // 160 km/h = 1108 steps
-        {170, 1181}, // 170 km/h = 1181 steps
-        {180, 1255}, // 180 km/h = 1255 steps
-        {190, 1326}, // 190 km/h = 1326 steps
-        {200, 1398}, // 200 km/h = 1398 steps
-        {210, 1464}, // 210 km/h = 1464 steps
-        {220, 1539}, // 220 km/h = 1539 steps
-        {230, 1610}, // 230 km/h = 1610 steps
-        {240, 1687}  // 240 km/h = 1687 steps
+        {170, 1178}, // 170 km/h = 1178 steps
+        {180, 1252}, // 180 km/h = 1252 steps
+        {190, 1323}, // 190 km/h = 1323 steps
+        {200, 1392}, // 200 km/h = 1392 steps
+        {210, 1461}, // 210 km/h = 1461 steps
+        {220, 1536}, // 220 km/h = 1536 steps
+        {230, 1607}, // 230 km/h = 1607 steps
+        {240, 1680}  // 240 km/h = 1680 steps
     };
 
     init();

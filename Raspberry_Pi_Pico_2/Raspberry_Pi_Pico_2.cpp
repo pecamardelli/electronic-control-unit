@@ -25,28 +25,28 @@ namespace Config
     constexpr double MIN_CHANGE_THRESHOLD = 0.01;    // Minimum change to trigger a save
 
     // Test mode configuration
-    constexpr int TEST_MOTOR_SPEED = 2;            // Motor speed during test
-    constexpr int TEST_INTERVAL_SEC = 2;           // Delay between test positions
-    constexpr int TEST_BUTTON_HOLD_TIME_MS = 5000; // Time to hold button for test mode
+    constexpr int TEST_MOTOR_SPEED = 4;            // Motor speed during test (4 RPM)
+    constexpr int TEST_INTERVAL_SEC = 2;           // Delay between test positions (2 seconds)
+    constexpr int TEST_BUTTON_HOLD_TIME_MS = 5000; // Time to hold button for test mode (5 seconds)
 
     // I2C configuration
     namespace I2C
     {
-        constexpr int I2C0_SDA = 4;
-        constexpr int I2C0_SCL = 5;
-        constexpr int I2C1_SDA = 2;
-        constexpr int I2C1_SCL = 3;
-        constexpr uint BAUD_RATE = 400000; // 400 kHz
+        constexpr int I2C0_SDA = 4;        // I2C0 SDA pin
+        constexpr int I2C0_SCL = 5;        // I2C0 SCL pin
+        constexpr int I2C1_SDA = 2;        // I2C1 SDA pin
+        constexpr int I2C1_SCL = 3;        // I2C1 SCL pin
+        constexpr uint BAUD_RATE = 400000; // I2C bus speed (400 kHz)
     }
 
     // Button configuration
     namespace Button
     {
-        constexpr int RESET_PARTIAL_PIN = 6; // GPIO pin for reset button
+        constexpr int RESET_PARTIAL_PIN = 6; // GPIO pin for reset button (with pull-up)
     }
 
     // Watchdog timeout in milliseconds
-    constexpr uint32_t WATCHDOG_TIMEOUT_MS = 8000;
+    constexpr uint32_t WATCHDOG_TIMEOUT_MS = 8000; // Watchdog timeout (8 seconds)
 }
 
 // Structure to hold odometer state
