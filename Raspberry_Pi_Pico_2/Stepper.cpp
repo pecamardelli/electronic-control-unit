@@ -1,22 +1,35 @@
-/*
- * Stepper.cpp - Stepper library for Raspberry Pi Pico - Adapted from original Arduino/RPi library
+/**
+ * @file Stepper.cpp
+ * @brief Implementation of the Stepper motor control library
  *
- * Original library        (0.1)   by Tom Igoe.
- * Two-wire modifications  (0.2)   by Sebastian Gassner
- * Combination version     (0.3)   by Tom Igoe and David Mellis
- * Bug fix for four-wire   (0.4)   by Tom Igoe, bug fix from Noah Shibley
- * High-speed stepping mod         by Eugene Kozlenko
- * Timer rollover fix              by Eugene Kozlenko
- * Five phase five wire    (1.1.0) by Ryan Orendorff
- * Ported to Raspberry PI  (1.1.0) by Pablo Camardelli
- * Adapted for Pico                by [Your Name]
+ * This file implements the functionality for controlling stepper motors with 2, 4, or 5 wires
+ * on the Raspberry Pi Pico. The implementation includes:
+ * - Motor initialization for different wire configurations
+ * - Speed control and timing management
+ * - Step-by-step movement control
+ * - Pin state management for different motor types
+ *
+ * Version history:
+ * - 0.1: Original library by Tom Igoe
+ * - 0.2: Two-wire modifications by Sebastian Gassner
+ * - 0.3: Combination version by Tom Igoe and David Mellis
+ * - 0.4: Bug fix for four-wire by Tom Igoe, fix from Noah Shibley
+ * - 1.1.0: Five phase five wire by Ryan Orendorff
+ * - 1.1.0: Ported to Raspberry PI by Pablo Camardelli
+ * - 1.1.0: Adapted for Pico by Pablo Camardelli
  */
 
 #include "Stepper.h"
 
-/*
- * Two-wire constructor.
- * Sets which wires should control the motor.
+/**
+ * @brief Constructor for 2-wire stepper motor configuration
+ *
+ * Initializes a stepper motor with 2 control wires. Sets up GPIO pins
+ * and initializes motor state variables.
+ *
+ * @param steps Number of steps per revolution
+ * @param pin_1 First motor control pin
+ * @param pin_2 Second motor control pin
  */
 Stepper::Stepper(int steps, int pin_1, int pin_2)
 {
@@ -32,7 +45,7 @@ Stepper::Stepper(int steps, int pin_1, int pin_2)
   // Setup the pins on the microcontroller:
   gpio_init(motor_pin_1);
   gpio_set_dir(motor_pin_1, GPIO_OUT);
-  
+
   gpio_init(motor_pin_2);
   gpio_set_dir(motor_pin_2, GPIO_OUT);
 
@@ -45,9 +58,17 @@ Stepper::Stepper(int steps, int pin_1, int pin_2)
   pin_count = 2;
 }
 
-/*
- * Four-pin constructor.
- * Sets which wires should control the motor.
+/**
+ * @brief Constructor for 4-wire stepper motor configuration
+ *
+ * Initializes a stepper motor with 4 control wires. Sets up GPIO pins
+ * and initializes motor state variables.
+ *
+ * @param steps Number of steps per revolution
+ * @param pin_1 First motor control pin
+ * @param pin_2 Second motor control pin
+ * @param pin_3 Third motor control pin
+ * @param pin_4 Fourth motor control pin
  */
 Stepper::Stepper(int steps, int pin_1, int pin_2,
                  int pin_3, int pin_4)
@@ -80,9 +101,18 @@ Stepper::Stepper(int steps, int pin_1, int pin_2,
   pin_count = 4;
 }
 
-/*
- * Five-pin constructor.
- * Sets which wires should control the motor.
+/**
+ * @brief Constructor for 5-wire stepper motor configuration
+ *
+ * Initializes a stepper motor with 5 control wires. Sets up GPIO pins
+ * and initializes motor state variables.
+ *
+ * @param steps Number of steps per revolution
+ * @param pin_1 First motor control pin
+ * @param pin_2 Second motor control pin
+ * @param pin_3 Third motor control pin
+ * @param pin_4 Fourth motor control pin
+ * @param pin_5 Fifth motor control pin
  */
 Stepper::Stepper(int steps, int pin_1, int pin_2,
                  int pin_3, int pin_4, int pin_5)
@@ -115,22 +145,37 @@ Stepper::Stepper(int steps, int pin_1, int pin_2,
   pin_count = 5;
 }
 
+/**
+ * @brief Destructor for the Stepper object
+ *
+ * Ensures proper cleanup by stopping the motor.
+ */
 Stepper::~Stepper()
 {
   stop();
 }
 
-/*
- * Sets the speed in revs per minute
+/**
+ * @brief Sets the motor speed in revolutions per minute
+ *
+ * Calculates the delay between steps based on the desired speed
+ * and the number of steps per revolution.
+ *
+ * @param whatSpeed Speed in RPM
  */
 void Stepper::setSpeed(long whatSpeed)
 {
   step_delay = 60L * 1000L * 1000L / number_of_steps / whatSpeed;
 }
 
-/*
- * Moves the motor steps_to_move steps.  If the number is negative,
- * the motor moves in the reverse direction.
+/**
+ * @brief Moves the motor a specified number of steps
+ *
+ * Controls the motor movement with proper timing and direction.
+ * The motor will move one step at a time, with appropriate delays
+ * between steps to maintain the set speed.
+ *
+ * @param steps_to_move Number of steps to move (negative for reverse)
  */
 void Stepper::step(int steps_to_move)
 {
@@ -184,8 +229,13 @@ void Stepper::step(int steps_to_move)
   }
 }
 
-/*
- * Moves the motor forward or backwards.
+/**
+ * @brief Controls the motor pins for a single step
+ *
+ * Sets the appropriate pin states for the current step position.
+ * Different pin patterns are used for 2-wire, 4-wire, and 5-wire motors.
+ *
+ * @param this_step Current step number (0-3 for 2/4 wire, 0-9 for 5 wire)
  */
 void Stepper::stepMotor(int thisStep)
 {
@@ -320,20 +370,29 @@ void Stepper::stepMotor(int thisStep)
   }
 }
 
+/**
+ * @brief Stops the motor by setting all pins to LOW
+ *
+ * Safely stops the motor by de-energizing all control pins.
+ */
 void Stepper::stop()
 {
   gpio_put(motor_pin_1, 0);
   gpio_put(motor_pin_2, 0);
-  if (pin_count >= 4) {
+  if (pin_count >= 4)
+  {
     gpio_put(motor_pin_3, 0);
     gpio_put(motor_pin_4, 0);
-    if (pin_count == 5) {
+    if (pin_count == 5)
+    {
       gpio_put(motor_pin_5, 0);
     }
   }
 }
 
-/*
-  version() returns the version of the library:
-*/
-int Stepper::version(void) { return 6; }
+/**
+ * @brief Returns the library version
+ *
+ * @return int Library version number (110 for version 1.1.0)
+ */
+int Stepper::version() const { return 110; }
