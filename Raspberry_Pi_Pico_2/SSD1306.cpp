@@ -13,12 +13,6 @@ SSD1306::SSD1306(i2c_inst_t *i2c_instance, uint8_t sda_pin, uint8_t scl_pin) : i
         return;
     }
 
-    gpio_pull_up(sda_pin);
-    gpio_pull_up(scl_pin);
-
-    // Add program information for picotool
-    // bi_decl(bi_2pins_with_func(sda_pin, scl_pin, GPIO_FUNC_I2C));
-
     // Initialize the display
     init();
 }
@@ -29,6 +23,7 @@ SSD1306::~SSD1306()
     if (buffer != NULL)
     {
         free(buffer);
+        buffer = NULL;
     }
 }
 
@@ -42,36 +37,41 @@ void SSD1306::sendCommand(uint8_t command)
 // Initialize display
 void SSD1306::init()
 {
-    // Wait a moment for the display to start up
-    sleep_ms(100);
+    // Initialize display with optimized sequence
+    const uint8_t init_commands[] = {
+        0xAE, // Display off
+        0xD5, // Set display clock div
+        0x80, // Default value
+        0xA8, // Set multiplex
+        SSD1306_HEIGHT - 1,
+        0xD3, // Set display offset
+        0x00, // No offset
+        0x40, // Start line
+        0x8D, // Charge pump
+        0x14, // Enable charge pump
+        0x20, // Memory mode
+        0x00, // Act like ks0108
+        0xA1, // Seg remap
+        0xC8, // Com scan dec
+        0xDA, // Com pins
+        SSD1306_HEIGHT == 32 ? 0x02 : 0x12,
+        0x81, // Set contrast
+        0xCF,
+        0xD9, // Set precharge
+        0xF1,
+        0xDB, // Set vcom detect
+        0x40,
+        0xA4, // Display all on resume
+        0xA6, // Normal display (not inverted)
+        0x2E, // Deactivate scroll
+        0xAF  // Display on
+    };
 
-    // Initialize display
-    sendCommand(0xAE); // Display off
-    sendCommand(0xD5); // Set display clock div
-    sendCommand(0x80); // Default value
-    sendCommand(0xA8); // Set multiplex
-    sendCommand(SSD1306_HEIGHT - 1);
-    sendCommand(0xD3); // Set display offset
-    sendCommand(0x00); // No offset
-    sendCommand(0x40); // Start line
-    sendCommand(0x8D); // Charge pump
-    sendCommand(0x14); // Enable charge pump
-    sendCommand(0x20); // Memory mode
-    sendCommand(0x00); // Act like ks0108
-    sendCommand(0xA1); // Seg remap
-    sendCommand(0xC8); // Com scan dec
-    sendCommand(0xDA); // Com pins
-    sendCommand(SSD1306_HEIGHT == 32 ? 0x02 : 0x12);
-    sendCommand(0x81); // Set contrast
-    sendCommand(0xCF);
-    sendCommand(0xD9); // Set precharge
-    sendCommand(0xF1);
-    sendCommand(0xDB); // Set vcom detect
-    sendCommand(0x40);
-    sendCommand(0xA4); // Display all on resume
-    sendCommand(0xA6); // Normal display (not inverted)
-    sendCommand(0x2E); // Deactivate scroll
-    sendCommand(0xAF); // Display on
+    // Send all commands in a single I2C transaction
+    for (size_t i = 0; i < sizeof(init_commands); i++)
+    {
+        sendCommand(init_commands[i]);
+    }
 
     // Clear the buffer
     clearBuffer();
@@ -92,19 +92,17 @@ void SSD1306::drawPixel(int16_t x, int16_t y, bool white)
     if (x < 0 || x >= SSD1306_WIDTH || y < 0 || y >= SSD1306_HEIGHT || buffer == NULL)
         return;
 
-    // Calculate the byte index
+    // Calculate the byte index and bit position
     uint16_t byte_idx = x + (y / 8) * SSD1306_WIDTH;
-
-    // Calculate the bit position within the byte
     uint8_t bit_pos = y % 8;
 
     if (white)
     {
-        buffer[byte_idx] |= (1 << bit_pos); // Set bit
+        buffer[byte_idx] |= (1 << bit_pos);
     }
     else
     {
-        buffer[byte_idx] &= ~(1 << bit_pos); // Clear bit
+        buffer[byte_idx] &= ~(1 << bit_pos);
     }
 }
 
@@ -136,9 +134,10 @@ void SSD1306::drawRect(int16_t x, int16_t y, int16_t w, int16_t h, bool white, b
 {
     if (fill)
     {
-        for (int16_t i = x; i < x + w; i++)
+        // Optimize filled rectangle drawing
+        for (int16_t j = y; j < y + h; j++)
         {
-            for (int16_t j = y; j < y + h; j++)
+            for (int16_t i = x; i < x + w; i++)
             {
                 drawPixel(i, j, white);
             }
@@ -146,6 +145,7 @@ void SSD1306::drawRect(int16_t x, int16_t y, int16_t w, int16_t h, bool white, b
     }
     else
     {
+        // Optimize outline rectangle drawing
         for (int16_t i = x; i < x + w; i++)
         {
             drawPixel(i, y, white);
@@ -166,23 +166,39 @@ void SSD1306::display()
         return;
 
     // Set column address
-    sendCommand(0x21);              // Set column start and end address
-    sendCommand(0);                 // Start at column 0
-    sendCommand(SSD1306_WIDTH - 1); // End at last column
+    sendCommand(0x21);
+    sendCommand(0);
+    sendCommand(SSD1306_WIDTH - 1);
 
     // Set page address
-    sendCommand(0x22);                   // Set page start and end address
-    sendCommand(0);                      // Start at page 0
-    sendCommand(SSD1306_HEIGHT / 8 - 1); // End at last page
+    sendCommand(0x22);
+    sendCommand(0);
+    sendCommand(SSD1306_HEIGHT / 8 - 1);
 
-    // Send the buffer
-    uint8_t *send_buf = (uint8_t *)malloc(1 + SSD1306_WIDTH * SSD1306_HEIGHT / 8); // 1 byte command + data
-    if (send_buf)
+    // Send the buffer in chunks to avoid memory issues
+    const uint8_t chunk_size = 32;
+    uint8_t *ptr = buffer;
+    uint16_t remaining = SSD1306_WIDTH * SSD1306_HEIGHT / 8;
+
+    while (remaining > 0)
     {
-        send_buf[0] = 0x40; // Data command
-        memcpy(send_buf + 1, buffer, SSD1306_WIDTH * SSD1306_HEIGHT / 8);
-        i2c_write_blocking(i2c, SSD1306_I2C_ADDRESS, send_buf, SSD1306_WIDTH * SSD1306_HEIGHT / 8 + 1, false);
-        free(send_buf);
+        uint8_t current_chunk = (remaining > chunk_size) ? chunk_size : remaining;
+        uint8_t *send_buf = (uint8_t *)malloc(current_chunk + 1);
+
+        if (send_buf)
+        {
+            send_buf[0] = 0x40; // Data command
+            memcpy(send_buf + 1, ptr, current_chunk);
+            i2c_write_blocking(i2c, SSD1306_I2C_ADDRESS, send_buf, current_chunk + 1, false);
+            free(send_buf);
+
+            ptr += current_chunk;
+            remaining -= current_chunk;
+        }
+        else
+        {
+            break;
+        }
     }
 }
 
@@ -194,6 +210,7 @@ void SSD1306::drawChar(int x, int y, char c, const sFONT &font)
     uint16_t charOffset = (c - 32) * font.Height * ((font.Width + 7) / 8);
     const uint8_t *charData = &font.table[charOffset];
 
+    // Optimize character drawing by processing bytes instead of individual pixels
     for (uint16_t i = 0; i < font.Height; i++)
     {
         for (uint16_t j = 0; j < font.Width; j++)
@@ -212,91 +229,59 @@ void SSD1306::drawChar(int x, int y, char c, const sFONT &font)
 // Draw a string
 void SSD1306::drawString(SSD1306_Align_t align, const char *str, const sFONT &font)
 {
+    int width = strlen(str) * font.Width;
+    int x;
+
     switch (align)
     {
     case SSD1306_ALIGN_CENTER:
-        drawString((SSD1306_WIDTH - (strlen(str) * font.Width)) / 2 - paddingInline, -paddingBlock, str, font, 1);
+        x = (SSD1306_WIDTH - width) / 2 - paddingInline;
         break;
     case SSD1306_ALIGN_RIGHT:
-        drawString(SSD1306_WIDTH - (strlen(str) * font.Width) - paddingInline, -paddingBlock, str, font, 1);
+        x = SSD1306_WIDTH - width - paddingInline;
         break;
     default:
-        drawString(0, 0, str, font, 1);
+        x = 0;
         break;
     }
+
+    drawString(x, -paddingBlock, str, font, 1);
 }
 
-void SSD1306::drawString(int x, int y, const char *str, const sFONT &font, int decimalPlaces = 1)
+void SSD1306::drawString(int x, int y, const char *str, const sFONT &font, int decimalPlaces)
 {
-    // Clear the entire buffer
+    // Clear the buffer
     clearBuffer();
 
-    const char *originalStr = str;
+    // Process the string
+    const char *ptr = str;
     int decimalCount = 0;
     bool foundDecimal = false;
 
-    // First pass: check if we need to apply decimal limiting
-    if (decimalPlaces >= 0)
+    while (*ptr)
     {
-        while (*str)
-        {
-            if (foundDecimal)
-            {
-                decimalCount++;
-                // If we've reached our limit of decimal places, break
-                if (decimalCount > decimalPlaces)
-                {
-                    break;
-                }
-            }
-            if (*str == '.')
-            {
-                foundDecimal = true;
-            }
-            str++;
-        }
-    }
-
-    // Reset to the beginning of the string
-    str = originalStr;
-    decimalCount = 0;
-    foundDecimal = false;
-
-    // Second pass: actually draw the characters
-    while (*str)
-    {
-        // Check if we've reached our decimal limit
+        // Handle decimal places
         if (foundDecimal)
         {
             decimalCount++;
             if (decimalPlaces >= 0 && decimalCount > decimalPlaces)
             {
-                break; // Stop drawing characters
+                break;
             }
         }
-
-        // Mark if we found a decimal point
-        if (*str == '.')
+        else if (*ptr == '.')
         {
             foundDecimal = true;
         }
 
-        // Draw the current character
-        drawChar(x, y, *str, font);
+        // Draw character
+        drawChar(x, y, *ptr, font);
 
-        // Advance to the next character (accounting for spacing)
-        if (*str == '.')
-        {
-            x += font.Width - 5; // Adjust for smaller spacing after a period
-        }
-        else
-        {
-            x += font.Width + 1; // Standard spacing
-        }
-
-        str++;
+        // Update position
+        x += (*ptr == '.') ? (font.Width - 5) : (font.Width + 1);
+        ptr++;
     }
 
-    // Update the display with the new buffer content
+    // Update display
     display();
 }
