@@ -66,6 +66,17 @@ public:
      */
     void calibrate();
 
+    /**
+     * @brief Tests the gauge movement
+     *
+     * Moves the gauge through all positions in the conversion table
+     * to verify proper operation.
+     *
+     * @param motorSpeed The speed to use for the test
+     * @param testInterval The delay between positions in seconds
+     */
+    void test(long motorSpeed, unsigned int testInterval);
+
 protected:
     std::unique_ptr<Stepper> motor;      ///< Stepper motor controller
     std::unique_ptr<Button> interruptor; ///< Button for position detection
@@ -98,15 +109,4 @@ protected:
      * @return int The corresponding motor step position
      */
     int convertToStep(double value);
-
-    /**
-     * @brief Tests the gauge movement
-     *
-     * Moves the gauge through all positions in the conversion table
-     * to verify proper operation.
-     *
-     * @param motorSpeed The speed to use for the test
-     * @param testInterval The delay between positions in seconds
-     */
-    void test(long motorSpeed, unsigned int testInterval);
 };

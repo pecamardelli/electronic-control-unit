@@ -24,6 +24,11 @@ namespace Config
     constexpr int MIN_SAVE_INTERVAL_MS = 3000;       // Minimum time between saves
     constexpr double MIN_CHANGE_THRESHOLD = 0.01;    // Minimum change to trigger a save
 
+    // Test mode configuration
+    constexpr int TEST_MOTOR_SPEED = 2;            // Motor speed during test
+    constexpr int TEST_INTERVAL_SEC = 2;           // Delay between test positions
+    constexpr int TEST_BUTTON_HOLD_TIME_MS = 5000; // Time to hold button for test mode
+
     // I2C configuration
     namespace I2C
     {
@@ -85,6 +90,8 @@ int main()
     OdometerState state;
     unsigned long lastSaveTime = 0;
     unsigned long lastDisplayUpdateTime = 0;
+    bool testMode = false;
+    unsigned long testModeStartTime = 0;
 
     FlashStorage storage(1024 * 1024, 16);
 
@@ -141,6 +148,22 @@ int main()
                 buttonPressStartTime = currentTime;
                 wasButtonPressed = true;
             }
+            else if (currentTime - buttonPressStartTime >= Config::TEST_BUTTON_HOLD_TIME_MS)
+            {
+                // Button has been held for 5 seconds, enter test mode
+                if (!testMode)
+                {
+                    testMode = true;
+                    testModeStartTime = currentTime;
+                    printf("Entering test mode...\n");
+                    speedometer.test(Config::TEST_MOTOR_SPEED, Config::TEST_INTERVAL_SEC);
+                    testMode = false;
+                    printf("Test mode completed.\n");
+                }
+                // Reset button state
+                wasButtonPressed = false;
+                buttonPressStartTime = 0;
+            }
             else if (currentTime - buttonPressStartTime >= 3000)
             {
                 // Button has been held for 3 seconds, reset the partial odometer
@@ -163,20 +186,24 @@ int main()
             buttonPressStartTime = 0;
         }
 
-        // Poll the speed sensor without delays to avoid missing pulses
-        speedSensorData = speedSensor.loop();
+        // Only process normal operation if not in test mode
+        if (!testMode)
+        {
+            // Poll the speed sensor without delays to avoid missing pulses
+            speedSensorData = speedSensor.loop();
 
-        // Update state based on new sensor data
-        checkForDataChanges(state, speedSensorData, partialKmNeedsUpdate, totalKmNeedsUpdate);
+            // Update state based on new sensor data
+            checkForDataChanges(state, speedSensorData, partialKmNeedsUpdate, totalKmNeedsUpdate);
 
-        // Update speedometer gauge
-        speedometer.loop(round(speedSensorData.speed));
+            // Update speedometer gauge
+            speedometer.loop(round(speedSensorData.speed));
 
-        updateDisplaysIfNeeded(lowerDisplay, upperDisplay, state,
-                               partialKmNeedsUpdate, totalKmNeedsUpdate,
-                               currentTime, lastDisplayUpdateTime);
+            updateDisplaysIfNeeded(lowerDisplay, upperDisplay, state,
+                                   partialKmNeedsUpdate, totalKmNeedsUpdate,
+                                   currentTime, lastDisplayUpdateTime);
 
-        saveDataIfNeeded(storage, state, currentTime, lastSaveTime);
+            saveDataIfNeeded(storage, state, currentTime, lastSaveTime);
+        }
     }
 
     return 0;
