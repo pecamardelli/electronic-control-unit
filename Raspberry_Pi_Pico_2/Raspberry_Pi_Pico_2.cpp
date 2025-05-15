@@ -12,6 +12,7 @@
 #include "Speedometer.h"
 #include "SpeedSensor.h"
 #include "SSD1306.h"
+#include "Button.h"
 
 // Configuration constants
 namespace Config
@@ -31,6 +32,12 @@ namespace Config
         constexpr int I2C1_SDA = 2;
         constexpr int I2C1_SCL = 3;
         constexpr uint BAUD_RATE = 400000; // 400 kHz
+    }
+
+    // Button configuration
+    namespace Button
+    {
+        constexpr int RESET_PARTIAL_PIN = 6; // GPIO pin for reset button
     }
 
     // Watchdog timeout in milliseconds
@@ -62,7 +69,6 @@ void initializeDisplays(SSD1306 &lowerDisplay, SSD1306 &upperDisplay, const Odom
 void checkForDataChanges(OdometerState &state, const SpeedSensorData &sensorData, bool &partialKmNeedsUpdate, bool &totalKmNeedsUpdate);
 void updateDisplaysIfNeeded(SSD1306 &lowerDisplay, SSD1306 &upperDisplay, OdometerState &state,
                             bool &partialKmNeedsUpdate, bool &totalKmNeedsUpdate, unsigned long currentTime, unsigned long &lastDisplayUpdateTime);
-void saveDataIfNeeded(FlashStorage &storage, OdometerState &state, unsigned long currentTime, unsigned long &lastSaveTime);
 void saveDataIfNeeded(FlashStorage &storage, OdometerState &state, unsigned long currentTime, unsigned long &lastSaveTime);
 
 int main()
@@ -99,6 +105,9 @@ int main()
     SpeedSensor speedSensor;
     SpeedSensorData speedSensorData = {0, 0.0, 0.0, 0.0};
 
+    // Initialize reset button
+    Button resetButton(Config::Button::RESET_PARTIAL_PIN, true); // true for pull-up
+
     // Initialize I2C
     initializeI2C();
 
@@ -119,21 +128,54 @@ int main()
 
         unsigned long currentTime = to_ms_since_boot(get_absolute_time());
 
+        // Check reset button
+        resetButton.check();
+        static unsigned long buttonPressStartTime = 0;
+        static bool wasButtonPressed = false;
+
+        if (resetButton.isPressed())
+        {
+            if (!wasButtonPressed)
+            {
+                // Button was just pressed, start timing
+                buttonPressStartTime = currentTime;
+                wasButtonPressed = true;
+            }
+            else if (currentTime - buttonPressStartTime >= 3000)
+            {
+                // Button has been held for 3 seconds, reset the partial odometer
+                state.partialKm = 0;
+                state.currentPartialKm = 0;
+                state.lastPartialKm = 0;
+                state.lastSavedPartialKm = 0;
+                state.dataChanged = true;
+                partialKmNeedsUpdate = true;
+
+                // Reset button state
+                wasButtonPressed = false;
+                buttonPressStartTime = 0;
+            }
+        }
+        else
+        {
+            // Button is not pressed, reset state
+            wasButtonPressed = false;
+            buttonPressStartTime = 0;
+        }
+
         // Poll the speed sensor without delays to avoid missing pulses
         speedSensorData = speedSensor.loop();
 
         // Update state based on new sensor data
         checkForDataChanges(state, speedSensorData, partialKmNeedsUpdate, totalKmNeedsUpdate);
 
-        // Update speedometer display
+        // Update speedometer gauge
         speedometer.loop(round(speedSensorData.speed));
 
-        // Update displays if needed
         updateDisplaysIfNeeded(lowerDisplay, upperDisplay, state,
                                partialKmNeedsUpdate, totalKmNeedsUpdate,
                                currentTime, lastDisplayUpdateTime);
 
-        // Save data if needed
         saveDataIfNeeded(storage, state, currentTime, lastSaveTime);
     }
 
@@ -239,7 +281,7 @@ void saveDataIfNeeded(FlashStorage &storage, OdometerState &state,
         }
         else
         {
-            // Handle save failure (could add retry logic or error display here)
+            // TODO: some logic or a message to display when an error ocurred?
             printf("Failed to save odometer data\n");
         }
     }
