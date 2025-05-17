@@ -42,7 +42,7 @@ namespace Config
     // Button configuration
     namespace Button
     {
-        constexpr int RESET_PARTIAL_PIN = 6; // GPIO pin for reset button (with pull-up)
+        constexpr int RESET_PARTIAL_PIN = 17; // GPIO pin for reset button (with pull-up)
     }
 
     // Watchdog timeout in milliseconds
