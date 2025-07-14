@@ -25,9 +25,10 @@ namespace Config
     constexpr double MIN_CHANGE_THRESHOLD = 0.01;    // Minimum change to trigger a save
 
     // Test mode configuration
-    constexpr int TEST_MOTOR_SPEED = 4;            // Motor speed during test (4 RPM)
-    constexpr int TEST_INTERVAL_SEC = 2;           // Delay between test positions (2 seconds)
-    constexpr int TEST_BUTTON_HOLD_TIME_MS = 5000; // Time to hold button for test mode (5 seconds)
+    constexpr int TEST_MOTOR_SPEED = 4;             // Motor speed during test (4 RPM)
+    constexpr int TEST_INTERVAL_SEC = 2;            // Delay between test positions (2 seconds)
+    constexpr int TEST_BUTTON_HOLD_TIME_MS = 10000; // Time to hold button for test mode (10 seconds)
+    constexpr int DISPLAY_INFO_HOLD_TIME_MS = 5000; // Time to hold button to toggle info display (5 seconds)
 
     // I2C configuration
     namespace I2C
@@ -126,6 +127,7 @@ int main()
 
     bool partialKmNeedsUpdate = false;
     bool totalKmNeedsUpdate = false;
+    bool infoDisplayEnabled = false; // Flag to enable/disable info display mode
 
     // Main loop
     while (true)
@@ -139,6 +141,7 @@ int main()
         resetButton.check();
         static unsigned long buttonPressStartTime = 0;
         static bool wasButtonPressed = false;
+        static bool testModeTriggered = false;
 
         if (resetButton.isPressed())
         {
@@ -147,10 +150,11 @@ int main()
                 // Button was just pressed, start timing
                 buttonPressStartTime = currentTime;
                 wasButtonPressed = true;
+                testModeTriggered = false;
             }
-            else if (currentTime - buttonPressStartTime >= Config::TEST_BUTTON_HOLD_TIME_MS)
+            else if (currentTime - buttonPressStartTime >= Config::TEST_BUTTON_HOLD_TIME_MS && !testModeTriggered)
             {
-                // Button has been held for 5 seconds, enter test mode
+                // Button has been held for 10 seconds, enter test mode
                 if (!testMode)
                 {
                     testMode = true;
@@ -159,31 +163,51 @@ int main()
                     speedSensor.setTestMode(true, 0.0); // Start test mode with 0 km/h
                     testMode = false;
                     printf("Test mode completed.\n");
+                    testModeTriggered = true;
                 }
-                // Reset button state
-                wasButtonPressed = false;
-                buttonPressStartTime = 0;
-            }
-            else if (currentTime - buttonPressStartTime >= 3000)
-            {
-                // Button has been held for 3 seconds, reset the partial odometer
-                state.partialKm = 0;
-                state.currentPartialKm = 0;
-                state.lastPartialKm = 0;
-                state.lastSavedPartialKm = 0;
-                state.dataChanged = true;
-                partialKmNeedsUpdate = true;
-
-                // Reset button state
-                wasButtonPressed = false;
-                buttonPressStartTime = 0;
             }
         }
         else
         {
-            // Button is not pressed, reset state
+            // Button was released - check what action to take based on hold duration
+            if (wasButtonPressed && !testModeTriggered)
+            {
+                unsigned long holdDuration = currentTime - buttonPressStartTime;
+
+                if (holdDuration >= Config::DISPLAY_INFO_HOLD_TIME_MS)
+                {
+                    // Button was held for 5+ seconds, toggle info display mode
+                    infoDisplayEnabled = !infoDisplayEnabled;
+
+                    if (infoDisplayEnabled)
+                    {
+                        printf("Info display mode enabled\n");
+                    }
+                    else
+                    {
+                        printf("Info display mode disabled - returning to odometer\n");
+                        // Force odometer display update when returning to normal mode
+                        totalKmNeedsUpdate = true;
+                        partialKmNeedsUpdate = true;
+                    }
+                }
+                else if (holdDuration >= 3000)
+                {
+                    // Button was held for 3-5 seconds, reset the partial odometer
+                    state.partialKm = 0;
+                    state.currentPartialKm = 0;
+                    state.lastPartialKm = 0;
+                    state.lastSavedPartialKm = 0;
+                    state.dataChanged = true;
+                    partialKmNeedsUpdate = true;
+                    printf("Partial odometer reset\n");
+                }
+            }
+
+            // Reset button state
             wasButtonPressed = false;
             buttonPressStartTime = 0;
+            testModeTriggered = false;
         }
 
         // Process speed sensor and update gauge
@@ -200,24 +224,39 @@ int main()
         {
             char buffer[16];
 
-            // In test mode, show speed in lower display
-            if (speedSensor.isTestMode())
+            if (infoDisplayEnabled)
             {
+                // Info display mode: show real-time speed and transitions
+                // Show current speed in upper display
                 snprintf(buffer, sizeof(buffer), "%d", (int)speedSensorData.speed);
-                lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-            }
-            else if (partialKmNeedsUpdate)
-            {
-                snprintf(buffer, sizeof(buffer), "%.1f", state.lastPartialKm);
-                lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-                partialKmNeedsUpdate = false;
-            }
-
-            if (totalKmNeedsUpdate)
-            {
-                snprintf(buffer, sizeof(buffer), "%d", (int)state.lastTotalKm);
                 upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-                totalKmNeedsUpdate = false;
+
+                // Show total transitions in lower display
+                snprintf(buffer, sizeof(buffer), "%llu", speedSensorData.transitions);
+                lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+            }
+            else
+            {
+                // Normal odometer display mode
+                // In test mode, show speed in lower display
+                if (speedSensor.isTestMode())
+                {
+                    snprintf(buffer, sizeof(buffer), "%d", (int)speedSensorData.speed);
+                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                }
+                else if (partialKmNeedsUpdate)
+                {
+                    snprintf(buffer, sizeof(buffer), "%.1f", state.lastPartialKm);
+                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                    partialKmNeedsUpdate = false;
+                }
+
+                if (totalKmNeedsUpdate)
+                {
+                    snprintf(buffer, sizeof(buffer), "%d", (int)state.lastTotalKm);
+                    upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                    totalKmNeedsUpdate = false;
+                }
             }
 
             lastDisplayUpdateTime = currentTime;
