@@ -111,6 +111,7 @@ double getCurrentTripValue(const OdometerState &state, TripMode trip);
 void getCurrentTripDisplayString(const OdometerState &state, TripMode trip, char *buffer, size_t bufferSize);
 void resetTrip(OdometerState &state, TripMode trip);
 void checkTripLimits(OdometerState &state, bool &partialKmNeedsUpdate);
+void setTotalKilometers(OdometerState &state, FlashStorage &storage, double newTotalKm);
 
 int main()
 {
@@ -152,11 +153,6 @@ int main()
     state.lastSavedTrip2Km = state.trip2Km;
     state.lastSavedTrip3Km = state.trip3Km;
 
-    state.partialKm = 761.2;
-    state.trip1Km = 111.2;
-    state.trip2Km = 22.3;
-    state.trip3Km = 647.9;
-
     Speedometer speedometer;
     SpeedSensor speedSensor;
     SpeedSensorData speedSensorData = {0, 0.0, 0.0, 0.0};
@@ -177,6 +173,9 @@ int main()
     TripMode currentTripMode = TripMode::PARTIAL; // Currently selected trip odometer
 
     initializeDisplays(lowerDisplay, upperDisplay, state, currentTripMode);
+
+    // HELPER: Set total kilometers to 1015 (remove this line after use)
+    // setTotalKilometers(state, storage, 1015.0);
 
     // Main loop
     while (true)
@@ -598,5 +597,31 @@ void checkTripLimits(OdometerState &state, bool &partialKmNeedsUpdate)
         resetTrip(state, TripMode::TRIP3);
         partialKmNeedsUpdate = true;
         printf("Trip3 auto-reset at %.1f km\n", Config::MAX_TRIP_VALUE);
+    }
+}
+
+void setTotalKilometers(OdometerState &state, FlashStorage &storage, double newTotalKm)
+{
+    printf("Setting total kilometers from %.1f to %.1f\n", state.totalKm, newTotalKm);
+
+    // Update all total-related values
+    state.totalKm = newTotalKm;
+    state.currentTotalKm = newTotalKm;
+    state.lastTotalKm = newTotalKm;
+    state.lastSavedTotalKm = newTotalKm;
+
+    // Mark data as changed to trigger save
+    state.dataChanged = true;
+
+    // Immediately save to flash storage
+    if (storage.saveData(state.totalKm, state.currentPartialKm))
+    {
+        printf("Total kilometers successfully set to %.1f and saved to flash\n", newTotalKm);
+        state.dataChanged = false;
+        state.lastSavedTotalKm = state.totalKm;
+    }
+    else
+    {
+        printf("ERROR: Failed to save new total kilometers to flash!\n");
     }
 }
