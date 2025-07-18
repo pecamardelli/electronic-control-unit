@@ -60,7 +60,9 @@ enum class TripMode
     PARTIAL = 0, // Original partial odometer
     TRIP1 = 1,   // Trip 1
     TRIP2 = 2,   // Trip 2
-    TRIP3 = 3    // Trip 3
+    TRIP3 = 3,   // Trip 3
+    SPEED = 4,   // Current speed display mode
+    TIME = 5     // Current time display mode
 };
 
 // Structure to hold odometer state
@@ -259,7 +261,7 @@ int main()
                 else if (holdDuration < 1000)
                 {
                     // Short press (< 1 second), cycle through trip modes
-                    currentTripMode = static_cast<TripMode>((static_cast<int>(currentTripMode) + 1) % 4);
+                    currentTripMode = static_cast<TripMode>((static_cast<int>(currentTripMode) + 1) % 6);
                     partialKmNeedsUpdate = true;
                     printf("Switched to %s\n", getTripName(currentTripMode));
                 }
@@ -332,6 +334,54 @@ int main()
                     snprintf(buffer, sizeof(buffer), "%d", (int)gpsData.speed_kmh);
                     lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
                 }
+                else if (currentTripMode == TripMode::SPEED)
+                {
+                    // Speed display mode - show current speed in lower display
+                    snprintf(buffer, sizeof(buffer), "%d", (int)gpsData.speed_kmh);
+                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                }
+                else if (currentTripMode == TripMode::TIME)
+                {
+                    // Time display mode - show current time in 24-hour format (HH:MM)
+                    // Get time from GPS if available, otherwise use system time
+                    if (gpsData.valid_fix && gpsData.hour != 255 && gpsData.minute != 255)
+                    {
+                        snprintf(buffer, sizeof(buffer), "%02d:%02d", gpsData.hour, gpsData.minute);
+                    }
+                    else
+                    {
+                        // Fallback to system time if GPS time not available
+                        absolute_time_t now = get_absolute_time();
+                        uint64_t us_since_boot = to_us_since_boot(now);
+                        // Simple time calculation (this would need proper RTC for real time)
+                        int seconds_since_boot = us_since_boot / 1000000;
+                        int hours = (seconds_since_boot / 3600) % 24;
+                        int minutes = (seconds_since_boot / 60) % 60;
+                        snprintf(buffer, sizeof(buffer), "%02d:%02d", hours, minutes);
+                    }
+                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                }
+                else if (currentTripMode == TripMode::TIME)
+                {
+                    // Time display mode - show current time in 24-hour format (HH:MM)
+                    // Get time from GPS if available, otherwise use system time
+                    if (gpsData.valid_fix && gpsData.hour != 255 && gpsData.minute != 255)
+                    {
+                        snprintf(buffer, sizeof(buffer), "%02d:%02d", gpsData.hour, gpsData.minute);
+                    }
+                    else
+                    {
+                        // Fallback to system time if GPS time not available
+                        absolute_time_t now = get_absolute_time();
+                        uint64_t us_since_boot = to_us_since_boot(now);
+                        // Simple time calculation (this would need proper RTC for real time)
+                        int seconds_since_boot = us_since_boot / 1000000;
+                        int hours = (seconds_since_boot / 3600) % 24;
+                        int minutes = (seconds_since_boot / 60) % 60;
+                        snprintf(buffer, sizeof(buffer), "%02d:%02d", hours, minutes);
+                    }
+                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                }
                 else if (partialKmNeedsUpdate)
                 {
                     getCurrentTripDisplayString(state, currentTripMode, buffer, sizeof(buffer));
@@ -339,6 +389,7 @@ int main()
                     partialKmNeedsUpdate = false;
                 }
 
+                // Always update total km display
                 if (totalKmNeedsUpdate)
                 {
                     snprintf(buffer, sizeof(buffer), "%d", (int)state.lastTotalKm);
@@ -586,6 +637,10 @@ const char *getTripName(TripMode trip)
         return "Trip2";
     case TripMode::TRIP3:
         return "Trip3";
+    case TripMode::SPEED:
+        return "Speed";
+    case TripMode::TIME:
+        return "Time";
     default:
         return "Unknown";
     }
@@ -660,6 +715,14 @@ void resetTrip(OdometerState &state, TripMode trip)
         state.lastTrip3Km = 0;
         state.lastSavedTrip3Km = 0;
         break;
+    case TripMode::SPEED:
+        // Speed mode doesn't have anything to reset
+        printf("Speed mode - nothing to reset\n");
+        return;
+    case TripMode::TIME:
+        // Time mode doesn't have anything to reset
+        printf("Time mode - nothing to reset\n");
+        return;
     }
     state.dataChanged = true;
 }
