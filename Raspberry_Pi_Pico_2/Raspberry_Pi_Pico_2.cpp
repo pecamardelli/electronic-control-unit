@@ -14,107 +14,11 @@
 #include "SSD1306.h"
 #include "Button.h"
 #include "GPS.h"
-
-// Configuration constants
-namespace Config
-{
-    // Display thresholds and intervals
-    constexpr double PARTIAL_UPDATE_THRESHOLD = 0.1; // Update display every 0.1 km
-    constexpr double TOTAL_UPDATE_THRESHOLD = 1.0;   // Update display every 1.0 km
-    constexpr int DISPLAY_UPDATE_INTERVAL_MS = 100;  // Update display every 100ms max
-    constexpr int MIN_SAVE_INTERVAL_MS = 3000;       // Minimum time between saves
-    constexpr double MIN_CHANGE_THRESHOLD = 0.01;    // Minimum change to trigger a save
-
-    // Test mode configuration
-    constexpr int TEST_MOTOR_SPEED = 4;             // Motor speed during test (4 RPM)
-    constexpr int TEST_INTERVAL_SEC = 2;            // Delay between test positions (2 seconds)
-    constexpr int TEST_BUTTON_HOLD_TIME_MS = 10000; // Time to hold button for test mode (10 seconds)
-    constexpr int DISPLAY_INFO_HOLD_TIME_MS = 5000; // Time to hold button to toggle info display (5 seconds)
-
-    // Trip odometer limits
-    constexpr double MAX_TRIP_VALUE = 1000.0; // Maximum value before auto-reset (applies to T1, T2, T3 only)
-
-    // I2C configuration
-    namespace I2C
-    {
-        constexpr int I2C0_SDA = 4;        // I2C0 SDA pin
-        constexpr int I2C0_SCL = 5;        // I2C0 SCL pin
-        constexpr int I2C1_SDA = 2;        // I2C1 SDA pin
-        constexpr int I2C1_SCL = 3;        // I2C1 SCL pin
-        constexpr uint BAUD_RATE = 400000; // I2C bus speed (400 kHz)
-    }
-
-    // Button configuration
-    namespace Button
-    {
-        constexpr int RESET_PARTIAL_PIN = 17; // GPIO pin for reset button (with pull-up)
-    }
-
-    // Watchdog timeout in milliseconds
-    constexpr uint32_t WATCHDOG_TIMEOUT_MS = 8000; // Watchdog timeout (8 seconds)
-}
-
-// Enum to track which trip odometer is currently selected
-enum class TripMode
-{
-    PARTIAL = 0, // Original partial odometer
-    TRIP1 = 1,   // Trip 1
-    TRIP2 = 2,   // Trip 2
-    TRIP3 = 3,   // Trip 3
-    SPEED = 4,   // Current speed display mode
-    TIME = 5     // Current time display mode
-};
-
-// Structure to hold odometer state
-struct OdometerState
-{
-    double totalKm;
-    double currentTotalKm;
-    double lastTotalKm;
-    double partialKm;
-    double currentPartialKm;
-    double lastPartialKm;
-    double lastSavedTotalKm;
-    double lastSavedPartialKm;
-    bool dataChanged;
-
-    // Trip odometers
-    double trip1Km;
-    double trip2Km;
-    double trip3Km;
-    double currentTrip1Km;
-    double currentTrip2Km;
-    double currentTrip3Km;
-    double lastTrip1Km;
-    double lastTrip2Km;
-    double lastTrip3Km;
-    double lastSavedTrip1Km;
-    double lastSavedTrip2Km;
-    double lastSavedTrip3Km;
-
-    OdometerState() : totalKm(0), currentTotalKm(0), lastTotalKm(0),
-                      partialKm(0), currentPartialKm(0), lastPartialKm(0),
-                      lastSavedTotalKm(0), lastSavedPartialKm(0),
-                      dataChanged(false),
-                      trip1Km(0), trip2Km(0), trip3Km(0),
-                      currentTrip1Km(0), currentTrip2Km(0), currentTrip3Km(0),
-                      lastTrip1Km(0), lastTrip2Km(0), lastTrip3Km(0),
-                      lastSavedTrip1Km(0), lastSavedTrip2Km(0), lastSavedTrip3Km(0) {}
-};
-
-// Function prototypes
-void initializeI2C();
-void initializeDisplays(SSD1306 &lowerDisplay, SSD1306 &upperDisplay, const OdometerState &state, TripMode currentTrip);
-void checkForDataChanges(OdometerState &state, const GPSData &gpsData, bool &partialKmNeedsUpdate, bool &totalKmNeedsUpdate, TripMode currentTrip);
-void updateDisplaysIfNeeded(SSD1306 &lowerDisplay, SSD1306 &upperDisplay, OdometerState &state,
-                            bool &partialKmNeedsUpdate, bool &totalKmNeedsUpdate, unsigned long currentTime, unsigned long &lastDisplayUpdateTime);
-void saveDataIfNeeded(FlashStorage &storage, OdometerState &state, unsigned long currentTime, unsigned long &lastSaveTime);
-const char *getTripName(TripMode trip);
-double getCurrentTripValue(const OdometerState &state, TripMode trip);
-void getCurrentTripDisplayString(const OdometerState &state, TripMode trip, char *buffer, size_t bufferSize);
-void resetTrip(OdometerState &state, TripMode trip);
-void checkTripLimits(OdometerState &state, bool &partialKmNeedsUpdate);
-void setTotalKilometers(OdometerState &state, FlashStorage &storage, double newTotalKm);
+#include "helpers/OdometerTypes.h"
+#include "helpers/DisplayHelper.h"
+#include "helpers/TripHelper.h"
+#include "helpers/OdometerHelper.h"
+#include "helpers/StorageHelper.h"
 
 int main()
 {
@@ -173,7 +77,7 @@ int main()
     Button resetButton(Config::Button::RESET_PARTIAL_PIN, true); // true for pull-up
 
     // Initialize I2C
-    initializeI2C();
+    DisplayHelper::initializeI2C();
 
     SSD1306 lowerDisplay(i2c0, Config::I2C::I2C0_SDA, Config::I2C::I2C0_SCL);
     SSD1306 upperDisplay(i2c1, Config::I2C::I2C1_SDA, Config::I2C::I2C1_SCL);
@@ -184,10 +88,10 @@ int main()
     bool infoDisplayEnabled = false;              // Flag to enable/disable info display mode
     TripMode currentTripMode = TripMode::PARTIAL; // Currently selected trip odometer
 
-    initializeDisplays(lowerDisplay, upperDisplay, state, currentTripMode);
+    DisplayHelper::initializeDisplays(lowerDisplay, upperDisplay, state, currentTripMode);
 
     // HELPER: Set total kilometers to a fixed value
-    // setTotalKilometers(state, storage, 1015.0);
+    // OdometerHelper::setTotalKilometers(state, storage, 1015.0);
 
     // Main loop
     while (true)
@@ -254,16 +158,16 @@ int main()
                 else if (holdDuration >= 3000)
                 {
                     // Button was held for 3-5 seconds, reset the current trip odometer
-                    resetTrip(state, currentTripMode);
+                    TripHelper::resetTrip(state, currentTripMode);
                     partialKmNeedsUpdate = true;
-                    printf("Trip %s reset\n", getTripName(currentTripMode));
+                    printf("Trip %s reset\n", TripHelper::getTripName(currentTripMode));
                 }
                 else if (holdDuration < 1000)
                 {
                     // Short press (< 1 second), cycle through trip modes
                     currentTripMode = static_cast<TripMode>((static_cast<int>(currentTripMode) + 1) % 6);
                     partialKmNeedsUpdate = true;
-                    printf("Switched to %s\n", getTripName(currentTripMode));
+                    printf("Switched to %s\n", TripHelper::getTripName(currentTripMode));
                 }
             }
 
@@ -281,7 +185,7 @@ int main()
         speedometer.loop(round(gpsData.speed_kmh));
 
         // Update state based on GPS data
-        checkForDataChanges(state, gpsData, partialKmNeedsUpdate, totalKmNeedsUpdate, currentTripMode);
+        OdometerHelper::checkForDataChanges(state, gpsData, partialKmNeedsUpdate, totalKmNeedsUpdate, currentTripMode);
 
         // Update displays
         if (currentTime - lastDisplayUpdateTime > Config::DISPLAY_UPDATE_INTERVAL_MS)
@@ -361,30 +265,9 @@ int main()
                     }
                     lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
                 }
-                else if (currentTripMode == TripMode::TIME)
-                {
-                    // Time display mode - show current time in 24-hour format (HH:MM)
-                    // Get time from GPS if available, otherwise use system time
-                    if (gpsData.valid_fix && gpsData.hour != 255 && gpsData.minute != 255)
-                    {
-                        snprintf(buffer, sizeof(buffer), "%02d:%02d", gpsData.hour, gpsData.minute);
-                    }
-                    else
-                    {
-                        // Fallback to system time if GPS time not available
-                        absolute_time_t now = get_absolute_time();
-                        uint64_t us_since_boot = to_us_since_boot(now);
-                        // Simple time calculation (this would need proper RTC for real time)
-                        int seconds_since_boot = us_since_boot / 1000000;
-                        int hours = (seconds_since_boot / 3600) % 24;
-                        int minutes = (seconds_since_boot / 60) % 60;
-                        snprintf(buffer, sizeof(buffer), "%02d:%02d", hours, minutes);
-                    }
-                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-                }
                 else if (partialKmNeedsUpdate)
                 {
-                    getCurrentTripDisplayString(state, currentTripMode, buffer, sizeof(buffer));
+                    TripHelper::getCurrentTripDisplayString(state, currentTripMode, buffer, sizeof(buffer));
                     lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
                     partialKmNeedsUpdate = false;
                 }
@@ -401,383 +284,8 @@ int main()
             lastDisplayUpdateTime = currentTime;
         }
 
-        saveDataIfNeeded(storage, state, currentTime, lastSaveTime);
+        StorageHelper::saveDataIfNeeded(storage, state, currentTime, lastSaveTime);
     }
 
     return 0;
-}
-
-void initializeI2C()
-{
-    // Initialize I2C0
-    gpio_set_function(Config::I2C::I2C0_SDA, GPIO_FUNC_I2C);
-    gpio_set_function(Config::I2C::I2C0_SCL, GPIO_FUNC_I2C);
-    i2c_init(i2c0, Config::I2C::BAUD_RATE);
-
-    // Initialize I2C1
-    gpio_set_function(Config::I2C::I2C1_SDA, GPIO_FUNC_I2C);
-    gpio_set_function(Config::I2C::I2C1_SCL, GPIO_FUNC_I2C);
-    i2c_init(i2c1, Config::I2C::BAUD_RATE);
-}
-
-void initializeDisplays(SSD1306 &lowerDisplay, SSD1306 &upperDisplay, const OdometerState &state, TripMode currentTrip)
-{
-    char buffer[16]; // Buffer for formatted strings
-
-    // Format and display current trip kilometers with identifier
-    getCurrentTripDisplayString(state, currentTrip, buffer, sizeof(buffer));
-    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-
-    // Format and display total kilometers
-    snprintf(buffer, sizeof(buffer), "%d", (int)state.totalKm);
-    upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-}
-
-void checkForDataChanges(OdometerState &state, const GPSData &gpsData, bool &partialKmNeedsUpdate, bool &totalKmNeedsUpdate, TripMode currentTrip)
-{
-    // Only update distances if GPS has a valid fix
-    if (!gpsData.valid_fix)
-        return;
-
-    // Get distance traveled from GPS (in kilometers)
-    static bool firstValidFix = true;
-    static double lastLatitude = 0.0;
-    static double lastLongitude = 0.0;
-
-    double distanceCoveredKm = 0.0;
-
-    if (firstValidFix)
-    {
-        // First GPS fix, just store position
-        lastLatitude = gpsData.latitude;
-        lastLongitude = gpsData.longitude;
-        firstValidFix = false;
-    }
-    else
-    {
-        // Calculate distance from last position
-        double distanceMeters = GPS::calculateDistance(lastLatitude, lastLongitude,
-                                                       gpsData.latitude, gpsData.longitude);
-        distanceCoveredKm = distanceMeters / 1000.0; // Convert to kilometers
-
-        // Update last position
-        lastLatitude = gpsData.latitude;
-        lastLongitude = gpsData.longitude;
-
-        // Only process if we've moved a reasonable distance (filter GPS noise)
-        if (distanceCoveredKm < 0.001)
-        { // Less than 1 meter
-            distanceCoveredKm = 0.0;
-        }
-    }
-
-    // Update current values for total and partial (partial always tracks)
-    state.currentTotalKm = state.totalKm + distanceCoveredKm;
-    state.currentPartialKm = state.partialKm + distanceCoveredKm;
-
-    // Update trip odometers - only the selected trip accumulates distance
-    if (currentTrip == TripMode::TRIP1)
-    {
-        state.currentTrip1Km = state.trip1Km + distanceCoveredKm;
-    }
-    else if (currentTrip == TripMode::TRIP2)
-    {
-        state.currentTrip2Km = state.trip2Km + distanceCoveredKm;
-    }
-    else if (currentTrip == TripMode::TRIP3)
-    {
-        state.currentTrip3Km = state.trip3Km + distanceCoveredKm;
-    }
-
-    // Check if data has changed enough to warrant saving
-    if (fabs(state.currentTotalKm - state.lastSavedTotalKm) > Config::MIN_CHANGE_THRESHOLD ||
-        fabs(state.currentPartialKm - state.lastSavedPartialKm) > Config::MIN_CHANGE_THRESHOLD ||
-        fabs(state.currentTrip1Km - state.lastSavedTrip1Km) > Config::MIN_CHANGE_THRESHOLD ||
-        fabs(state.currentTrip2Km - state.lastSavedTrip2Km) > Config::MIN_CHANGE_THRESHOLD ||
-        fabs(state.currentTrip3Km - state.lastSavedTrip3Km) > Config::MIN_CHANGE_THRESHOLD)
-    {
-        state.dataChanged = true;
-    }
-
-    // Check if displays need updates based on current trip
-    double currentTripValue = getCurrentTripValue(state, currentTrip);
-    double lastTripValue = 0;
-
-    switch (currentTrip)
-    {
-    case TripMode::PARTIAL:
-        lastTripValue = state.lastPartialKm;
-        break;
-    case TripMode::TRIP1:
-        lastTripValue = state.lastTrip1Km;
-        break;
-    case TripMode::TRIP2:
-        lastTripValue = state.lastTrip2Km;
-        break;
-    case TripMode::TRIP3:
-        lastTripValue = state.lastTrip3Km;
-        break;
-    }
-
-    if (currentTripValue >= lastTripValue + Config::PARTIAL_UPDATE_THRESHOLD)
-    {
-        // Update the appropriate last value
-        switch (currentTrip)
-        {
-        case TripMode::PARTIAL:
-            state.lastPartialKm = state.currentPartialKm;
-            break;
-        case TripMode::TRIP1:
-            state.lastTrip1Km = state.currentTrip1Km;
-            break;
-        case TripMode::TRIP2:
-            state.lastTrip2Km = state.currentTrip2Km;
-            break;
-        case TripMode::TRIP3:
-            state.lastTrip3Km = state.currentTrip3Km;
-            break;
-        }
-        partialKmNeedsUpdate = true;
-    }
-
-    if (state.currentTotalKm >= state.lastTotalKm + Config::TOTAL_UPDATE_THRESHOLD)
-    {
-        state.lastTotalKm = floor(state.currentTotalKm);
-        totalKmNeedsUpdate = true;
-    }
-
-    // Update the actual stored values if distance was covered
-    if (distanceCoveredKm > 0)
-    {
-        state.totalKm = state.currentTotalKm;
-        state.partialKm = state.currentPartialKm;
-
-        switch (currentTrip)
-        {
-        case TripMode::TRIP1:
-            state.trip1Km = state.currentTrip1Km;
-            break;
-        case TripMode::TRIP2:
-            state.trip2Km = state.currentTrip2Km;
-            break;
-        case TripMode::TRIP3:
-            state.trip3Km = state.currentTrip3Km;
-            break;
-        }
-    }
-
-    // Check if any trip has exceeded the maximum limit and auto-reset if needed
-    checkTripLimits(state, partialKmNeedsUpdate);
-}
-
-void updateDisplaysIfNeeded(SSD1306 &lowerDisplay, SSD1306 &upperDisplay,
-                            OdometerState &state, bool &partialKmNeedsUpdate,
-                            bool &totalKmNeedsUpdate, unsigned long currentTime,
-                            unsigned long &lastDisplayUpdateTime)
-{
-    // Only update displays periodically to avoid overwhelming the I2C bus
-    if (currentTime - lastDisplayUpdateTime > Config::DISPLAY_UPDATE_INTERVAL_MS)
-    {
-        char buffer[16];
-
-        if (partialKmNeedsUpdate)
-        {
-            snprintf(buffer, sizeof(buffer), "%.1f", state.lastPartialKm);
-            lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-            partialKmNeedsUpdate = false;
-        }
-
-        if (totalKmNeedsUpdate)
-        {
-            snprintf(buffer, sizeof(buffer), "%d", (int)state.lastTotalKm);
-            upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-            totalKmNeedsUpdate = false;
-        }
-
-        lastDisplayUpdateTime = currentTime;
-    }
-}
-
-void saveDataIfNeeded(FlashStorage &storage, OdometerState &state,
-                      unsigned long currentTime, unsigned long &lastSaveTime)
-{
-    // Save data to flash only when:
-    // 1. Data has actually changed
-    // 2. Enough time has passed since last save to prevent excessive writes
-    if (state.dataChanged && (currentTime - lastSaveTime > Config::MIN_SAVE_INTERVAL_MS))
-    {
-        if (storage.saveData(state.currentTotalKm, state.currentPartialKm))
-        {
-            // Update saved values only on successful save
-            state.lastSavedTotalKm = state.currentTotalKm;
-            state.lastSavedPartialKm = state.currentPartialKm;
-            state.lastSavedTrip1Km = state.currentTrip1Km;
-            state.lastSavedTrip2Km = state.currentTrip2Km;
-            state.lastSavedTrip3Km = state.currentTrip3Km;
-            state.dataChanged = false;
-            lastSaveTime = currentTime;
-        }
-        else
-        {
-            // TODO: some logic or a message to display when an error ocurred?
-            printf("Failed to save odometer data\n");
-        }
-    }
-}
-
-const char *getTripName(TripMode trip)
-{
-    switch (trip)
-    {
-    case TripMode::PARTIAL:
-        return "Partial";
-    case TripMode::TRIP1:
-        return "Trip1";
-    case TripMode::TRIP2:
-        return "Trip2";
-    case TripMode::TRIP3:
-        return "Trip3";
-    case TripMode::SPEED:
-        return "Speed";
-    case TripMode::TIME:
-        return "Time";
-    default:
-        return "Unknown";
-    }
-}
-
-double getCurrentTripValue(const OdometerState &state, TripMode trip)
-{
-    switch (trip)
-    {
-    case TripMode::PARTIAL:
-        return state.currentPartialKm;
-    case TripMode::TRIP1:
-        return state.currentTrip1Km;
-    case TripMode::TRIP2:
-        return state.currentTrip2Km;
-    case TripMode::TRIP3:
-        return state.currentTrip3Km;
-    default:
-        return 0.0;
-    }
-}
-
-void getCurrentTripDisplayString(const OdometerState &state, TripMode trip, char *buffer, size_t bufferSize)
-{
-    double tripValue = getCurrentTripValue(state, trip);
-
-    switch (trip)
-    {
-    case TripMode::PARTIAL:
-        snprintf(buffer, bufferSize, "%.1f", tripValue);
-        break;
-    case TripMode::TRIP1:
-        snprintf(buffer, bufferSize, "T1 %.1f", tripValue);
-        break;
-    case TripMode::TRIP2:
-        snprintf(buffer, bufferSize, "T2 %.1f", tripValue);
-        break;
-    case TripMode::TRIP3:
-        snprintf(buffer, bufferSize, "T3 %.1f", tripValue);
-        break;
-    default:
-        snprintf(buffer, bufferSize, "?.? %.1f", tripValue);
-        break;
-    }
-}
-
-void resetTrip(OdometerState &state, TripMode trip)
-{
-    switch (trip)
-    {
-    case TripMode::PARTIAL:
-        state.partialKm = 0;
-        state.currentPartialKm = 0;
-        state.lastPartialKm = 0;
-        state.lastSavedPartialKm = 0;
-        break;
-    case TripMode::TRIP1:
-        state.trip1Km = 0;
-        state.currentTrip1Km = 0;
-        state.lastTrip1Km = 0;
-        state.lastSavedTrip1Km = 0;
-        break;
-    case TripMode::TRIP2:
-        state.trip2Km = 0;
-        state.currentTrip2Km = 0;
-        state.lastTrip2Km = 0;
-        state.lastSavedTrip2Km = 0;
-        break;
-    case TripMode::TRIP3:
-        state.trip3Km = 0;
-        state.currentTrip3Km = 0;
-        state.lastTrip3Km = 0;
-        state.lastSavedTrip3Km = 0;
-        break;
-    case TripMode::SPEED:
-        // Speed mode doesn't have anything to reset
-        printf("Speed mode - nothing to reset\n");
-        return;
-    case TripMode::TIME:
-        // Time mode doesn't have anything to reset
-        printf("Time mode - nothing to reset\n");
-        return;
-    }
-    state.dataChanged = true;
-}
-
-void checkTripLimits(OdometerState &state, bool &partialKmNeedsUpdate)
-{
-    // Note: Partial odometer is excluded from auto-reset since it has no prefix and can display more digits
-
-    // Check Trip1
-    if (state.currentTrip1Km >= Config::MAX_TRIP_VALUE)
-    {
-        resetTrip(state, TripMode::TRIP1);
-        partialKmNeedsUpdate = true;
-        printf("Trip1 auto-reset at %.1f km\n", Config::MAX_TRIP_VALUE);
-    }
-
-    // Check Trip2
-    if (state.currentTrip2Km >= Config::MAX_TRIP_VALUE)
-    {
-        resetTrip(state, TripMode::TRIP2);
-        partialKmNeedsUpdate = true;
-        printf("Trip2 auto-reset at %.1f km\n", Config::MAX_TRIP_VALUE);
-    }
-
-    // Check Trip3
-    if (state.currentTrip3Km >= Config::MAX_TRIP_VALUE)
-    {
-        resetTrip(state, TripMode::TRIP3);
-        partialKmNeedsUpdate = true;
-        printf("Trip3 auto-reset at %.1f km\n", Config::MAX_TRIP_VALUE);
-    }
-}
-
-void setTotalKilometers(OdometerState &state, FlashStorage &storage, double newTotalKm)
-{
-    printf("Setting total kilometers from %.1f to %.1f\n", state.totalKm, newTotalKm);
-
-    // Update all total-related values
-    state.totalKm = newTotalKm;
-    state.currentTotalKm = newTotalKm;
-    state.lastTotalKm = newTotalKm;
-    state.lastSavedTotalKm = newTotalKm;
-
-    // Mark data as changed to trigger save
-    state.dataChanged = true;
-
-    // Immediately save to flash storage
-    if (storage.saveData(state.totalKm, state.currentPartialKm))
-    {
-        printf("Total kilometers successfully set to %.1f and saved to flash\n", newTotalKm);
-        state.dataChanged = false;
-        state.lastSavedTotalKm = state.totalKm;
-    }
-    else
-    {
-        printf("ERROR: Failed to save new total kilometers to flash!\n");
-    }
 }
