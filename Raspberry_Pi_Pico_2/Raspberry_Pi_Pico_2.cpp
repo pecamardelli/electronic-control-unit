@@ -13,6 +13,7 @@
 #include "SpeedSensor.h"
 #include "SSD1306.h"
 #include "Button.h"
+#include "GPS.h"
 
 // Configuration constants
 namespace Config
@@ -102,7 +103,7 @@ struct OdometerState
 // Function prototypes
 void initializeI2C();
 void initializeDisplays(SSD1306 &lowerDisplay, SSD1306 &upperDisplay, const OdometerState &state, TripMode currentTrip);
-void checkForDataChanges(OdometerState &state, const SpeedSensorData &sensorData, bool &partialKmNeedsUpdate, bool &totalKmNeedsUpdate, TripMode currentTrip);
+void checkForDataChanges(OdometerState &state, const GPSData &gpsData, bool &partialKmNeedsUpdate, bool &totalKmNeedsUpdate, TripMode currentTrip);
 void updateDisplaysIfNeeded(SSD1306 &lowerDisplay, SSD1306 &upperDisplay, OdometerState &state,
                             bool &partialKmNeedsUpdate, bool &totalKmNeedsUpdate, unsigned long currentTime, unsigned long &lastDisplayUpdateTime);
 void saveDataIfNeeded(FlashStorage &storage, OdometerState &state, unsigned long currentTime, unsigned long &lastSaveTime);
@@ -154,8 +155,17 @@ int main()
     state.lastSavedTrip3Km = state.trip3Km;
 
     Speedometer speedometer;
-    SpeedSensor speedSensor;
-    SpeedSensorData speedSensorData = {0, 0.0, 0.0, 0.0};
+    GPS gps;
+
+    // Initialize GPS
+    if (!gps.initialize())
+    {
+        printf("ERROR: Failed to initialize GPS module!\n");
+    }
+    else
+    {
+        printf("GPS module initialized successfully\n");
+    }
 
     // Initialize reset button
     Button resetButton(Config::Button::RESET_PARTIAL_PIN, true); // true for pull-up
@@ -174,7 +184,7 @@ int main()
 
     initializeDisplays(lowerDisplay, upperDisplay, state, currentTripMode);
 
-    // HELPER: Set total kilometers to 1015 (remove this line after use)
+    // HELPER: Set total kilometers to a fixed value
     // setTotalKilometers(state, storage, 1015.0);
 
     // Main loop
@@ -208,7 +218,7 @@ int main()
                     testMode = true;
                     testModeStartTime = currentTime;
                     printf("Entering test mode...\n");
-                    speedSensor.setTestMode(true, 0.0); // Start test mode with 0 km/h
+                    // GPS test mode - just display GPS info
                     testMode = false;
                     printf("Test mode completed.\n");
                     testModeTriggered = true;
@@ -261,38 +271,65 @@ int main()
             testModeTriggered = false;
         }
 
-        // Process speed sensor and update gauge
-        speedSensorData = speedSensor.loop();
+        // Process GPS data and update gauge
+        gps.update();
+        const GPSData &gpsData = gps.getData();
 
-        // Update speedometer gauge with current speed
-        speedometer.loop(round(speedSensorData.speed));
+        // Update speedometer gauge with GPS speed
+        speedometer.loop(round(gpsData.speed_kmh));
 
-        // Update state based on new sensor data
-        checkForDataChanges(state, speedSensorData, partialKmNeedsUpdate, totalKmNeedsUpdate, currentTripMode);
+        // Update state based on GPS data
+        checkForDataChanges(state, gpsData, partialKmNeedsUpdate, totalKmNeedsUpdate, currentTripMode);
 
         // Update displays
         if (currentTime - lastDisplayUpdateTime > Config::DISPLAY_UPDATE_INTERVAL_MS)
         {
             char buffer[16];
 
-            if (infoDisplayEnabled)
-            {
-                // Info display mode: show real-time speed and transitions
-                // Show current speed in upper display
-                snprintf(buffer, sizeof(buffer), "%d", (int)speedSensorData.speed);
-                upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+            // Always show GPS debug info when acquiring signal OR when info mode is enabled
+            bool showGPSDebug = infoDisplayEnabled || !gpsData.valid_fix;
 
-                // Show total transitions in lower display
-                snprintf(buffer, sizeof(buffer), "%llu", speedSensorData.transitions);
-                lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+            if (showGPSDebug)
+            {
+                // GPS debug mode: show GPS info and acquisition progress
+                if (gpsData.valid_fix)
+                {
+                    // GPS has valid fix - show speed and satellite count
+                    snprintf(buffer, sizeof(buffer), "%d", (int)gpsData.speed_kmh);
+                    upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+
+                    snprintf(buffer, sizeof(buffer), "SAT%d", gpsData.satellites_used);
+                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                }
+                else
+                {
+                    // GPS acquiring signal - show progress messages
+                    if (gpsData.satellites_used == 0)
+                    {
+                        upperDisplay.drawString(SSD1306_ALIGN_CENTER, "GPS", LiberationSansNarrow_Bold28);
+                        lowerDisplay.drawString(SSD1306_ALIGN_CENTER, "SEARCH", LiberationSansNarrow_Bold28);
+                    }
+                    else if (gpsData.satellites_used < 4)
+                    {
+                        snprintf(buffer, sizeof(buffer), "SAT%d", gpsData.satellites_used);
+                        upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                        lowerDisplay.drawString(SSD1306_ALIGN_CENTER, "WAIT", LiberationSansNarrow_Bold28);
+                    }
+                    else
+                    {
+                        snprintf(buffer, sizeof(buffer), "SAT%d", gpsData.satellites_used);
+                        upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                        lowerDisplay.drawString(SSD1306_ALIGN_CENTER, "CALC", LiberationSansNarrow_Bold28);
+                    }
+                }
             }
             else
             {
                 // Normal odometer display mode
-                // In test mode, show speed in lower display
-                if (speedSensor.isTestMode())
+                // In test mode, show GPS speed in lower display
+                if (testMode)
                 {
-                    snprintf(buffer, sizeof(buffer), "%d", (int)speedSensorData.speed);
+                    snprintf(buffer, sizeof(buffer), "%d", (int)gpsData.speed_kmh);
                     lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
                 }
                 else if (partialKmNeedsUpdate)
@@ -345,24 +382,60 @@ void initializeDisplays(SSD1306 &lowerDisplay, SSD1306 &upperDisplay, const Odom
     upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
 }
 
-void checkForDataChanges(OdometerState &state, const SpeedSensorData &sensorData, bool &partialKmNeedsUpdate, bool &totalKmNeedsUpdate, TripMode currentTrip)
+void checkForDataChanges(OdometerState &state, const GPSData &gpsData, bool &partialKmNeedsUpdate, bool &totalKmNeedsUpdate, TripMode currentTrip)
 {
+    // Only update distances if GPS has a valid fix
+    if (!gpsData.valid_fix)
+        return;
+
+    // Get distance traveled from GPS (in kilometers)
+    static bool firstValidFix = true;
+    static double lastLatitude = 0.0;
+    static double lastLongitude = 0.0;
+
+    double distanceCoveredKm = 0.0;
+
+    if (firstValidFix)
+    {
+        // First GPS fix, just store position
+        lastLatitude = gpsData.latitude;
+        lastLongitude = gpsData.longitude;
+        firstValidFix = false;
+    }
+    else
+    {
+        // Calculate distance from last position
+        double distanceMeters = GPS::calculateDistance(lastLatitude, lastLongitude,
+                                                       gpsData.latitude, gpsData.longitude);
+        distanceCoveredKm = distanceMeters / 1000.0; // Convert to kilometers
+
+        // Update last position
+        lastLatitude = gpsData.latitude;
+        lastLongitude = gpsData.longitude;
+
+        // Only process if we've moved a reasonable distance (filter GPS noise)
+        if (distanceCoveredKm < 0.001)
+        { // Less than 1 meter
+            distanceCoveredKm = 0.0;
+        }
+    }
+
     // Update current values for total and partial (partial always tracks)
-    state.currentTotalKm = state.totalKm + sensorData.distanceCovered;
-    state.currentPartialKm = state.partialKm + sensorData.distanceCovered;
+    state.currentTotalKm = state.totalKm + distanceCoveredKm;
+    state.currentPartialKm = state.partialKm + distanceCoveredKm;
 
     // Update trip odometers - only the selected trip accumulates distance
     if (currentTrip == TripMode::TRIP1)
     {
-        state.currentTrip1Km = state.trip1Km + sensorData.distanceCovered;
+        state.currentTrip1Km = state.trip1Km + distanceCoveredKm;
     }
     else if (currentTrip == TripMode::TRIP2)
     {
-        state.currentTrip2Km = state.trip2Km + sensorData.distanceCovered;
+        state.currentTrip2Km = state.trip2Km + distanceCoveredKm;
     }
     else if (currentTrip == TripMode::TRIP3)
     {
-        state.currentTrip3Km = state.trip3Km + sensorData.distanceCovered;
+        state.currentTrip3Km = state.trip3Km + distanceCoveredKm;
     }
 
     // Check if data has changed enough to warrant saving
@@ -420,6 +493,26 @@ void checkForDataChanges(OdometerState &state, const SpeedSensorData &sensorData
     {
         state.lastTotalKm = floor(state.currentTotalKm);
         totalKmNeedsUpdate = true;
+    }
+
+    // Update the actual stored values if distance was covered
+    if (distanceCoveredKm > 0)
+    {
+        state.totalKm = state.currentTotalKm;
+        state.partialKm = state.currentPartialKm;
+
+        switch (currentTrip)
+        {
+        case TripMode::TRIP1:
+            state.trip1Km = state.currentTrip1Km;
+            break;
+        case TripMode::TRIP2:
+            state.trip2Km = state.currentTrip2Km;
+            break;
+        case TripMode::TRIP3:
+            state.trip3Km = state.currentTrip3Km;
+            break;
+        }
     }
 
     // Check if any trip has exceeded the maximum limit and auto-reset if needed
