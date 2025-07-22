@@ -51,6 +51,7 @@ add_executable(Raspberry_Pi_Pico_2
     helpers/TripHelper.cpp
     helpers/OdometerHelper.cpp
     helpers/StorageHelper.cpp
+    helpers/TimeHelper.cpp
 )
 
 pico_set_program_name(Raspberry_Pi_Pico_2 "Raspberry_Pi_Pico_2")

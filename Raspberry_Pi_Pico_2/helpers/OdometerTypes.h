@@ -41,6 +41,14 @@ namespace Config
 
     // Watchdog timeout in milliseconds
     constexpr uint32_t WATCHDOG_TIMEOUT_MS = 8000; // Watchdog timeout (8 seconds)
+
+    // Timezone configuration
+    namespace Time
+    {
+        constexpr int TIMEZONE_OFFSET_HOURS = -3;      // UTC offset in hours (Argentina: UTC-3)
+        constexpr bool ENABLE_DAYLIGHT_SAVING = false; // Set to true if you want DST support
+        constexpr int DST_OFFSET_HOURS = 1;            // Additional offset during DST
+    }
 }
 
 // Enum to track which trip odometer is currently selected

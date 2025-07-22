@@ -19,6 +19,7 @@
 #include "helpers/TripHelper.h"
 #include "helpers/OdometerHelper.h"
 #include "helpers/StorageHelper.h"
+#include "helpers/TimeHelper.h"
 
 int main()
 {
@@ -196,9 +197,22 @@ int main()
                    gpsData.speed_kmh);
             printf("GPS: Lat=%.6f, Lon=%.6f, Alt=%.1fm\n",
                    gpsData.latitude, gpsData.longitude, gpsData.altitude);
-            printf("GPS: Time=%02d:%02d:%02d, Date=%02d/%02d/%02d\n",
-                   gpsData.hour, gpsData.minute, gpsData.second,
-                   gpsData.day, gpsData.month, gpsData.year);
+
+            if (gpsData.valid_fix && gpsData.hour != 255 && gpsData.minute != 255)
+            {
+                uint8_t local_hour, local_minute;
+                TimeHelper::convertUTCToLocal(gpsData.hour, gpsData.minute, local_hour, local_minute);
+                printf("GPS: Time=%02d:%02d:%02d UTC (%02d:%02d Local), Date=%02d/%02d/%02d\n",
+                       gpsData.hour, gpsData.minute, gpsData.second,
+                       local_hour, local_minute,
+                       gpsData.day, gpsData.month, gpsData.year);
+            }
+            else
+            {
+                printf("GPS: Time=%02d:%02d:%02d UTC (No valid time), Date=%02d/%02d/%02d\n",
+                       gpsData.hour, gpsData.minute, gpsData.second,
+                       gpsData.day, gpsData.month, gpsData.year);
+            }
             printf("GPS: HDOP=%.1f, Course=%.1f°\n",
                    gpsData.hdop, gpsData.course);
             lastGPSDebug = currentTime;
@@ -309,7 +323,10 @@ int main()
                     // Get time from GPS if available, otherwise use system time
                     if (gpsData.valid_fix && gpsData.hour != 255 && gpsData.minute != 255)
                     {
-                        snprintf(buffer, sizeof(buffer), "%02d:%02d", gpsData.hour, gpsData.minute);
+                        // Convert UTC time from GPS to local time
+                        uint8_t local_hour, local_minute;
+                        TimeHelper::convertUTCToLocal(gpsData.hour, gpsData.minute, local_hour, local_minute);
+                        snprintf(buffer, sizeof(buffer), "%02d:%02d", local_hour, local_minute);
                     }
                     else
                     {
