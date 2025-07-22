@@ -17,7 +17,7 @@ namespace Config
     // Test mode configuration
     constexpr int TEST_MOTOR_SPEED = 4;             // Motor speed during test (4 RPM)
     constexpr int TEST_INTERVAL_SEC = 2;            // Delay between test positions (2 seconds)
-    constexpr int TEST_BUTTON_HOLD_TIME_MS = 10000; // Time to hold button for test mode (10 seconds)
+    constexpr int LONG_BUTTON_HOLD_TIME_MS = 10000; // Time to hold button for long press (10 seconds)
     constexpr int DISPLAY_INFO_HOLD_TIME_MS = 5000; // Time to hold button to toggle info display (5 seconds)
 
     // Trip odometer limits

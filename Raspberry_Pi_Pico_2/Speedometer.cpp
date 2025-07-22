@@ -186,13 +186,7 @@ void Speedometer::loop(double speed)
     double originalSpeed = speed;
     filteredSpeed = filterSpeed(speed);
 
-    // Debug output for speed filtering and backlash compensation
-    static int debugCounter = 0;
-    if (++debugCounter % 500 == 0) // Print every 500 calls to avoid spam
-    {
-        printf("Speedometer: Raw=%.1f -> Filtered=%.1f km/h, Step=%d\n",
-               originalSpeed, filteredSpeed, currentStep);
-    } // Clamp filtered speed to valid range
+    // Clamp filtered speed to valid range
     filteredSpeed = std::clamp(filteredSpeed,
                                static_cast<double>(SpeedometerConfig::MIN_SPEED),
                                static_cast<double>(SpeedometerConfig::MAX_SPEED));

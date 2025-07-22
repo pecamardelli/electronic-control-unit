@@ -166,13 +166,6 @@ bool GPS::parseGGA(const char *sentence)
     {
         current_data.fix_quality = parseUint8(field);
         current_data.valid_fix = (current_data.fix_quality > 0);
-
-        // Debug: Print fix quality parsing
-        if (debug_mode)
-        {
-            printf("GPS: Fix quality field='%s', parsed=%d, valid_fix=%s\n",
-                   field, current_data.fix_quality, current_data.valid_fix ? "true" : "false");
-        }
     }
 
     // Field 7: Number of satellites

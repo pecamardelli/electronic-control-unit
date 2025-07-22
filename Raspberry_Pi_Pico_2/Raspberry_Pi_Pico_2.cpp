@@ -37,8 +37,6 @@ int main()
     OdometerState state;
     unsigned long lastSaveTime = 0;
     unsigned long lastDisplayUpdateTime = 0;
-    bool testMode = false;
-    unsigned long testModeStartTime = 0;
 
     FlashStorage storage(1024 * 1024, 16);
 
@@ -90,7 +88,6 @@ int main()
     // Set up initial display values
     bool partialKmNeedsUpdate = false;
     bool totalKmNeedsUpdate = false;
-    bool infoDisplayEnabled = false;              // Flag to enable/disable info display mode
     TripMode currentTripMode = TripMode::PARTIAL; // Currently selected trip odometer
 
     DisplayHelper::initializeDisplays(lowerDisplay, upperDisplay, state, currentTripMode);
@@ -110,7 +107,7 @@ int main()
         resetButton.check();
         static unsigned long buttonPressStartTime = 0;
         static bool wasButtonPressed = false;
-        static bool testModeTriggered = false;
+        static bool longPressTriggered = false;
 
         if (resetButton.isPressed())
         {
@@ -119,43 +116,24 @@ int main()
                 // Button was just pressed, start timing
                 buttonPressStartTime = currentTime;
                 wasButtonPressed = true;
-                testModeTriggered = false;
+                longPressTriggered = false;
             }
-            else if (currentTime - buttonPressStartTime >= Config::TEST_BUTTON_HOLD_TIME_MS && !testModeTriggered)
+            else if (currentTime - buttonPressStartTime >= Config::LONG_BUTTON_HOLD_TIME_MS && !longPressTriggered)
             {
-                // Button has been held for 10 seconds, enter test mode
-                if (!testMode)
-                {
-                    testMode = true;
-                    testModeStartTime = currentTime;
-                    // GPS test mode - just display GPS info
-                    testMode = false;
-                    testModeTriggered = true;
-                }
+                // Button has been held for 10 seconds - reserved for future use
+                longPressTriggered = true;
             }
         }
         else
         {
             // Button was released - check what action to take based on hold duration
-            if (wasButtonPressed && !testModeTriggered)
+            if (wasButtonPressed && !longPressTriggered)
             {
                 unsigned long holdDuration = currentTime - buttonPressStartTime;
 
                 if (holdDuration >= Config::DISPLAY_INFO_HOLD_TIME_MS)
                 {
-                    // Button was held for 5+ seconds, toggle info display mode
-                    infoDisplayEnabled = !infoDisplayEnabled;
-
-                    if (infoDisplayEnabled)
-                    {
-                        // Info display mode enabled
-                    }
-                    else
-                    {
-                        // Force odometer display update when returning to normal mode
-                        totalKmNeedsUpdate = true;
-                        partialKmNeedsUpdate = true;
-                    }
+                    // Button was held for 5+ seconds - reserved for future use
                 }
                 else if (holdDuration >= 3000)
                 {
@@ -174,16 +152,26 @@ int main()
             // Reset button state
             wasButtonPressed = false;
             buttonPressStartTime = 0;
-            testModeTriggered = false;
+            longPressTriggered = false;
         }
 
         // Process GPS data and update gauge
         gps.update();
         const GPSData &gpsData = gps.getData();
 
+        // Check for GPS fix state changes to trigger display updates
+        static bool lastValidFix = false;
+        if (gpsData.valid_fix != lastValidFix)
+        {
+            // GPS fix state changed - force display refresh
+            partialKmNeedsUpdate = true;
+            totalKmNeedsUpdate = true;
+            lastValidFix = gpsData.valid_fix;
+        }
+
         // Debug GPS status every 5 seconds
         static unsigned long lastGPSDebug = 0;
-        if (currentTime - lastGPSDebug > 5000)
+        if (currentTime - lastGPSDebug > 2000)
         {
             printf("GPS: Fix=%s, Sats=%d, Speed=%.1f km/h, Position=%.6f,%.6f, Time=%02d:%02d UTC\n",
                    gpsData.valid_fix ? "YES" : "NO",
@@ -205,52 +193,34 @@ int main()
         {
             char buffer[16];
 
-            // Always show GPS debug info when acquiring signal OR when info mode is enabled
-            bool showGPSDebug = infoDisplayEnabled || !gpsData.valid_fix;
+            // Show GPS debug info only when acquiring signal (no valid fix)
+            bool showGPSDebug = !gpsData.valid_fix;
 
             if (showGPSDebug)
             {
-                // GPS debug mode: show GPS info and acquisition progress
-                if (gpsData.valid_fix)
+                // GPS acquiring signal - show progress messages
+                if (gpsData.satellites_used == 0)
                 {
-                    // GPS has valid fix - show speed and satellite count
-                    snprintf(buffer, sizeof(buffer), "%d", (int)gpsData.speed_kmh);
-                    upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-
+                    upperDisplay.drawString(SSD1306_ALIGN_CENTER, "GPS", LiberationSansNarrow_Bold28);
+                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, "SEARCH", LiberationSansNarrow_Bold28);
+                }
+                else if (gpsData.satellites_used < 4)
+                {
                     snprintf(buffer, sizeof(buffer), "SAT%d", gpsData.satellites_used);
-                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                    upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, "WAIT", LiberationSansNarrow_Bold28);
                 }
                 else
                 {
-                    // GPS acquiring signal - show progress messages
-                    if (gpsData.satellites_used == 0)
-                    {
-                        upperDisplay.drawString(SSD1306_ALIGN_CENTER, "GPS", LiberationSansNarrow_Bold28);
-                        lowerDisplay.drawString(SSD1306_ALIGN_CENTER, "SEARCH", LiberationSansNarrow_Bold28);
-                    }
-                    else if (gpsData.satellites_used < 4)
-                    {
-                        snprintf(buffer, sizeof(buffer), "SAT%d", gpsData.satellites_used);
-                        upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-                        lowerDisplay.drawString(SSD1306_ALIGN_CENTER, "WAIT", LiberationSansNarrow_Bold28);
-                    }
-                    else
-                    {
-                        snprintf(buffer, sizeof(buffer), "SAT%d", gpsData.satellites_used);
-                        upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-                        lowerDisplay.drawString(SSD1306_ALIGN_CENTER, "CALC", LiberationSansNarrow_Bold28);
-                    }
+                    snprintf(buffer, sizeof(buffer), "SAT%d", gpsData.satellites_used);
+                    upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, "CALC", LiberationSansNarrow_Bold28);
                 }
             }
             else
             {
-                // In test mode, show GPS speed in lower display
-                if (testMode)
-                {
-                    snprintf(buffer, sizeof(buffer), "%d", (int)gpsData.speed_kmh);
-                    lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-                }
-                else if (currentTripMode == TripMode::SPEED)
+                // Normal odometer display mode - always update lower display
+                if (currentTripMode == TripMode::SPEED)
                 {
                     // Speed display mode - show current speed in lower display
                     snprintf(buffer, sizeof(buffer), "%d", (int)gpsData.speed_kmh);
@@ -280,22 +250,19 @@ int main()
                     }
                     lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
                 }
-                else if (partialKmNeedsUpdate)
+                else
                 {
+                    // Trip odometer modes (PARTIAL, TRIP1, TRIP2, TRIP3) - always update
                     TripHelper::getCurrentTripDisplayString(state, currentTripMode, buffer, sizeof(buffer));
                     lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
                     partialKmNeedsUpdate = false;
                 }
 
-                // Always update total km display
-                if (totalKmNeedsUpdate)
-                {
-                    snprintf(buffer, sizeof(buffer), "%d", (int)state.lastTotalKm);
-                    upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
-                    totalKmNeedsUpdate = false;
-                }
+                // Always update total km display when we have valid fix
+                snprintf(buffer, sizeof(buffer), "%d", (int)state.lastTotalKm);
+                upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                totalKmNeedsUpdate = false;
             }
-
             lastDisplayUpdateTime = currentTime;
         }
 
