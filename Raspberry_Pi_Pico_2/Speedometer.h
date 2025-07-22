@@ -39,6 +39,27 @@ private:
     int stepToGo = 0;          ///< Target step position
     int currentStep = 0;       ///< Current step position
 
+    // Speed filtering variables
+    static constexpr int FILTER_BUFFER_SIZE = 5;  ///< Number of samples for moving average
+    double speedBuffer[FILTER_BUFFER_SIZE] = {0}; ///< Circular buffer for speed samples
+    int bufferIndex = 0;                          ///< Current index in the circular buffer
+    bool bufferFilled = false;                    ///< Whether the buffer has been filled at least once
+    double filteredSpeed = 0;                     ///< Current filtered speed value
+
+private:
+    /**
+     * @brief Filters the raw GPS speed to reduce noise
+     *
+     * Applies multiple filtering techniques:
+     * - Dead zone for speeds below threshold
+     * - Moving average filter
+     * - Hysteresis for start/stop detection
+     *
+     * @param rawSpeed The raw speed from GPS in km/h
+     * @return The filtered speed in km/h
+     */
+    double filterSpeed(double rawSpeed);
+
 public:
     /**
      * @brief Constructs a new Speedometer object

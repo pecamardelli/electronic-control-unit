@@ -8,6 +8,9 @@
  */
 
 #include "Speedometer.h"
+#include <cmath>
+#include <algorithm>
+#include <stdio.h>
 
 /**
  * @namespace SpeedometerConfig
@@ -27,6 +30,12 @@ namespace SpeedometerConfig
     constexpr int MOTOR_SPEED_MEDIUM = 3;      ///< Motor speed for medium adjustments
     constexpr int MOTOR_SPEED_SLOW = 2;        ///< Motor speed for small adjustments
     constexpr int MOTOR_SPEED_FINE = 1;        ///< Motor speed for fine adjustments
+
+    // Speed filtering configuration
+    constexpr double DEAD_ZONE_THRESHOLD = 2.0; ///< Speeds below this are considered stationary (km/h)
+    constexpr double HYSTERESIS_START = 3.0;    ///< Speed to start movement from stationary (km/h)
+    constexpr double HYSTERESIS_STOP = 1.5;     ///< Speed to stop movement when moving (km/h)
+    constexpr double MAX_SPEED_CHANGE = 15.0;   ///< Maximum allowed speed change per update (km/h)
 }
 
 /**
@@ -89,6 +98,77 @@ Speedometer::~Speedometer()
 }
 
 /**
+ * @brief Filters the raw GPS speed to reduce noise and improve accuracy
+ *
+ * This method implements multiple filtering techniques to handle GPS speed noise:
+ * 1. Dead zone: Speeds below threshold are treated as stationary
+ * 2. Hysteresis: Different thresholds for starting/stopping movement
+ * 3. Moving average: Smooths out rapid fluctuations
+ * 4. Rate limiting: Prevents sudden speed jumps
+ *
+ * @param rawSpeed The raw speed from GPS in km/h
+ * @return The filtered speed in km/h
+ */
+double Speedometer::filterSpeed(double rawSpeed)
+{
+    // Step 1: Apply dead zone for very low speeds
+    if (rawSpeed < SpeedometerConfig::DEAD_ZONE_THRESHOLD)
+    {
+        rawSpeed = 0.0;
+    }
+
+    // Step 2: Apply hysteresis to prevent oscillation around threshold
+    static bool isMoving = false;
+    if (!isMoving && rawSpeed >= SpeedometerConfig::HYSTERESIS_START)
+    {
+        isMoving = true;
+    }
+    else if (isMoving && rawSpeed <= SpeedometerConfig::HYSTERESIS_STOP)
+    {
+        isMoving = false;
+        rawSpeed = 0.0;
+    }
+    else if (!isMoving)
+    {
+        rawSpeed = 0.0;
+    }
+
+    // Step 3: Add to circular buffer for moving average
+    speedBuffer[bufferIndex] = rawSpeed;
+    bufferIndex = (bufferIndex + 1) % FILTER_BUFFER_SIZE;
+    if (!bufferFilled && bufferIndex == 0)
+    {
+        bufferFilled = true;
+    }
+
+    // Step 4: Calculate moving average
+    double sum = 0.0;
+    int count = bufferFilled ? FILTER_BUFFER_SIZE : bufferIndex;
+    for (int i = 0; i < count; i++)
+    {
+        sum += speedBuffer[i];
+    }
+    double averagedSpeed = count > 0 ? sum / count : 0.0;
+
+    // Step 5: Apply rate limiting to prevent sudden jumps
+    double speedDifference = averagedSpeed - filteredSpeed;
+    if (std::abs(speedDifference) > SpeedometerConfig::MAX_SPEED_CHANGE)
+    {
+        // Limit the rate of change
+        if (speedDifference > 0)
+        {
+            averagedSpeed = filteredSpeed + SpeedometerConfig::MAX_SPEED_CHANGE;
+        }
+        else
+        {
+            averagedSpeed = filteredSpeed - SpeedometerConfig::MAX_SPEED_CHANGE;
+        }
+    }
+
+    return averagedSpeed;
+}
+
+/**
  * @brief Main control loop for the speedometer
  *
  * This method is called repeatedly to update the speedometer position based on
@@ -102,13 +182,17 @@ Speedometer::~Speedometer()
  */
 void Speedometer::loop(double speed)
 {
-    // Clamp speed to valid range
-    speed = std::clamp(speed,
-                       static_cast<double>(SpeedometerConfig::MIN_SPEED),
-                       static_cast<double>(SpeedometerConfig::MAX_SPEED));
+    // Apply speed filtering to reduce GPS noise
+    double originalSpeed = speed;
+    filteredSpeed = filterSpeed(speed);
 
-    // Calculate target step position
-    int newStepToGo = convertToStep(speed);
+    // Clamp filtered speed to valid range
+    filteredSpeed = std::clamp(filteredSpeed,
+                               static_cast<double>(SpeedometerConfig::MIN_SPEED),
+                               static_cast<double>(SpeedometerConfig::MAX_SPEED));
+
+    // Calculate target step position using filtered speed
+    int newStepToGo = convertToStep(filteredSpeed);
 
     // Add mechanical play compensation when changing direction
     static int lastDirection = 0; // 0: no movement, 1: increasing, -1: decreasing
