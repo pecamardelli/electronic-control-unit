@@ -69,6 +69,10 @@ private:
     double prev_longitude;
     bool prev_position_valid;
 
+    // Debug variables
+    bool debug_mode;
+    char last_raw_sentence[GPSConfig::BUFFER_SIZE];
+
     // Private methods for NMEA parsing
     bool parseNMEA(const char *sentence);
     bool parseGGA(const char *sentence); // Global positioning system fix data
@@ -135,6 +139,12 @@ public:
 
     // Enable/disable specific NMEA sentences
     bool enableNMEASentence(const char *sentence_type, bool enable);
+
+    // Debug method to enable/disable raw NMEA sentence printing
+    void setDebugMode(bool enable) { debug_mode = enable; }
+
+    // Get the last received raw NMEA sentence
+    const char *getLastRawSentence() const { return last_raw_sentence; }
 };
 
 #endif // GPS_H

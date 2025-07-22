@@ -23,6 +23,7 @@
 int main()
 {
     stdio_init_all();
+    printf("=== Raspberry Pi Pico 2 Odometer Starting ===\n");
 
     // Initialize watchdog
     if (watchdog_enable_caused_reboot())
@@ -30,6 +31,7 @@ int main()
         printf("Rebooted by watchdog!\n");
     }
     watchdog_enable(Config::WATCHDOG_TIMEOUT_MS, true);
+    printf("Watchdog enabled with %d ms timeout\n", Config::WATCHDOG_TIMEOUT_MS);
 
     OdometerState state;
     unsigned long lastSaveTime = 0;
@@ -71,6 +73,8 @@ int main()
     else
     {
         printf("GPS module initialized successfully\n");
+        // Enable GPS debug mode to see raw NMEA sentences
+        gps.setDebugMode(true);
     }
 
     // Initialize reset button
@@ -181,11 +185,51 @@ int main()
         gps.update();
         const GPSData &gpsData = gps.getData();
 
+        // Debug GPS status every 5 seconds
+        static unsigned long lastGPSDebug = 0;
+        if (currentTime - lastGPSDebug > 5000)
+        {
+            printf("=== GPS DEBUG ===\n");
+            printf("GPS: Fix=%s, Sats=%d, Speed=%.1f km/h\n",
+                   gpsData.valid_fix ? "YES" : "NO",
+                   gpsData.satellites_used,
+                   gpsData.speed_kmh);
+            printf("GPS: Lat=%.6f, Lon=%.6f, Alt=%.1fm\n",
+                   gpsData.latitude, gpsData.longitude, gpsData.altitude);
+            printf("GPS: Time=%02d:%02d:%02d, Date=%02d/%02d/%02d\n",
+                   gpsData.hour, gpsData.minute, gpsData.second,
+                   gpsData.day, gpsData.month, gpsData.year);
+            printf("GPS: HDOP=%.1f, Course=%.1f°\n",
+                   gpsData.hdop, gpsData.course);
+            lastGPSDebug = currentTime;
+        }
+
+        // Debug raw GPS data every 10 seconds (less frequent to avoid spam)
+        static unsigned long lastRawGPSDebug = 0;
+        if (currentTime - lastRawGPSDebug > 10000)
+        {
+            printf("=== RAW GPS DEBUG ===\n");
+            // printf("Last raw GPS sentence: %s\n", gps.getLastRawSentence());
+            printf("GPS signal quality: %s\n", gps.getSignalQuality().c_str());
+            lastRawGPSDebug = currentTime;
+        }
+
         // Update speedometer gauge with GPS speed
         speedometer.loop(round(gpsData.speed_kmh));
 
         // Update state based on GPS data
         OdometerHelper::checkForDataChanges(state, gpsData, partialKmNeedsUpdate, totalKmNeedsUpdate, currentTripMode);
+
+        // Debug odometer updates
+        static double lastDebugTotalKm = -1;
+        static double lastDebugPartialKm = -1;
+        if (lastDebugTotalKm != state.totalKm || lastDebugPartialKm != state.partialKm)
+        {
+            printf("ODOMETER UPDATE: Total=%.3f km, Partial=%.3f km, Trip=%s\n",
+                   state.totalKm, state.partialKm, TripHelper::getTripName(currentTripMode));
+            lastDebugTotalKm = state.totalKm;
+            lastDebugPartialKm = state.partialKm;
+        }
 
         // Update displays
         if (currentTime - lastDisplayUpdateTime > Config::DISPLAY_UPDATE_INTERVAL_MS)
@@ -194,6 +238,20 @@ int main()
 
             // Always show GPS debug info when acquiring signal OR when info mode is enabled
             bool showGPSDebug = infoDisplayEnabled || !gpsData.valid_fix;
+
+            // Debug display state
+            static bool lastShowGPSDebug = true; // Initialize to different state to force first print
+            if (lastShowGPSDebug != showGPSDebug)
+            {
+                printf("Display mode changed: showGPSDebug=%s (infoDisplayEnabled=%s, valid_fix=%s)\n",
+                       showGPSDebug ? "true" : "false",
+                       infoDisplayEnabled ? "true" : "false",
+                       gpsData.valid_fix ? "true" : "false");
+                lastShowGPSDebug = showGPSDebug;
+                // Force display updates when switching modes
+                totalKmNeedsUpdate = true;
+                partialKmNeedsUpdate = true;
+            }
 
             if (showGPSDebug)
             {
@@ -231,18 +289,19 @@ int main()
             }
             else
             {
-                // Normal odometer display mode
                 // In test mode, show GPS speed in lower display
                 if (testMode)
                 {
                     snprintf(buffer, sizeof(buffer), "%d", (int)gpsData.speed_kmh);
                     lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                    printf("Test mode: showing speed %d\n", (int)gpsData.speed_kmh);
                 }
                 else if (currentTripMode == TripMode::SPEED)
                 {
                     // Speed display mode - show current speed in lower display
                     snprintf(buffer, sizeof(buffer), "%d", (int)gpsData.speed_kmh);
                     lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                    printf("Speed mode: showing speed %d\n", (int)gpsData.speed_kmh);
                 }
                 else if (currentTripMode == TripMode::TIME)
                 {
@@ -264,12 +323,14 @@ int main()
                         snprintf(buffer, sizeof(buffer), "%02d:%02d", hours, minutes);
                     }
                     lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
+                    printf("Time mode: showing time %s\n", buffer);
                 }
                 else if (partialKmNeedsUpdate)
                 {
                     TripHelper::getCurrentTripDisplayString(state, currentTripMode, buffer, sizeof(buffer));
                     lowerDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
                     partialKmNeedsUpdate = false;
+                    printf("Trip mode: showing %s\n", buffer);
                 }
 
                 // Always update total km display
@@ -278,6 +339,7 @@ int main()
                     snprintf(buffer, sizeof(buffer), "%d", (int)state.lastTotalKm);
                     upperDisplay.drawString(SSD1306_ALIGN_CENTER, buffer, LiberationSansNarrow_Bold28);
                     totalKmNeedsUpdate = false;
+                    printf("Total km: showing %s\n", buffer);
                 }
             }
 

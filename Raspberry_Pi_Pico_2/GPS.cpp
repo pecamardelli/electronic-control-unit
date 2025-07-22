@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <math.h>
 
-GPS::GPS() : uart(uart0), buffer_index(0), prev_latitude(0.0), prev_longitude(0.0), prev_position_valid(false)
+GPS::GPS() : uart(uart0), buffer_index(0), prev_latitude(0.0), prev_longitude(0.0), prev_position_valid(false), debug_mode(false)
 {
     memset(rx_buffer, 0, sizeof(rx_buffer));
+    memset(last_raw_sentence, 0, sizeof(last_raw_sentence));
 }
 
 GPS::~GPS()
@@ -90,6 +91,16 @@ bool GPS::parseNMEA(const char *sentence)
     if (!sentence || strlen(sentence) < 6)
         return false;
 
+    // Store the raw sentence for debugging
+    strncpy(last_raw_sentence, sentence, sizeof(last_raw_sentence) - 1);
+    last_raw_sentence[sizeof(last_raw_sentence) - 1] = '\0';
+
+    // Print raw sentence if debug mode is enabled
+    // if (debug_mode)
+    // {
+    //     printf("RAW GPS: %s\n", sentence);
+    // }
+
     // Validate checksum
     if (!validateChecksum(sentence))
         return false;
@@ -155,6 +166,13 @@ bool GPS::parseGGA(const char *sentence)
     {
         current_data.fix_quality = parseUint8(field);
         current_data.valid_fix = (current_data.fix_quality > 0);
+
+        // Debug: Print fix quality parsing
+        if (debug_mode)
+        {
+            printf("GPS: Fix quality field='%s', parsed=%d, valid_fix=%s\n",
+                   field, current_data.fix_quality, current_data.valid_fix ? "true" : "false");
+        }
     }
 
     // Field 7: Number of satellites
@@ -234,8 +252,14 @@ double GPS::convertDMStoDD(double dms)
 
 uint8_t GPS::parseUint8(const char *str)
 {
-    if (!str || strlen(str) < 2)
+    if (!str || strlen(str) < 1)
         return 0;
+
+    // Handle single digit
+    if (strlen(str) == 1)
+        return (uint8_t)(str[0] - '0');
+
+    // Handle two digits
     return (uint8_t)((str[0] - '0') * 10 + (str[1] - '0'));
 }
 
