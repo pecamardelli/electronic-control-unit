@@ -188,14 +188,11 @@ void Speedometer::loop(double speed)
 
     // Debug output for speed filtering and backlash compensation
     static int debugCounter = 0;
-    if (++debugCounter % 100 == 0) // Print every 100 calls to avoid spam
+    if (++debugCounter % 500 == 0) // Print every 500 calls to avoid spam
     {
-        printf("Speedometer: Raw=%.1f -> Filtered=%.1f km/h, Step=%d, Backlash=%s\n",
-               originalSpeed, filteredSpeed, currentStep,
-               inBacklashCompensation ? "ACTIVE" : "NONE");
-    }
-
-    // Clamp filtered speed to valid range
+        printf("Speedometer: Raw=%.1f -> Filtered=%.1f km/h, Step=%d\n",
+               originalSpeed, filteredSpeed, currentStep);
+    } // Clamp filtered speed to valid range
     filteredSpeed = std::clamp(filteredSpeed,
                                static_cast<double>(SpeedometerConfig::MIN_SPEED),
                                static_cast<double>(SpeedometerConfig::MAX_SPEED));
@@ -218,9 +215,6 @@ void Speedometer::loop(double speed)
         inBacklashCompensation = true;
         backlashStepsRemaining = BACKLASH_STEPS;
         backlashDirection = desiredDirection;
-
-        printf("Backlash compensation started: %d steps in direction %d\n",
-               BACKLASH_STEPS, backlashDirection);
     }
 
     // Handle backlash compensation
@@ -241,7 +235,6 @@ void Speedometer::loop(double speed)
         {
             // Backlash compensation complete
             inBacklashCompensation = false;
-            printf("Backlash compensation completed\n");
         }
     }
 

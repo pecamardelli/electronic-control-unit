@@ -95,11 +95,9 @@ namespace TripHelper
             break;
         case TripMode::SPEED:
             // Speed mode doesn't have anything to reset
-            printf("Speed mode - nothing to reset\n");
             return;
         case TripMode::TIME:
             // Time mode doesn't have anything to reset
-            printf("Time mode - nothing to reset\n");
             return;
         }
         state.dataChanged = true;
@@ -110,11 +108,9 @@ namespace TripHelper
         // Note: Partial odometer is excluded from auto-reset since it has no prefix and can display more digits
 
         // Check Trip1
-        if (state.currentTrip1Km >= Config::MAX_TRIP_VALUE)
+        if (state.trip1Km >= Config::MAX_TRIP_VALUE)
         {
-            resetTrip(state, TripMode::TRIP1);
-            partialKmNeedsUpdate = true;
-            printf("Trip1 auto-reset at %.1f km\n", Config::MAX_TRIP_VALUE);
+            state.trip1Km = 0;
         }
 
         // Check Trip2
