@@ -46,6 +46,13 @@ private:
     bool bufferFilled = false;                    ///< Whether the buffer has been filled at least once
     double filteredSpeed = 0;                     ///< Current filtered speed value
 
+    // Backlash compensation variables
+    bool inBacklashCompensation = false;      ///< Whether currently performing backlash compensation
+    int backlashStepsRemaining = 0;           ///< Number of backlash compensation steps remaining
+    int backlashDirection = 0;                ///< Direction for backlash compensation (1 or -1)
+    int lastMovementDirection = 0;            ///< Last direction of normal movement (not backlash)
+    static constexpr int BACKLASH_STEPS = 15; ///< Number of steps for backlash compensation
+
 private:
     /**
      * @brief Filters the raw GPS speed to reduce noise

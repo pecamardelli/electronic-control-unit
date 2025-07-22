@@ -96,7 +96,7 @@ int main()
     DisplayHelper::initializeDisplays(lowerDisplay, upperDisplay, state, currentTripMode);
 
     // HELPER: Set total kilometers to a fixed value
-    // OdometerHelper::setTotalKilometers(state, storage, 1015.0);
+    // OdometerHelper::setTotalKilometers(state, storage, 1070.0);
 
     // Main loop
     while (true)

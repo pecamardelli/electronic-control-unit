@@ -186,6 +186,15 @@ void Speedometer::loop(double speed)
     double originalSpeed = speed;
     filteredSpeed = filterSpeed(speed);
 
+    // Debug output for speed filtering and backlash compensation
+    static int debugCounter = 0;
+    if (++debugCounter % 100 == 0) // Print every 100 calls to avoid spam
+    {
+        printf("Speedometer: Raw=%.1f -> Filtered=%.1f km/h, Step=%d, Backlash=%s\n",
+               originalSpeed, filteredSpeed, currentStep,
+               inBacklashCompensation ? "ACTIVE" : "NONE");
+    }
+
     // Clamp filtered speed to valid range
     filteredSpeed = std::clamp(filteredSpeed,
                                static_cast<double>(SpeedometerConfig::MIN_SPEED),
@@ -194,17 +203,49 @@ void Speedometer::loop(double speed)
     // Calculate target step position using filtered speed
     int newStepToGo = convertToStep(filteredSpeed);
 
-    // Add mechanical play compensation when changing direction
-    static int lastDirection = 0; // 0: no movement, 1: increasing, -1: decreasing
-    int currentDirection = newStepToGo > currentStep ? 1 : (newStepToGo < currentStep ? -1 : 0);
+    // Determine the desired movement direction
+    int desiredDirection = 0;
+    if (newStepToGo > currentStep)
+        desiredDirection = 1;
+    else if (newStepToGo < currentStep)
+        desiredDirection = -1;
 
-    if (currentDirection != 0 && currentDirection != lastDirection)
+    // Check if we need to start backlash compensation
+    if (!inBacklashCompensation && desiredDirection != 0 &&
+        desiredDirection != lastMovementDirection && lastMovementDirection != 0)
     {
-        // Add 4 steps of compensation when changing direction
-        newStepToGo += currentDirection * 15;
-    }
-    lastDirection = currentDirection;
+        // Direction change detected - start backlash compensation
+        inBacklashCompensation = true;
+        backlashStepsRemaining = BACKLASH_STEPS;
+        backlashDirection = desiredDirection;
 
+        printf("Backlash compensation started: %d steps in direction %d\n",
+               BACKLASH_STEPS, backlashDirection);
+    }
+
+    // Handle backlash compensation
+    if (inBacklashCompensation)
+    {
+        if (backlashStepsRemaining > 0)
+        {
+            // Perform one backlash compensation step
+            motor->setSpeed(SpeedometerConfig::MOTOR_SPEED_FINE); // Use fine speed for precision
+            motor->step(backlashDirection);
+            currentStep += backlashDirection;
+            backlashStepsRemaining--;
+
+            // Don't update stepToGo during backlash compensation
+            return;
+        }
+        else
+        {
+            // Backlash compensation complete
+            inBacklashCompensation = false;
+            printf("Backlash compensation completed\n");
+        }
+    }
+
+    // Normal movement logic (only when not in backlash compensation)
     // Calculate step difference for speed adjustment
     int stepDifference = std::abs(newStepToGo - currentStep);
 
@@ -231,12 +272,15 @@ void Speedometer::loop(double speed)
     {
         motor->step(1);
         currentStep++;
+        lastMovementDirection = 1; // Track movement direction for backlash detection
     }
     else if (currentStep > newStepToGo)
     {
         motor->step(-1);
         currentStep--;
+        lastMovementDirection = -1; // Track movement direction for backlash detection
     }
+    // If currentStep == newStepToGo, no movement needed, don't change lastMovementDirection
 
     // Update stepToGo for next iteration
     stepToGo = newStepToGo;
