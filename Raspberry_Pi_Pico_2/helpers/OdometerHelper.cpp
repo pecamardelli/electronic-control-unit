@@ -33,6 +33,14 @@ namespace OdometerHelper
                                                            gpsData.latitude, gpsData.longitude);
             distanceCoveredKm = distanceMeters / 1000.0; // Convert to kilometers
 
+            // Safety check: Reject unreasonable distances (likely GPS errors)
+            if (distanceCoveredKm > 10.0) // More than 10 km in one GPS update is unrealistic
+            {
+                distanceCoveredKm = 0.0;
+                // Don't update last position to avoid carrying forward the bad position
+                return;
+            }
+
             // Update last position
             lastLatitude = gpsData.latitude;
             lastLongitude = gpsData.longitude;
@@ -90,6 +98,11 @@ namespace OdometerHelper
         case TripMode::TRIP3:
             lastTripValue = state.lastTrip3Km;
             break;
+        case TripMode::SPEED:
+        case TripMode::TIME:
+            // These modes don't have trip values to compare
+            lastTripValue = 0;
+            break;
         }
 
         if (currentTripValue >= lastTripValue + Config::PARTIAL_UPDATE_THRESHOLD)
@@ -108,6 +121,10 @@ namespace OdometerHelper
                 break;
             case TripMode::TRIP3:
                 state.lastTrip3Km = state.currentTrip3Km;
+                break;
+            case TripMode::SPEED:
+            case TripMode::TIME:
+                // These modes don't update trip values
                 break;
             }
             partialKmNeedsUpdate = true;
@@ -135,6 +152,11 @@ namespace OdometerHelper
                 break;
             case TripMode::TRIP3:
                 state.trip3Km = state.currentTrip3Km;
+                break;
+            case TripMode::PARTIAL:
+            case TripMode::SPEED:
+            case TripMode::TIME:
+                // These modes don't have separate trip storage
                 break;
             }
         }
