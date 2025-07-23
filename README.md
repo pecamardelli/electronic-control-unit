@@ -1,131 +1,77 @@
-# Electronic Control Unit (ECU) for Cars
+# Electronic Projects
 
-This repository contains two projects aimed at developing a prototype for an **Electronic Control Unit (ECU)**. The ECU is designed to manage and optimize various car subsystems, leveraging microcontrollers and a Raspberry Pi for enhanced functionality.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Hardware Requirements](#hardware-requirements)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-
----
-
-## Overview
-
-The ECU is a critical component in modern vehicles, responsible for monitoring and controlling various electrical systems. This project demonstrates a basic implementation of an ECU using:
-
-1. **Arduino** for low-level, real-time controls.
-2. **Raspberry Pi** for more complex computation and communication tasks.
-
-Both projects are written in **C/C++** for maximum performance and control.
-
----
-
-## Features
-
-- **Arduino Project:**
-
-  - Low-level hardware control.
-  - Real-time processing of sensor data.
-  - Actuator management.
-
-- **Raspberry Pi Project:**
-  - Data aggregation and analysis.
-  - Communication with external systems (e.g., CAN bus or cloud).
-  - Advanced computation and logging.
-
----
+This repository contains some of my automotive electronics projects. Some of them are abandoned and unfinished experiments.
 
 ## Project Structure
 
-```plaintext
-/
-├── Arduino/
-│   ├── gps                 # GPS program logic
-│   ├── main                # Main program logic
-│   ├── motor_controller    # Motor controller program logic
-│   └── README.md           # Detailed info about Arduino project
-├── RaspberryPi/
-│   ├── main.cpp       # Main program logic
-│   ├── ...
-│   └── README.md      # Detailed info about Raspberry Pi project
-├── LICENSE
-└── README.md              # You are here!
-```
-
----
-
-## Hardware Requirements
-
 ### Arduino
+Initially, I started with Arduino, but the lack of processing power soon became evident. I enjoyed experimenting with some demanding operations on an Arduino Mega, but after experiencing several frustrations, I looked for more powerful hardware.
 
-- Arduino Mega (or compatible microcontroller)
-- Sensors (e.g., temperature, pressure, etc.)
-- Actuators (e.g., relays, motor drivers)
+Here are some of the frustrations I faced:
 
-### Raspberry Pi
+#### Main Controller (`Arduino/main/`)
+- **Purpose**: Primary vehicle monitoring system
+- **Features**: 
+  - Temperature and humidity sensing
+  - Voltage and current monitoring
+  - Coolant temperature measurement
+  - Flow meter integration
+  - Small display interface
+  - SD card data logging
+  - GPS tracking
+- **Hardware**: Arduino with various sensors and displays
 
-- Raspberry Pi 3 (or newer)
-- MicroSD card (16GB+)
-- Display module (e.g., GC9A01)
-- Sensors (optional)
-- Power supply
+#### Motor Controller (`Arduino/motor_controller/`)
+- **Purpose**: DC motor control using AF Motor shield
+- **Features**: Basic forward motor control with speed adjustment
 
----
+#### GPS Module (`Arduino/gps/`)
+- **Purpose**: Standalone GPS tracking functionality. Never got it to work...
 
-## Installation
+### ECU - Raspberry Pi 3 (`ECU/`)
 
-### Arduino
+The main problem with this approach was the physical size of the Pi and all its peripherals. The boot time was also a significant weakness. Nevertheless, there are some interesting features implemented here. Check them out!
 
-1. Open the `Arduino/main` folder in the Arduino IDE.
-2. Compile and upload the sketch to your Arduino board.
+- **Purpose**: Advanced electronic control unit with real-time processing
+- **Features**:
+  - BCM2835 library integration for GPIO control
+  - Shared memory communication between processes
+  - I2C sensor communication
+  - Digital gauge displays
+  - Temperature monitoring
+  - Voltage sensing
+  - Configuration management via INI files
+- **Build**: CMake-based build system
+- **Dependencies**: BCM2835 library (see ECU/README.md for installation)
 
-### Raspberry Pi
+### Speedometer - Raspberry Pi Pico 2 (`Speedometer/`)
 
-1. Connect through SSH to the Raspberry.
-2. Connect through SFTP also.
-3. Navigate to the `Raspberry` folder:
-   ```bash
-   cd Raspberry/
-   ```
-4. Compile the program:
-   ```bash
-   make
-   ```
-5. Run the program:
-   ```bash
-   sudo ./ecu
-   ```
+Finally, some success! This project actually works! I finally built something functional! Now I know the feeling of Doc Brown!
 
----
+- **Purpose**: Dedicated speedometer and odometer system for my 1979 IKA Torino (Argentine car based on the 1964 Rambler American 440)
+- **Features**:
+  - Stepper motor gauge control
+  - OLED display (SSD1306) - two of them for total and partial odometer readings and other features
+  - GPS integration - I tried using an optical sensor attached to the gearbox, but obviously, it didn't work
+  - Flash storage for trip data
+  - Watchdog timer for reliability
+  - Button interface for user interaction
+  - Trip and odometer calculations
+- **Build**: CMake with Pico SDK
 
-## Usage
+## Development Tools
 
-### Arduino
-
-- Connect sensors and actuators as described in the `Arduino/README.md`.
-- Monitor serial output for debugging.
-
-### Raspberry Pi
-
-- Connect additional peripherals and run the program.
-- View logs and outputs for system insights.
-
----
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request with your improvements.
-
----
+The `tools/` directory contains various utility scripts, mostly used with the Pi 3:
+- DBC to JSON conversion
+- SSH key deployment
+- Font and icon conversion utilities
+- Raspberry Pi configuration scripts
+- Network setup tools
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+See LICENSE file for details.
 
----
+## Credits
+
+Special thanks to Claude! Let's be honest - he made the GPS speedometer work! Kudos!
