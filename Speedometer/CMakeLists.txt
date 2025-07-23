@@ -36,7 +36,7 @@ pico_sdk_init()
 # Add executable. Default name is the project name, version 0.1
 
 add_executable(Raspberry_Pi_Pico_2 
-    Raspberry_Pi_Pico_2.cpp 
+    TorinoSpeedometer.cpp 
     FlashStorage.cpp 
     Stepper.cpp 
     Speedometer.cpp 
