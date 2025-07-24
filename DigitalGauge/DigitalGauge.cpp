@@ -5,7 +5,7 @@
 #include "hardware/watchdog.h"
 #include "hardware/uart.h"
 #include "hardware/gpio.h"
-#include "GC9A01.h"
+#include "core/GC9A01.h"
 
 // GC9A01 Display pin definitions
 #define DISPLAY_SPI_PORT spi0
