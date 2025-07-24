@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
-#include "hardware/i2c.h"
 #include "hardware/watchdog.h"
 #include "hardware/uart.h"
 #include "hardware/gpio.h"
@@ -17,11 +16,6 @@
 #define DISPLAY_PIN_DC   20
 #define DISPLAY_PIN_RST  21
 #define DISPLAY_PIN_BL   22  // Backlight control
-
-// I2C defines (for future sensors)
-#define I2C_PORT i2c0
-#define I2C_SDA 8
-#define I2C_SCL 9
 
 // UART defines for GPS communication
 #define GPS_UART_ID uart1
@@ -43,13 +37,6 @@ int main() {
     gpio_set_function(DISPLAY_PIN_SCK,  GPIO_FUNC_SPI);
     gpio_set_function(DISPLAY_PIN_MOSI, GPIO_FUNC_SPI);
     
-    // I2C Initialization for future sensors
-    i2c_init(I2C_PORT, 400*1000);
-    gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);
-    gpio_set_function(I2C_SCL, GPIO_FUNC_I2C);
-    gpio_pull_up(I2C_SDA);
-    gpio_pull_up(I2C_SCL);
-
     // Initialize display
     printf("Initializing GC9A01 display...\n");
     display.init();
