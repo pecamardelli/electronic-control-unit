@@ -38,6 +38,7 @@ pico_sdk_init()
 add_executable(DigitalGauge 
     DigitalGauge.cpp 
     core/GC9A01.cpp
+    core/PicoComm.cpp
     fonts/font8.cpp
     fonts/font12.cpp
     fonts/font16.cpp
