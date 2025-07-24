@@ -52,9 +52,9 @@ void demo_basic_graphics() {
     display.drawLine(0, 239, 239, 0, ORANGE);
     
     // Add some text
-    display.print(60, 100, "GC9A01", WHITE, BLACK, 2);
-    display.print(60, 130, "DISPLAY", WHITE, BLACK, 2);
-    display.print(80, 160, "TEST", WHITE, BLACK, 2);
+    display.print(60, 100, "GC9A01", WHITE, BLACK, &Font24);
+    display.print(60, 130, "DISPLAY", WHITE, BLACK, &Font20);
+    display.print(80, 160, "TEST", WHITE, BLACK, &Font16);
     
     sleep_ms(3000);
 }
@@ -65,7 +65,7 @@ void demo_gauge() {
     display.fillScreen(BLACK);
     
     // Draw gauge title
-    display.print(80, 20, "RPM GAUGE", WHITE, BLACK, 2);
+    display.print(80, 20, "RPM GAUGE", WHITE, BLACK, &Font20);
     
     // Animate a gauge from 0 to max and back
     for (int cycle = 0; cycle < 3; cycle++) {
@@ -76,7 +76,7 @@ void demo_gauge() {
             
             // Display RPM value
             display.fillRect(80, 200, 80, 20, BLACK);
-            display.printf(85, 205, WHITE, BLACK, 1, "%.0f RPM", rpm);
+            display.printf(85, 205, WHITE, BLACK, &Font12, "%.0f RPM", rpm);
             
             sleep_ms(50);
         }
@@ -88,7 +88,7 @@ void demo_gauge() {
             
             // Display RPM value
             display.fillRect(80, 200, 80, 20, BLACK);
-            display.printf(85, 205, WHITE, BLACK, 1, "%.0f RPM", rpm);
+            display.printf(85, 205, WHITE, BLACK, &Font12, "%.0f RPM", rpm);
             
             sleep_ms(50);
         }
@@ -103,33 +103,33 @@ void demo_dashboard() {
     display.fillScreen(BLACK);
     
     // Title
-    display.print(60, 10, "DASHBOARD", WHITE, BLACK, 2);
+    display.print(60, 10, "DASHBOARD", WHITE, BLACK, &Font24);
     
     // RPM Gauge (center)
     display.drawGauge(120, 120, 70, 3500, 0, 8000, RED, WHITE);
-    display.print(105, 85, "RPM", WHITE, BLACK, 1);
-    display.print(100, 180, "3500", WHITE, BLACK, 1);
+    display.print(105, 85, "RPM", WHITE, BLACK, &Font12);
+    display.print(100, 180, "3500", WHITE, BLACK, &Font12);
     
     // Temperature gauge (top left)
     display.drawGauge(60, 60, 35, 85, 0, 120, BLUE, WHITE);
-    display.print(45, 25, "TEMP", WHITE, BLACK, 1);
-    display.print(50, 95, "85C", WHITE, BLACK, 1);
+    display.print(45, 25, "TEMP", WHITE, BLACK, &Font8);
+    display.print(50, 95, "85C", WHITE, BLACK, &Font8);
     
     // Fuel gauge (top right)
     display.drawGauge(180, 60, 35, 75, 0, 100, GREEN, WHITE);
-    display.print(165, 25, "FUEL", WHITE, BLACK, 1);
-    display.print(170, 95, "75%", WHITE, BLACK, 1);
+    display.print(165, 25, "FUEL", WHITE, BLACK, &Font8);
+    display.print(170, 95, "75%", WHITE, BLACK, &Font8);
     
     // Speed indicator (bottom)
     display.fillRect(80, 200, 80, 30, CYAN);
-    display.print(95, 210, "120 KMH", BLACK, CYAN, 1);
+    display.print(95, 210, "120 KMH", BLACK, CYAN, &Font12);
     
     // Warning lights
     display.fillCircle(20, 200, 8, RED);
-    display.print(5, 215, "OIL", WHITE, BLACK, 1);
+    display.print(5, 215, "OIL", WHITE, BLACK, &Font8);
     
     display.fillCircle(220, 200, 8, GREEN);
-    display.print(205, 215, "BAT", WHITE, BLACK, 1);
+    display.print(205, 215, "BAT", WHITE, BLACK, &Font8);
     
     sleep_ms(5000);
 }
@@ -158,9 +158,9 @@ int main() {
     
     // Show startup screen
     display.fillScreen(BLACK);
-    display.print(60, 100, "DIGITAL", WHITE, BLACK, 2);
-    display.print(70, 130, "GAUGE", WHITE, BLACK, 2);
-    display.print(30, 160, "INITIALIZING", WHITE, BLACK, 1);
+    display.print(60, 100, "DIGITAL", WHITE, BLACK, &Font24);
+    display.print(70, 130, "GAUGE", WHITE, BLACK, &Font24);
+    display.print(30, 160, "INITIALIZING", WHITE, BLACK, &Font12);
     
     // Add some loading dots
     for (int i = 0; i < 5; i++) {
@@ -186,9 +186,9 @@ int main() {
         
         // Show "Demo Complete" message
         display.fillScreen(BLACK);
-        display.print(50, 100, "DEMO", WHITE, BLACK, 3);
-        display.print(30, 140, "COMPLETE", WHITE, BLACK, 3);
-        display.print(60, 200, "Restarting...", GREEN, BLACK, 1);
+        display.print(50, 100, "DEMO", WHITE, BLACK, &LiberationSansNarrow_Bold36);
+        display.print(30, 140, "COMPLETE", WHITE, BLACK, &LiberationSansNarrow_Bold28);
+        display.print(60, 200, "Restarting...", GREEN, BLACK, &Font16);
         sleep_ms(3000);
     }
 }

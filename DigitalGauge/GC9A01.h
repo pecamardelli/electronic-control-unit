@@ -4,6 +4,7 @@
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 #include "hardware/gpio.h"
+#include "fonts/fonts.h"
 
 // Display dimensions
 #define GC9A01_WIDTH  240
@@ -94,10 +95,14 @@ public:
     void drawBitmap(uint16_t x, uint16_t y, const uint8_t* bitmap, uint16_t w, uint16_t h, uint16_t color);
     void drawBitmap565(uint16_t x, uint16_t y, const uint16_t* bitmap, uint16_t w, uint16_t h);
     
-    // Text drawing (basic)
-    void drawChar(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t bg, uint8_t size);
-    void print(uint16_t x, uint16_t y, const char* text, uint16_t color, uint16_t bg = BLACK, uint8_t size = 1);
-    void printf(uint16_t x, uint16_t y, uint16_t color, uint16_t bg, uint8_t size, const char* format, ...);
+    // Text drawing (using sFONT structure)
+    void drawChar(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t bg, sFONT* font);
+    void print(uint16_t x, uint16_t y, const char* text, uint16_t color, uint16_t bg = BLACK, sFONT* font = &Font16);
+    void printf(uint16_t x, uint16_t y, uint16_t color, uint16_t bg, sFONT* font, const char* format, ...);
+    
+    // Legacy text drawing (basic 5x7 font)
+    void drawCharBasic(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t bg, uint8_t size);
+    void printBasic(uint16_t x, uint16_t y, const char* text, uint16_t color, uint16_t bg = BLACK, uint8_t size = 1);
     
     // Gauge-specific functions
     void drawGauge(uint16_t centerX, uint16_t centerY, uint16_t radius, 

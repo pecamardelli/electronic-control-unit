@@ -38,6 +38,23 @@ pico_sdk_init()
 add_executable(DigitalGauge 
     DigitalGauge.cpp 
     GC9A01.cpp
+    fonts/font8.cpp
+    fonts/font12.cpp
+    fonts/font16.cpp
+    fonts/font20.cpp
+    fonts/font24.cpp
+    fonts/font48.cpp
+    fonts/font50.cpp
+    fonts/LiberationSansNarrow_Bold16.cpp
+    fonts/LiberationSansNarrow_Bold24.cpp
+    fonts/LiberationSansNarrow_Bold28.cpp
+    fonts/LiberationSansNarrow_Bold30.cpp
+    fonts/LiberationSansNarrow_Bold36.cpp
+    fonts/LiberationSansNarrow_Bold48.cpp
+    fonts/LiberationSansNarrow_Bold54.cpp
+    fonts/LiberationSansNarrow_Bold60.cpp
+    fonts/LiberationSansNarrow_Bold72.cpp
+    fonts/LiberationSansNarrow_Bold80.cpp
 )
 
 pico_set_program_name(DigitalGauge "DigitalGauge")

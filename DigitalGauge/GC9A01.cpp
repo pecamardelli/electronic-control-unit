@@ -685,7 +685,52 @@ void GC9A01::fillTriangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, ui
     }
 }
 
-void GC9A01::drawChar(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t bg, uint8_t size) {
+void GC9A01::drawChar(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t bg, sFONT* font) {
+    if (c < 32 || c > 126) c = 32; // Replace non-printable with space
+    
+    uint32_t char_offset = (c - 32) * font->Height * ((font->Width + 7) / 8);
+    const uint8_t* char_data = &font->table[char_offset];
+    
+    for (uint16_t row = 0; row < font->Height; row++) {
+        for (uint16_t col = 0; col < font->Width; col++) {
+            // Calculate byte and bit position
+            uint16_t byte_index = row * ((font->Width + 7) / 8) + (col / 8);
+            uint8_t bit_position = 7 - (col % 8);
+            
+            // Check if pixel should be drawn
+            if (char_data[byte_index] & (1 << bit_position)) {
+                drawPixel(x + col, y + row, color);
+            } else if (bg != color) {
+                drawPixel(x + col, y + row, bg);
+            }
+        }
+    }
+}
+
+void GC9A01::print(uint16_t x, uint16_t y, const char* text, uint16_t color, uint16_t bg, sFONT* font) {
+    uint16_t currentX = x;
+    while (*text) {
+        if (*text == '\n') {
+            currentX = x;
+            y += font->Height;
+        } else {
+            drawChar(currentX, y, *text, color, bg, font);
+            currentX += font->Width;
+        }
+        text++;
+    }
+}
+
+void GC9A01::printf(uint16_t x, uint16_t y, uint16_t color, uint16_t bg, sFONT* font, const char* format, ...) {
+    char buffer[256];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+    print(x, y, buffer, color, bg, font);
+}
+
+void GC9A01::drawCharBasic(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t bg, uint8_t size) {
     if (c < 32 || c > 126) c = 32; // Replace non-printable with space
     
     const uint8_t* charData = font5x7[c - 32];
@@ -711,27 +756,18 @@ void GC9A01::drawChar(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t b
     }
 }
 
-void GC9A01::print(uint16_t x, uint16_t y, const char* text, uint16_t color, uint16_t bg, uint8_t size) {
+void GC9A01::printBasic(uint16_t x, uint16_t y, const char* text, uint16_t color, uint16_t bg, uint8_t size) {
     uint16_t currentX = x;
     while (*text) {
         if (*text == '\n') {
             currentX = x;
             y += 8 * size;
         } else {
-            drawChar(currentX, y, *text, color, bg, size);
+            drawCharBasic(currentX, y, *text, color, bg, size);
             currentX += 6 * size;
         }
         text++;
     }
-}
-
-void GC9A01::printf(uint16_t x, uint16_t y, uint16_t color, uint16_t bg, uint8_t size, const char* format, ...) {
-    char buffer[256];
-    va_list args;
-    va_start(args, format);
-    vsnprintf(buffer, sizeof(buffer), format, args);
-    va_end(args);
-    print(x, y, buffer, color, bg, size);
 }
 
 uint16_t GC9A01::color565(uint8_t r, uint8_t g, uint8_t b) {
