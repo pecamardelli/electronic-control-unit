@@ -42,6 +42,17 @@ namespace Config
     // Watchdog timeout in milliseconds
     constexpr uint32_t WATCHDOG_TIMEOUT_MS = 8000; // Watchdog timeout (8 seconds)
 
+    // GPS accuracy and filtering configuration
+    namespace GPS
+    {
+        constexpr uint8_t MIN_SATELLITES = 4;                // Minimum satellites for positioning
+        constexpr double MAX_HDOP = 5.0;                     // Maximum HDOP for good accuracy
+        constexpr double MIN_SPEED_KMPH = 2.0;               // Minimum speed for reliable distance calc
+        constexpr double MAX_DISTANCE_JUMP_KM = 10.0;        // Maximum realistic distance per update
+        constexpr double MIN_MOVEMENT_KM = 0.005;            // Minimum movement to filter GPS noise (5m)
+        constexpr double SPEED_CONSISTENCY_THRESHOLD = 20.0; // Max difference between calculated and reported speed
+    }
+
     // Timezone configuration
     namespace Time
     {
