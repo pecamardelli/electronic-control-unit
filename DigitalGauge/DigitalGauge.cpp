@@ -2,10 +2,9 @@
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 #include "hardware/watchdog.h"
-#include "hardware/uart.h"
 #include "hardware/gpio.h"
 #include "core/GC9A01.h"
-#include "core/PicoComm.h"
+#include "assets/torino_logo_sm.h"
 
 // GC9A01 Display pin definitions
 #define DISPLAY_SPI_PORT spi0
@@ -17,15 +16,8 @@
 #define DISPLAY_PIN_RST  21
 #define DISPLAY_PIN_BL   22  // Backlight control
 
-// UART defines for GPS communication
-#define GPS_UART_ID uart1
-#define GPS_BAUD_RATE 115200
-#define GPS_UART_TX_PIN 4
-#define GPS_UART_RX_PIN 5
-
-// Create display and communication objects
+// Create display object
 GC9A01 display(DISPLAY_SPI_PORT, DISPLAY_PIN_CS, DISPLAY_PIN_DC, DISPLAY_PIN_RST, DISPLAY_PIN_BL);
-PicoComm gps_comm;
 
 int main() {
     stdio_init_all();
@@ -42,22 +34,26 @@ int main() {
     display.init();
     printf("Display initialized!\n");
     
-    // GPS Communication setup
-    gps_comm.configureUART(GPS_UART_ID, GPS_UART_TX_PIN, GPS_UART_RX_PIN, GPS_BAUD_RATE);
-    if (gps_comm.begin()) {
-        printf("GPS communication initialized successfully\n");
-    } else {
-        printf("Failed to initialize GPS communication\n");
-    }
+    // Show Torino logo for 5 seconds
+    display.fillScreen(BLACK);
+    
+    // Center the 156x130 logo on the 240x240 screen
+    uint16_t logo_x = (240 - 156) / 2 + 4;  // 42 pixels from left
+    uint16_t logo_y = (240 - 130) / 2 - 12;  // 55 pixels from top
+    
+    printf("Displaying Torino logo...\n");
+    display.drawImage(logo_x, logo_y, 156, 130, torino_logo_sm);
+    
+    // Keep logo visible for 5 seconds
+    sleep_ms(5000);
     
     // Clear screen and display centered text
-    display.fillScreen(BLACK);
-    display.print(60, 110, "DIGITAL", WHITE, BLACK, &LiberationSansNarrow_Bold36);
-    display.print(75, 150, "GAUGE", WHITE, BLACK, &LiberationSansNarrow_Bold36);
+    // display.fillScreen(BLACK);
+    // display.print(60, 110, "DIGITAL", WHITE, BLACK, &LiberationSansNarrow_Bold36);
+    // display.print(75, 150, "GAUGE", WHITE, BLACK, &LiberationSansNarrow_Bold36);
     
     printf("Digital Gauge ready!\n");
     
-    // Main loop - just keep the display on
     while (true) {
         sleep_ms(1000);
     }

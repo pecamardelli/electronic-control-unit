@@ -91,26 +91,20 @@ public:
     void drawTriangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
     void fillTriangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
     
-    // Bitmap drawing
-    void drawBitmap(uint16_t x, uint16_t y, const uint8_t* bitmap, uint16_t w, uint16_t h, uint16_t color);
-    void drawBitmap565(uint16_t x, uint16_t y, const uint16_t* bitmap, uint16_t w, uint16_t h);
-    
     // Text drawing (using sFONT structure)
     void drawChar(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t bg, sFONT* font);
+    uint16_t getCharSpacing(char c, sFONT* font);
     void print(uint16_t x, uint16_t y, const char* text, uint16_t color, uint16_t bg = BLACK, sFONT* font = &Font16);
     void printf(uint16_t x, uint16_t y, uint16_t color, uint16_t bg, sFONT* font, const char* format, ...);
     
-    // Legacy text drawing (basic 5x7 font)
-    void drawCharBasic(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t bg, uint8_t size);
-    void printBasic(uint16_t x, uint16_t y, const char* text, uint16_t color, uint16_t bg = BLACK, uint8_t size = 1);
+    // Image drawing
+    void drawImage(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const unsigned char* image_data);
     
     // Gauge-specific functions
     void drawGauge(uint16_t centerX, uint16_t centerY, uint16_t radius, 
                    float value, float minVal, float maxVal, 
                    uint16_t needleColor = RED, uint16_t scaleColor = WHITE);
     void drawArc(uint16_t x, uint16_t y, uint16_t r, float startAngle, float endAngle, uint16_t color, uint8_t thickness = 1);
-    void drawGradientArc(uint16_t x, uint16_t y, uint16_t r, float startAngle, float endAngle, 
-                        uint16_t startColor, uint16_t endColor, uint8_t thickness = 1);
     
     // Color utilities
     uint16_t color565(uint8_t r, uint8_t g, uint8_t b);

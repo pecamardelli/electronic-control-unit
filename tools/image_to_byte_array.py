@@ -3,8 +3,8 @@ from PIL import Image
 
 print(f"Current working directory: {os.getcwd()}")
 
-path = f"{os.getcwd()}/assets/images"
-header_file_name = "gauge_pattern"
+path = f"{os.getcwd()}/"
+header_file_name = "torino_logo_sm"
 header_file_content = f"""#ifndef _{header_file_name.upper()}_H_
 #define _{header_file_name.upper()}_H_\n\n"""
 

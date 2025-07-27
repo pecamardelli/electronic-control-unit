@@ -4,68 +4,9 @@
 #include <cstdarg>
 #include <cstdio>
 
-// Basic 5x7 font for text rendering
-static const uint8_t font5x7[][5] = {
-    {0x00, 0x00, 0x00, 0x00, 0x00}, // space
-    {0x00, 0x00, 0x5F, 0x00, 0x00}, // !
-    {0x00, 0x07, 0x00, 0x07, 0x00}, // "
-    {0x14, 0x7F, 0x14, 0x7F, 0x14}, // #
-    {0x24, 0x2A, 0x7F, 0x2A, 0x12}, // $
-    {0x23, 0x13, 0x08, 0x64, 0x62}, // %
-    {0x36, 0x49, 0x55, 0x22, 0x50}, // &
-    {0x00, 0x05, 0x03, 0x00, 0x00}, // '
-    {0x00, 0x1C, 0x22, 0x41, 0x00}, // (
-    {0x00, 0x41, 0x22, 0x1C, 0x00}, // )
-    {0x08, 0x2A, 0x1C, 0x2A, 0x08}, // *
-    {0x08, 0x08, 0x3E, 0x08, 0x08}, // +
-    {0x00, 0x50, 0x30, 0x00, 0x00}, // ,
-    {0x08, 0x08, 0x08, 0x08, 0x08}, // -
-    {0x00, 0x60, 0x60, 0x00, 0x00}, // .
-    {0x20, 0x10, 0x08, 0x04, 0x02}, // /
-    {0x3E, 0x51, 0x49, 0x45, 0x3E}, // 0
-    {0x00, 0x42, 0x7F, 0x40, 0x00}, // 1
-    {0x42, 0x61, 0x51, 0x49, 0x46}, // 2
-    {0x21, 0x41, 0x45, 0x4B, 0x31}, // 3
-    {0x18, 0x14, 0x12, 0x7F, 0x10}, // 4
-    {0x27, 0x45, 0x45, 0x45, 0x39}, // 5
-    {0x3C, 0x4A, 0x49, 0x49, 0x30}, // 6
-    {0x01, 0x71, 0x09, 0x05, 0x03}, // 7
-    {0x36, 0x49, 0x49, 0x49, 0x36}, // 8
-    {0x06, 0x49, 0x49, 0x29, 0x1E}, // 9
-    {0x00, 0x36, 0x36, 0x00, 0x00}, // :
-    {0x00, 0x56, 0x36, 0x00, 0x00}, // ;
-    {0x00, 0x08, 0x14, 0x22, 0x41}, // <
-    {0x14, 0x14, 0x14, 0x14, 0x14}, // =
-    {0x41, 0x22, 0x14, 0x08, 0x00}, // >
-    {0x02, 0x01, 0x51, 0x09, 0x06}, // ?
-    {0x32, 0x49, 0x79, 0x41, 0x3E}, // @
-    {0x7E, 0x11, 0x11, 0x11, 0x7E}, // A
-    {0x7F, 0x49, 0x49, 0x49, 0x36}, // B
-    {0x3E, 0x41, 0x41, 0x41, 0x22}, // C
-    {0x7F, 0x41, 0x41, 0x22, 0x1C}, // D
-    {0x7F, 0x49, 0x49, 0x49, 0x41}, // E
-    {0x7F, 0x09, 0x09, 0x01, 0x01}, // F
-    {0x3E, 0x41, 0x49, 0x49, 0x7A}, // G
-    {0x7F, 0x08, 0x08, 0x08, 0x7F}, // H
-    {0x00, 0x41, 0x7F, 0x41, 0x00}, // I
-    {0x20, 0x40, 0x41, 0x3F, 0x01}, // J
-    {0x7F, 0x08, 0x14, 0x22, 0x41}, // K
-    {0x7F, 0x40, 0x40, 0x40, 0x40}, // L
-    {0x7F, 0x02, 0x04, 0x02, 0x7F}, // M
-    {0x7F, 0x04, 0x08, 0x10, 0x7F}, // N
-    {0x3E, 0x41, 0x41, 0x41, 0x3E}, // O
-    {0x7F, 0x09, 0x09, 0x09, 0x06}, // P
-    {0x3E, 0x41, 0x51, 0x21, 0x5E}, // Q
-    {0x7F, 0x09, 0x19, 0x29, 0x46}, // R
-    {0x46, 0x49, 0x49, 0x49, 0x31}, // S
-    {0x01, 0x01, 0x7F, 0x01, 0x01}, // T
-    {0x3F, 0x40, 0x40, 0x40, 0x3F}, // U
-    {0x1F, 0x20, 0x40, 0x20, 0x1F}, // V
-    {0x7F, 0x20, 0x18, 0x20, 0x7F}, // W
-    {0x63, 0x14, 0x08, 0x14, 0x63}, // X
-    {0x03, 0x04, 0x78, 0x04, 0x03}, // Y
-    {0x61, 0x51, 0x49, 0x45, 0x43}, // Z
-};
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 GC9A01::GC9A01(spi_inst_t* spi, uint8_t cs, uint8_t dc, uint8_t rst, uint8_t bl) 
     : spi_port(spi), pin_cs(cs), pin_dc(dc), pin_rst(rst), pin_bl(bl) {
@@ -707,6 +648,32 @@ void GC9A01::drawChar(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t b
     }
 }
 
+uint16_t GC9A01::getCharSpacing(char c, sFONT* font) {
+    // Character-specific spacing adjustments - only reduce spacing for narrow characters
+    switch (c) {
+        case ' ':  // Space
+            return font->Width * 0.6f;  // Slightly smaller space
+        case '.':  // Period
+        case ',':  // Comma
+        case ':':  // Colon
+        case ';':  // Semicolon
+        case '\'': // Apostrophe
+        case '!':  // Exclamation
+            return font->Width * 0.5f;  // Much narrower - these are very thin
+        case 'I':  // Capital I
+        case 'i':  // Lowercase i
+        case 'l':  // Lowercase l
+        case '|':  // Pipe
+            return font->Width * 0.6f;  // Narrower - these are thin
+        case 'f':  // Lowercase f
+        case 'j':  // Lowercase j
+        case 't':  // Lowercase t
+            return font->Width * 0.8f;  // Slightly narrower
+        default:
+            return font->Width;  // Standard width for all other characters
+    }
+}
+
 void GC9A01::print(uint16_t x, uint16_t y, const char* text, uint16_t color, uint16_t bg, sFONT* font) {
     uint16_t currentX = x;
     while (*text) {
@@ -715,7 +682,7 @@ void GC9A01::print(uint16_t x, uint16_t y, const char* text, uint16_t color, uin
             y += font->Height;
         } else {
             drawChar(currentX, y, *text, color, bg, font);
-            currentX += font->Width;
+            currentX += getCharSpacing(*text, font);
         }
         text++;
     }
@@ -730,44 +697,29 @@ void GC9A01::printf(uint16_t x, uint16_t y, uint16_t color, uint16_t bg, sFONT* 
     print(x, y, buffer, color, bg, font);
 }
 
-void GC9A01::drawCharBasic(uint16_t x, uint16_t y, char c, uint16_t color, uint16_t bg, uint8_t size) {
-    if (c < 32 || c > 126) c = 32; // Replace non-printable with space
+void GC9A01::drawImage(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const unsigned char* image_data) {
+    if (x >= GC9A01_WIDTH || y >= GC9A01_HEIGHT) return;
     
-    const uint8_t* charData = font5x7[c - 32];
+    // Clip to screen boundaries
+    if (x + w > GC9A01_WIDTH) w = GC9A01_WIDTH - x;
+    if (y + h > GC9A01_HEIGHT) h = GC9A01_HEIGHT - y;
     
-    for (int8_t i = 0; i < 5; i++) {
-        uint8_t line = charData[i];
-        for (int8_t j = 0; j < 8; j++) {
-            if (line & 0x1) {
-                if (size == 1) {
-                    drawPixel(x + i, y + j, color);
-                } else {
-                    fillRect(x + i * size, y + j * size, size, size, color);
-                }
-            } else if (bg != color) {
-                if (size == 1) {
-                    drawPixel(x + i, y + j, bg);
-                } else {
-                    fillRect(x + i * size, y + j * size, size, size, bg);
-                }
-            }
-            line >>= 1;
-        }
+    setAddressWindow(x, y, x + w - 1, y + h - 1);
+    
+    // Send image data directly (assuming RGB565 format)
+    gpio_put(pin_dc, 1);  // Data mode
+    gpio_put(pin_cs, 0);  // Select device
+    
+    // Send image data in chunks to avoid potential SPI buffer issues
+    const size_t chunk_size = 1024;  // Send 1KB at a time
+    size_t total_bytes = w * h * 2;  // 2 bytes per pixel for RGB565
+    
+    for (size_t offset = 0; offset < total_bytes; offset += chunk_size) {
+        size_t bytes_to_send = (offset + chunk_size > total_bytes) ? (total_bytes - offset) : chunk_size;
+        spi_write_blocking(spi_port, &image_data[offset], bytes_to_send);
     }
-}
-
-void GC9A01::printBasic(uint16_t x, uint16_t y, const char* text, uint16_t color, uint16_t bg, uint8_t size) {
-    uint16_t currentX = x;
-    while (*text) {
-        if (*text == '\n') {
-            currentX = x;
-            y += 8 * size;
-        } else {
-            drawCharBasic(currentX, y, *text, color, bg, size);
-            currentX += 6 * size;
-        }
-        text++;
-    }
+    
+    gpio_put(pin_cs, 1);  // Deselect device
 }
 
 uint16_t GC9A01::color565(uint8_t r, uint8_t g, uint8_t b) {
