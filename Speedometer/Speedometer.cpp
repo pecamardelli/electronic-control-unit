@@ -55,29 +55,29 @@ Speedometer::Speedometer()
     // Format: {speed (km/h), steps}
     conversions = {
         {0, 0},      // 0 km/h = 0 steps
-        {20, 97},    // 20 km/h = 97 steps
-        {30, 174},   // 30 km/h = 174 steps
-        {40, 246},   // 40 km/h = 246 steps
-        {50, 315},   // 50 km/h = 315 steps
-        {60, 392},   // 60 km/h = 392 steps
-        {70, 458},   // 70 km/h = 458 steps
-        {80, 528},   // 80 km/h = 528 steps
-        {90, 605},   // 90 km/h = 605 steps
-        {100, 676},  // 100 km/h = 676 steps
-        {110, 744},  // 110 km/h = 744 steps
-        {120, 820},  // 120 km/h = 820 steps
-        {130, 893},  // 130 km/h = 893 steps
-        {140, 962},  // 140 km/h = 962 steps
-        {150, 1033}, // 150 km/h = 1033 steps
-        {160, 1108}, // 160 km/h = 1108 steps
-        {170, 1178}, // 170 km/h = 1178 steps
-        {180, 1252}, // 180 km/h = 1252 steps
-        {190, 1323}, // 190 km/h = 1323 steps
-        {200, 1392}, // 200 km/h = 1392 steps
-        {210, 1461}, // 210 km/h = 1461 steps
-        {220, 1536}, // 220 km/h = 1536 steps
-        {230, 1607}, // 230 km/h = 1607 steps
-        {240, 1680}  // 240 km/h = 1680 steps
+        {20, 90},    // 20 km/h = 90 steps (was 97, reduced by 7)
+        {30, 167},   // 30 km/h = 167 steps (was 174, reduced by 7)
+        {40, 239},   // 40 km/h = 239 steps (was 246, reduced by 7)
+        {50, 308},   // 50 km/h = 308 steps (was 315, reduced by 7)
+        {60, 385},   // 60 km/h = 385 steps (was 392, reduced by 7)
+        {70, 451},   // 70 km/h = 451 steps (was 458, reduced by 7)
+        {80, 521},   // 80 km/h = 521 steps (was 528, reduced by 7)
+        {90, 598},   // 90 km/h = 598 steps (was 605, reduced by 7)
+        {100, 669},  // 100 km/h = 669 steps (was 676, reduced by 7)
+        {110, 737},  // 110 km/h = 737 steps (was 744, reduced by 7)
+        {120, 813},  // 120 km/h = 813 steps (was 820, reduced by 7)
+        {130, 886},  // 130 km/h = 886 steps (was 893, reduced by 7)
+        {140, 955},  // 140 km/h = 955 steps (was 962, reduced by 7)
+        {150, 1026}, // 150 km/h = 1026 steps (was 1033, reduced by 7)
+        {160, 1101}, // 160 km/h = 1101 steps (was 1108, reduced by 7)
+        {170, 1171}, // 170 km/h = 1171 steps (was 1178, reduced by 7)
+        {180, 1245}, // 180 km/h = 1245 steps (was 1252, reduced by 7)
+        {190, 1316}, // 190 km/h = 1316 steps (was 1323, reduced by 7)
+        {200, 1385}, // 200 km/h = 1385 steps (was 1392, reduced by 7)
+        {210, 1454}, // 210 km/h = 1454 steps (was 1461, reduced by 7)
+        {220, 1529}, // 220 km/h = 1529 steps (was 1536, reduced by 7)
+        {230, 1600}, // 230 km/h = 1600 steps (was 1607, reduced by 7)
+        {240, 1673}  // 240 km/h = 1673 steps (was 1680, reduced by 7)
     };
 
     init();
@@ -219,7 +219,8 @@ void Speedometer::loop(double speed)
             // Perform one backlash compensation step
             motor->setSpeed(SpeedometerConfig::MOTOR_SPEED_FINE); // Use fine speed for precision
             motor->step(backlashDirection);
-            currentStep += backlashDirection;
+            // NOTE: Don't update currentStep during backlash compensation
+            // These are purely mechanical steps to take up slack, not position changes
             backlashStepsRemaining--;
 
             // Don't update stepToGo during backlash compensation
